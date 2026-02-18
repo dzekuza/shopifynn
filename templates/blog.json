@@ -1,0 +1,12 @@
+{
+  "sections": {
+    "main-blog": {
+      "type": "main-blog",
+      "settings": {
+        "posts_per_page": 6,
+        "columns": "3"
+      }
+    }
+  },
+  "order": ["main-blog"]
+}

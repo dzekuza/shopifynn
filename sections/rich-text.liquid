@@ -1,0 +1,142 @@
+<section class="rich-text section {% if section.settings.color_scheme == 'surface' %}section--surface{% elsif section.settings.color_scheme == 'dark' %}section--dark{% endif %}">
+  <div class="container">
+    <div class="rich-text__inner" style="text-align: {{ section.settings.text_alignment }}; max-width: {{ section.settings.content_width }}px; margin: 0 auto;">
+      {% for block in section.blocks %}
+        {% case block.type %}
+          {% when 'subtitle' %}
+            <p class="rich-text__subtitle" {{ block.shopify_attributes }}>{{ block.settings.subtitle }}</p>
+          {% when 'heading' %}
+            <h2 class="rich-text__heading" {{ block.shopify_attributes }}>{{ block.settings.heading }}</h2>
+          {% when 'text' %}
+            <div class="rich-text__text rte" {{ block.shopify_attributes }}>{{ block.settings.text }}</div>
+          {% when 'button' %}
+            <div class="rich-text__button-wrap" {{ block.shopify_attributes }}>
+              <a href="{{ block.settings.button_url }}" class="button {% if block.settings.button_style == 'primary' %}button--primary{% else %}button--outline{% endif %}">
+                {{ block.settings.button_text }}
+              </a>
+            </div>
+        {% endcase %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Rich Text",
+  "settings": [
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "content_width",
+      "label": "Content width",
+      "min": 400,
+      "max": 1000,
+      "step": 50,
+      "default": 700,
+      "unit": "px"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "options": [
+        { "value": "default", "label": "Default" },
+        { "value": "surface", "label": "Surface" },
+        { "value": "dark", "label": "Dark" }
+      ],
+      "default": "default"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "subtitle",
+      "name": "Subtitle",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "subtitle",
+          "label": "Subtitle",
+          "default": "About Us"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "name": "Heading",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Our Nordic Heritage"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Text",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Founded in the heart of Scandinavia, Aurowe brings the centuries-old Nordic bathing tradition into the modern world. Each tub is crafted with care, precision, and a deep respect for nature.</p>"
+        }
+      ]
+    },
+    {
+      "type": "button",
+      "name": "Button",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button text",
+          "default": "Learn More"
+        },
+        {
+          "type": "url",
+          "id": "button_url",
+          "label": "Button link"
+        },
+        {
+          "type": "select",
+          "id": "button_style",
+          "label": "Button style",
+          "options": [
+            { "value": "primary", "label": "Primary" },
+            { "value": "outline", "label": "Outline" }
+          ],
+          "default": "primary"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Rich Text",
+      "blocks": [
+        { "type": "subtitle" },
+        { "type": "heading" },
+        { "type": "text" },
+        { "type": "button" }
+      ]
+    }
+  ]
+}
+{% endschema %}

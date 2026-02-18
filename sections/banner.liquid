@@ -1,0 +1,146 @@
+<section class="banner {% if section.settings.full_width %}banner--full{% endif %}">
+  {% unless section.settings.full_width %}<div class="container">{% endunless %}
+    <div class="banner__inner" style="min-height: {{ section.settings.height }}px;">
+      <div class="banner__media">
+        {% if section.settings.image %}
+          <img
+            src="{{ section.settings.image | image_url: width: 1920 }}"
+            srcset="
+              {{ section.settings.image | image_url: width: 768 }} 768w,
+              {{ section.settings.image | image_url: width: 1200 }} 1200w,
+              {{ section.settings.image | image_url: width: 1920 }} 1920w
+            "
+            sizes="100vw"
+            alt="{{ section.settings.heading | escape | default: 'Banner image' }}"
+            loading="lazy"
+            class="banner__image"
+          >
+        {% else %}
+          <div class="banner__placeholder"></div>
+        {% endif %}
+        <div class="banner__overlay" style="opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};"></div>
+      </div>
+
+      <div class="banner__content banner__content--{{ section.settings.text_position }}">
+        <div class="container">
+          {% if section.settings.subtitle != blank %}
+            <p class="banner__subtitle">{{ section.settings.subtitle }}</p>
+          {% endif %}
+          {% if section.settings.heading != blank %}
+            <h2 class="banner__heading">{{ section.settings.heading }}</h2>
+          {% endif %}
+          {% if section.settings.text != blank %}
+            <p class="banner__text">{{ section.settings.text }}</p>
+          {% endif %}
+
+          {% if section.settings.button_text_1 != blank or section.settings.button_text_2 != blank %}
+            <div class="banner__buttons">
+              {% if section.settings.button_text_1 != blank %}
+                <a href="{{ section.settings.button_url_1 }}" class="button button--primary">
+                  {{ section.settings.button_text_1 }}
+                </a>
+              {% endif %}
+              {% if section.settings.button_text_2 != blank %}
+                <a href="{{ section.settings.button_url_2 }}" class="button button--outline">
+                  {{ section.settings.button_text_2 }}
+                </a>
+              {% endif %}
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  {% unless section.settings.full_width %}</div>{% endunless %}
+</section>
+
+{% schema %}
+{
+  "name": "Banner",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Background image"
+    },
+    {
+      "type": "range",
+      "id": "height",
+      "label": "Section height",
+      "min": 200,
+      "max": 600,
+      "step": 50,
+      "default": 400,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Overlay opacity",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "default": 30,
+      "unit": "%"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full width",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "text_position",
+      "label": "Text position",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Seasonal Collection"
+    },
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Description"
+    },
+    {
+      "type": "text",
+      "id": "button_text_1",
+      "label": "Button 1 text",
+      "default": "Shop Now"
+    },
+    {
+      "type": "url",
+      "id": "button_url_1",
+      "label": "Button 1 link"
+    },
+    {
+      "type": "text",
+      "id": "button_text_2",
+      "label": "Button 2 text"
+    },
+    {
+      "type": "url",
+      "id": "button_url_2",
+      "label": "Button 2 link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Banner"
+    }
+  ]
+}
+{% endschema %}

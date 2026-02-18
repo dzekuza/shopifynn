@@ -1,0 +1,111 @@
+{% paginate blog.articles by section.settings.posts_per_page %}
+<section class="blog-page section">
+  <div class="container">
+    <div class="blog-page__header">
+      <h1 class="blog-page__title">{{ blog.title }}</h1>
+    </div>
+
+    {% if blog.articles.size > 0 %}
+      <div class="blog-page__grid blog-page__grid--{{ section.settings.columns }}">
+        {% for article in blog.articles %}
+          <article class="blog-page__card">
+            {% if article.image %}
+              <a href="{{ article.url }}" class="blog-page__image-wrap">
+                <img
+                  src="{{ article.image | image_url: width: 540 }}"
+                  srcset="
+                    {{ article.image | image_url: width: 360 }} 360w,
+                    {{ article.image | image_url: width: 540 }} 540w
+                  "
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                  alt="{{ article.image.alt | escape | default: article.title }}"
+                  loading="lazy"
+                  class="blog-page__image"
+                >
+              </a>
+            {% endif %}
+
+            <div class="blog-page__content">
+              <time class="blog-page__date" datetime="{{ article.published_at | date: '%Y-%m-%d' }}">
+                {{ article.published_at | date: '%B %d, %Y' }}
+              </time>
+
+              <h2 class="blog-page__article-title">
+                <a href="{{ article.url }}">{{ article.title }}</a>
+              </h2>
+
+              {% if article.excerpt_or_content != blank %}
+                <p class="blog-page__excerpt">{{ article.excerpt_or_content | strip_html | truncatewords: 25 }}</p>
+              {% endif %}
+
+              <a href="{{ article.url }}" class="blog-page__read-more">
+                Read more
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </a>
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+
+      {% if paginate.pages > 1 %}
+        <nav class="blog-page__pagination" aria-label="Blog pagination">
+          {% if paginate.previous %}
+            <a href="{{ paginate.previous.url }}" class="collection-page__pagination-link" aria-label="Previous page">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+            </a>
+          {% endif %}
+
+          {% for part in paginate.parts %}
+            {% if part.is_link %}
+              <a href="{{ part.url }}" class="collection-page__pagination-link">{{ part.title }}</a>
+            {% else %}
+              {% if part.title == paginate.current_page %}
+                <span class="collection-page__pagination-link collection-page__pagination-link--active" aria-current="page">{{ part.title }}</span>
+              {% else %}
+                <span class="collection-page__pagination-link">{{ part.title }}</span>
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+
+          {% if paginate.next %}
+            <a href="{{ paginate.next.url }}" class="collection-page__pagination-link" aria-label="Next page">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+            </a>
+          {% endif %}
+        </nav>
+      {% endif %}
+    {% else %}
+      <div class="blog-page__empty">
+        <p>No articles yet. Check back soon.</p>
+      </div>
+    {% endif %}
+  </div>
+</section>
+{% endpaginate %}
+
+{% schema %}
+{
+  "name": "Blog Page",
+  "settings": [
+    {
+      "type": "range",
+      "id": "posts_per_page",
+      "label": "Posts per page",
+      "min": 3,
+      "max": 12,
+      "step": 3,
+      "default": 6
+    },
+    {
+      "type": "select",
+      "id": "columns",
+      "label": "Columns",
+      "options": [
+        { "value": "2", "label": "2" },
+        { "value": "3", "label": "3" }
+      ],
+      "default": "3"
+    }
+  ]
+}
+{% endschema %}

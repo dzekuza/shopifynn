@@ -1,0 +1,56 @@
+{
+  "sections": {
+    "main-page": {
+      "type": "main-page",
+      "settings": {
+        "show_title": false,
+        "content_width": 1280
+      }
+    },
+    "contact": {
+      "type": "contact-form",
+      "settings": {
+        "heading": "Get in Touch",
+        "text": "<p>Have a question about our products or need help choosing the right tub? We're here to help.</p>",
+        "show_phone": true,
+        "button_text": "Send Message"
+      },
+      "blocks": {
+        "email": {
+          "type": "contact_info",
+          "settings": {
+            "icon": "email",
+            "label": "Email",
+            "value": "hello@aurowe.com"
+          }
+        },
+        "phone": {
+          "type": "contact_info",
+          "settings": {
+            "icon": "phone",
+            "label": "Phone",
+            "value": "+358 40 123 4567"
+          }
+        },
+        "location": {
+          "type": "contact_info",
+          "settings": {
+            "icon": "location",
+            "label": "Workshop",
+            "value": "Nordic Design District, Helsinki, Finland"
+          }
+        },
+        "hours": {
+          "type": "contact_info",
+          "settings": {
+            "icon": "clock",
+            "label": "Hours",
+            "value": "Mon-Fri 9:00 - 17:00 (EET)"
+          }
+        }
+      },
+      "block_order": ["email", "phone", "location", "hours"]
+    }
+  },
+  "order": ["main-page", "contact"]
+}

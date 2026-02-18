@@ -1,0 +1,133 @@
+<section class="collection-list section {% if section.settings.color_scheme == 'surface' %}section--surface{% endif %}">
+  <div class="container">
+    {% if section.settings.heading != blank or section.settings.subheading != blank %}
+      <div class="section__header">
+        {% if section.settings.heading != blank %}
+          <h2 class="section__heading">{{ section.settings.heading }}</h2>
+        {% endif %}
+        {% if section.settings.subheading != blank %}
+          <p class="section__subheading">{{ section.settings.subheading }}</p>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    <div class="collection-list__grid collection-list__grid--{{ section.settings.columns }}">
+      {% for block in section.blocks %}
+        {% assign collection = collections[block.settings.collection] %}
+        <a href="{% if collection %}{{ collection.url }}{% else %}#{% endif %}" class="collection-list__card" {{ block.shopify_attributes }}>
+          <div class="collection-list__image-wrap">
+            {% if block.settings.image %}
+              <img
+                src="{{ block.settings.image | image_url: width: 600 }}"
+                alt="{{ collection.title | default: block.settings.title | escape }}"
+                loading="lazy"
+                class="collection-list__image"
+              >
+            {% elsif collection and collection.image %}
+              <img
+                src="{{ collection.image | image_url: width: 600 }}"
+                alt="{{ collection.title | escape }}"
+                loading="lazy"
+                class="collection-list__image"
+              >
+            {% else %}
+              <div class="collection-list__placeholder"></div>
+            {% endif %}
+            <div class="collection-list__overlay"></div>
+          </div>
+
+          <div class="collection-list__info">
+            <h3 class="collection-list__title">
+              {{ block.settings.title | default: collection.title | default: 'Collection' }}
+            </h3>
+            {% if section.settings.show_count and collection %}
+              <p class="collection-list__count">{{ collection.products_count }} products</p>
+            {% endif %}
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Collection List",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Our Collections"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading"
+    },
+    {
+      "type": "select",
+      "id": "columns",
+      "label": "Columns",
+      "options": [
+        { "value": "2", "label": "2" },
+        { "value": "3", "label": "3" },
+        { "value": "4", "label": "4" }
+      ],
+      "default": "3"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_count",
+      "label": "Show product count",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "options": [
+        { "value": "default", "label": "Default" },
+        { "value": "surface", "label": "Surface" }
+      ],
+      "default": "default"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection_card",
+      "name": "Collection",
+      "limit": 8,
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Custom title",
+          "info": "Leave blank to use collection title"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Custom image",
+          "info": "Leave blank to use collection image"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection List",
+      "blocks": [
+        { "type": "collection_card" },
+        { "type": "collection_card" },
+        { "type": "collection_card" }
+      ]
+    }
+  ]
+}
+{% endschema %}

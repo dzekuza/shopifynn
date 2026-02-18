@@ -1,0 +1,91 @@
+{
+  "sections": {
+    "main-product": {
+      "type": "main-product",
+      "blocks": {
+        "title": {
+          "type": "title"
+        },
+        "rating": {
+          "type": "rating",
+          "settings": {
+            "rating": 5,
+            "review_count": 0
+          }
+        },
+        "price": {
+          "type": "price",
+          "settings": {
+            "show_tax_notice": true,
+            "tax_text": "Tax included. Shipping calculated at checkout."
+          }
+        },
+        "separator-1": {
+          "type": "separator"
+        },
+        "variant_picker": {
+          "type": "variant_picker"
+        },
+        "quantity": {
+          "type": "quantity_selector"
+        },
+        "buy_buttons": {
+          "type": "buy_buttons",
+          "settings": {
+            "button_text": "Add to Cart",
+            "show_dynamic_checkout": true
+          }
+        },
+        "separator-2": {
+          "type": "separator"
+        },
+        "description": {
+          "type": "description"
+        },
+        "specs": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Specifications",
+            "icon": "ruler",
+            "content": "<p>Detailed product specifications will appear here.</p>"
+          }
+        },
+        "shipping": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Shipping & Returns",
+            "icon": "truck",
+            "content": "<p>Free shipping on orders over \u20ac500. Delivery within 4-6 weeks. 30-day return policy.</p>"
+          }
+        },
+        "warranty": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Warranty",
+            "icon": "shield",
+            "content": "<p>All our products come with a comprehensive warranty. Contact us for details.</p>"
+          }
+        },
+        "share": {
+          "type": "share"
+        }
+      },
+      "block_order": [
+        "title",
+        "rating",
+        "price",
+        "separator-1",
+        "variant_picker",
+        "quantity",
+        "buy_buttons",
+        "separator-2",
+        "description",
+        "specs",
+        "shipping",
+        "warranty",
+        "share"
+      ]
+    }
+  },
+  "order": ["main-product"]
+}

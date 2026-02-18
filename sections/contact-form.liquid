@@ -1,0 +1,195 @@
+<section class="contact-form section {% if section.settings.color_scheme == 'surface' %}section--surface{% elsif section.settings.color_scheme == 'dark' %}section--dark{% endif %}">
+  <div class="container">
+    <div class="contact-form__layout">
+      <div class="contact-form__info">
+        {% if section.settings.heading != blank %}
+          <h2 class="contact-form__heading">{{ section.settings.heading }}</h2>
+        {% endif %}
+        {% if section.settings.text != blank %}
+          <div class="contact-form__text rte">{{ section.settings.text }}</div>
+        {% endif %}
+
+        {% for block in section.blocks %}
+          {% if block.type == 'contact_info' %}
+            <div class="contact-form__detail" {{ block.shopify_attributes }}>
+              <div class="contact-form__detail-icon">
+                {% case block.settings.icon %}
+                  {% when 'email' %}
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                  {% when 'phone' %}
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg>
+                  {% when 'location' %}
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                  {% when 'clock' %}
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                {% endcase %}
+              </div>
+              <div>
+                <strong class="contact-form__detail-label">{{ block.settings.label }}</strong>
+                <p class="contact-form__detail-value">{{ block.settings.value }}</p>
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+
+      <div class="contact-form__form-wrap">
+        {% form 'contact', class: 'contact-form__form' %}
+          {% if form.posted_successfully? %}
+            <div class="contact-form__success">
+              <p>Thank you for your message. We'll get back to you shortly.</p>
+            </div>
+          {% endif %}
+
+          {% if form.errors %}
+            <div class="contact-form__errors">
+              {{ form.errors | default_errors }}
+            </div>
+          {% endif %}
+
+          <div class="contact-form__fields">
+            <div class="contact-form__field">
+              <label for="contact-name" class="contact-form__label">Name</label>
+              <input type="text" id="contact-name" name="contact[name]" class="contact-form__input" required>
+            </div>
+
+            <div class="contact-form__field">
+              <label for="contact-email" class="contact-form__label">Email</label>
+              <input type="email" id="contact-email" name="contact[email]" class="contact-form__input" required>
+            </div>
+
+            {% if section.settings.show_phone %}
+              <div class="contact-form__field">
+                <label for="contact-phone" class="contact-form__label">Phone (optional)</label>
+                <input type="tel" id="contact-phone" name="contact[phone]" class="contact-form__input">
+              </div>
+            {% endif %}
+
+            <div class="contact-form__field contact-form__field--full">
+              <label for="contact-message" class="contact-form__label">Message</label>
+              <textarea id="contact-message" name="contact[body]" class="contact-form__textarea" rows="6" required></textarea>
+            </div>
+          </div>
+
+          <button type="submit" class="button button--primary contact-form__submit">
+            {{ section.settings.button_text | default: 'Send Message' }}
+          </button>
+        {% endform %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Contact Form",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Get in Touch"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Description",
+      "default": "<p>Have a question about our products or need help choosing the right tub? We're here to help.</p>"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_phone",
+      "label": "Show phone field",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Submit button text",
+      "default": "Send Message"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "options": [
+        { "value": "default", "label": "Default" },
+        { "value": "surface", "label": "Surface" }
+      ],
+      "default": "default"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "contact_info",
+      "name": "Contact Detail",
+      "limit": 4,
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "email", "label": "Email" },
+            { "value": "phone", "label": "Phone" },
+            { "value": "location", "label": "Location" },
+            { "value": "clock", "label": "Hours" }
+          ],
+          "default": "email"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Email"
+        },
+        {
+          "type": "text",
+          "id": "value",
+          "label": "Value",
+          "default": "hello@aurowe.com"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Contact Form",
+      "blocks": [
+        {
+          "type": "contact_info",
+          "settings": {
+            "icon": "email",
+            "label": "Email",
+            "value": "hello@aurowe.com"
+          }
+        },
+        {
+          "type": "contact_info",
+          "settings": {
+            "icon": "phone",
+            "label": "Phone",
+            "value": "+358 40 123 4567"
+          }
+        },
+        {
+          "type": "contact_info",
+          "settings": {
+            "icon": "location",
+            "label": "Workshop",
+            "value": "Nordic Design District, Helsinki, Finland"
+          }
+        },
+        {
+          "type": "contact_info",
+          "settings": {
+            "icon": "clock",
+            "label": "Hours",
+            "value": "Mon-Fri 9:00 - 17:00 (EET)"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

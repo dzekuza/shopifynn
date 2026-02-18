@@ -1,0 +1,118 @@
+<section class="collection-page section">
+  <div class="container">
+    <!-- Collection Header -->
+    <div class="collection-page__header">
+      <h1 class="collection-page__title">{{ collection.title }}</h1>
+      {% if collection.description != blank and section.settings.show_description %}
+        <div class="collection-page__description rte">
+          {{ collection.description }}
+        </div>
+      {% endif %}
+    </div>
+
+    {% if collection.products.size > 0 %}
+      <!-- Toolbar -->
+      <div class="collection-page__toolbar">
+        <p class="collection-page__count">{{ collection.products_count }} {{ collection.products_count | pluralize: 'product', 'products' }}</p>
+
+        {% if section.settings.enable_sorting %}
+          <div class="collection-page__sort">
+            <label for="sort-by" class="visually-hidden">Sort by</label>
+            <select id="sort-by" class="collection-page__sort-select" data-sort-select>
+              {% for option in collection.sort_options %}
+                <option value="{{ option.value }}" {% if collection.sort_by == option.value %}selected{% endif %}>
+                  {{ option.name }}
+                </option>
+              {% endfor %}
+            </select>
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- Product Grid -->
+      <div class="collection-page__grid collection-page__grid--{{ section.settings.columns }}">
+        {% for product in collection.products %}
+          <div class="collection-page__item">
+            {% render 'product-card', product: product %}
+          </div>
+        {% endfor %}
+      </div>
+
+      <!-- Pagination -->
+      {% if paginate.pages > 1 %}
+        {% paginate collection.products by section.settings.products_per_page %}
+          <nav class="collection-page__pagination" aria-label="Pagination">
+            {% if paginate.previous %}
+              <a href="{{ paginate.previous.url }}" class="collection-page__pagination-link" aria-label="Previous page">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+              </a>
+            {% endif %}
+
+            {% for part in paginate.parts %}
+              {% if part.is_link %}
+                <a href="{{ part.url }}" class="collection-page__pagination-link">{{ part.title }}</a>
+              {% else %}
+                {% if part.title == paginate.current_page %}
+                  <span class="collection-page__pagination-link collection-page__pagination-link--active" aria-current="page">{{ part.title }}</span>
+                {% else %}
+                  <span class="collection-page__pagination-link">{{ part.title }}</span>
+                {% endif %}
+              {% endif %}
+            {% endfor %}
+
+            {% if paginate.next %}
+              <a href="{{ paginate.next.url }}" class="collection-page__pagination-link" aria-label="Next page">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+              </a>
+            {% endif %}
+          </nav>
+        {% endpaginate %}
+      {% endif %}
+    {% else %}
+      <div class="collection-page__empty">
+        <p>No products found in this collection.</p>
+        <a href="{{ routes.all_products_collection_url }}" class="button button--primary">Browse all products</a>
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Collection Page",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_description",
+      "label": "Show collection description",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "label": "Products per page",
+      "min": 4,
+      "max": 24,
+      "step": 4,
+      "default": 12
+    },
+    {
+      "type": "select",
+      "id": "columns",
+      "label": "Desktop columns",
+      "options": [
+        { "value": "2", "label": "2" },
+        { "value": "3", "label": "3" },
+        { "value": "4", "label": "4" }
+      ],
+      "default": "3"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sorting",
+      "label": "Enable sorting",
+      "default": true
+    }
+  ]
+}
+{% endschema %}

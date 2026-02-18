@@ -1,0 +1,126 @@
+<section class="video-section section {% if section.settings.color_scheme == 'surface' %}section--surface{% elsif section.settings.color_scheme == 'dark' %}section--dark{% endif %}">
+  <div class="container">
+    {% if section.settings.heading != blank or section.settings.subheading != blank %}
+      <div class="section__header">
+        {% if section.settings.heading != blank %}
+          <h2 class="section__heading">{{ section.settings.heading }}</h2>
+        {% endif %}
+        {% if section.settings.subheading != blank %}
+          <p class="section__subheading">{{ section.settings.subheading }}</p>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    <div class="video-section__wrapper" style="max-width: {{ section.settings.video_width }}px; margin: 0 auto;">
+      {% if section.settings.video_url != blank %}
+        {% if section.settings.cover_image and section.settings.video_url contains 'youtube' or section.settings.video_url contains 'vimeo' %}
+          <div class="video-section__cover" data-video-cover>
+            <img
+              src="{{ section.settings.cover_image | image_url: width: 1200 }}"
+              alt="{{ section.settings.heading | escape | default: 'Video cover' }}"
+              loading="lazy"
+              class="video-section__cover-image"
+            >
+            <button class="video-section__play-btn" data-video-play aria-label="Play video">
+              <svg width="64" height="64" viewBox="0 0 24 24" fill="white">
+                <polygon points="5 3 19 12 5 21 5 3"/>
+              </svg>
+            </button>
+          </div>
+        {% endif %}
+
+        <div class="video-section__embed {% if section.settings.cover_image %}video-section__embed--hidden{% endif %}" data-video-embed>
+          {% if section.settings.video_url contains 'youtube' %}
+            {% assign video_id = section.settings.video_url | split: 'v=' | last | split: '&' | first %}
+            {% if video_id == section.settings.video_url %}
+              {% assign video_id = section.settings.video_url | split: 'youtu.be/' | last | split: '?' | first %}
+            {% endif %}
+            <iframe
+              src="https://www.youtube.com/embed/{{ video_id }}?rel=0"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+              loading="lazy"
+              title="{{ section.settings.heading | escape | default: 'Video' }}"
+            ></iframe>
+          {% elsif section.settings.video_url contains 'vimeo' %}
+            {% assign video_id = section.settings.video_url | split: 'vimeo.com/' | last | split: '?' | first %}
+            <iframe
+              src="https://player.vimeo.com/video/{{ video_id }}"
+              frameborder="0"
+              allow="autoplay; fullscreen; picture-in-picture"
+              allowfullscreen
+              loading="lazy"
+              title="{{ section.settings.heading | escape | default: 'Video' }}"
+            ></iframe>
+          {% endif %}
+        </div>
+      {% else %}
+        <div class="video-section__placeholder">
+          <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--color-text-muted)" stroke-width="1">
+            <polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+          </svg>
+          <p>Add a YouTube or Vimeo URL to display a video.</p>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Video",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "See It In Action"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Watch how our hot tubs transform outdoor living."
+    },
+    {
+      "type": "text",
+      "id": "video_url",
+      "label": "Video URL",
+      "info": "Paste a YouTube or Vimeo URL"
+    },
+    {
+      "type": "image_picker",
+      "id": "cover_image",
+      "label": "Cover image",
+      "info": "Shows before the video plays"
+    },
+    {
+      "type": "range",
+      "id": "video_width",
+      "label": "Max video width",
+      "min": 600,
+      "max": 1280,
+      "step": 40,
+      "default": 960,
+      "unit": "px"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "options": [
+        { "value": "default", "label": "Default" },
+        { "value": "surface", "label": "Surface" },
+        { "value": "dark", "label": "Dark" }
+      ],
+      "default": "default"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Video"
+    }
+  ]
+}
+{% endschema %}

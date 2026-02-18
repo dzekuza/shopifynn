@@ -35,8 +35,10 @@
     }
   </style>
 
-  {{ settings.font_heading | font_face: font_display: 'swap' }}
-  {{ settings.font_body | font_face: font_display: 'swap' }}
+  <style>
+    {{ settings.font_heading | font_face: font_display: 'swap' }}
+    {{ settings.font_body | font_face: font_display: 'swap' }}
+  </style>
 
   <link rel="stylesheet" href="{{ 'theme.css' | asset_url }}">
 

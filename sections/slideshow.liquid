@@ -1,0 +1,160 @@
+<section class="slideshow" data-slideshow>
+  <div class="slideshow__wrapper">
+    {% for block in section.blocks %}
+      <div class="slideshow__slide {% if forloop.first %}slideshow__slide--active{% endif %}" data-slide="{{ forloop.index0 }}" {{ block.shopify_attributes }}>
+        <div class="slideshow__media">
+          {% if block.settings.image %}
+            <img
+              src="{{ block.settings.image | image_url: width: 1920 }}"
+              srcset="
+                {{ block.settings.image | image_url: width: 768 }} 768w,
+                {{ block.settings.image | image_url: width: 1200 }} 1200w,
+                {{ block.settings.image | image_url: width: 1920 }} 1920w
+              "
+              sizes="100vw"
+              alt="{{ block.settings.heading | escape | default: 'Slide image' }}"
+              loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
+              class="slideshow__image"
+            >
+          {% else %}
+            <div class="slideshow__placeholder"></div>
+          {% endif %}
+          <div class="slideshow__overlay" style="opacity: {{ block.settings.overlay_opacity | divided_by: 100.0 }};"></div>
+        </div>
+
+        <div class="slideshow__content">
+          <div class="container">
+            {% if block.settings.subtitle != blank %}
+              <p class="slideshow__subtitle">{{ block.settings.subtitle }}</p>
+            {% endif %}
+            {% if block.settings.heading != blank %}
+              <h2 class="slideshow__heading">{{ block.settings.heading }}</h2>
+            {% endif %}
+            {% if block.settings.text != blank %}
+              <p class="slideshow__text">{{ block.settings.text }}</p>
+            {% endif %}
+            {% if block.settings.button_text != blank %}
+              <a href="{{ block.settings.button_url }}" class="button button--primary slideshow__button">
+                {{ block.settings.button_text }}
+              </a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+  {% if section.blocks.size > 1 %}
+    <div class="slideshow__nav">
+      <button class="slideshow__nav-btn" data-slideshow-prev aria-label="Previous slide">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <div class="slideshow__dots">
+        {% for block in section.blocks %}
+          <button class="slideshow__dot {% if forloop.first %}slideshow__dot--active{% endif %}" data-slideshow-dot="{{ forloop.index0 }}" aria-label="Go to slide {{ forloop.index }}"></button>
+        {% endfor %}
+      </div>
+      <button class="slideshow__nav-btn" data-slideshow-next aria-label="Next slide">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+    </div>
+  {% endif %}
+</section>
+
+{% schema %}
+{
+  "name": "Slideshow",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Auto-rotate slides",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "autoplay_speed",
+      "label": "Change slides every",
+      "min": 3,
+      "max": 10,
+      "step": 1,
+      "default": 5,
+      "unit": "sec"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Slide",
+      "limit": 6,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Background image"
+        },
+        {
+          "type": "range",
+          "id": "overlay_opacity",
+          "label": "Overlay opacity",
+          "min": 0,
+          "max": 80,
+          "step": 5,
+          "default": 30,
+          "unit": "%"
+        },
+        {
+          "type": "text",
+          "id": "subtitle",
+          "label": "Subtitle"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Slide heading"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Description"
+        },
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button text",
+          "default": "Shop Now"
+        },
+        {
+          "type": "url",
+          "id": "button_url",
+          "label": "Button link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Slideshow",
+      "blocks": [
+        {
+          "type": "slide",
+          "settings": {
+            "heading": "Nordic Bathing Tradition",
+            "text": "Experience the art of Scandinavian relaxation",
+            "button_text": "Explore Collection"
+          }
+        },
+        {
+          "type": "slide",
+          "settings": {
+            "heading": "Handcrafted Excellence",
+            "text": "Each tub built with care by master craftsmen",
+            "button_text": "Learn More"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

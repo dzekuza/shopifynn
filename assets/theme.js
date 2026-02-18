@@ -92,11 +92,177 @@
     }
   }
 
+  /* ---- Collapsible / Accordion ---- */
+
+  document.querySelectorAll('[data-collapsible-trigger]').forEach((trigger) => {
+    trigger.addEventListener('click', () => {
+      const content = trigger.nextElementSibling;
+      if (!content) return;
+
+      const isOpen = trigger.getAttribute('aria-expanded') === 'true';
+
+      if (isOpen) {
+        trigger.setAttribute('aria-expanded', 'false');
+        content.style.display = 'none';
+        content.classList.remove('faq__answer--open');
+      } else {
+        trigger.setAttribute('aria-expanded', 'true');
+        content.style.display = 'block';
+        content.classList.add('faq__answer--open');
+      }
+    });
+  });
+
+  /* ---- Product Thumbnails ---- */
+
+  document.querySelectorAll('[data-thumbnail]').forEach((thumb) => {
+    thumb.addEventListener('click', () => {
+      const mainImage = document.getElementById('product-main-image');
+      if (!mainImage) return;
+
+      mainImage.src = thumb.dataset.imageUrl;
+      if (thumb.dataset.srcset) mainImage.srcset = thumb.dataset.srcset;
+      if (thumb.dataset.alt) mainImage.alt = thumb.dataset.alt;
+
+      document.querySelectorAll('[data-thumbnail]').forEach((t) => t.classList.remove('product__thumbnail--active'));
+      thumb.classList.add('product__thumbnail--active');
+    });
+  });
+
+  /* ---- Quantity Selector ---- */
+
+  document.querySelectorAll('[data-quantity-minus]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const input = btn.parentElement.querySelector('[data-quantity-input]');
+      if (input && parseInt(input.value) > 1) {
+        input.value = parseInt(input.value) - 1;
+        updateFormQuantity(input.value);
+      }
+    });
+  });
+
+  document.querySelectorAll('[data-quantity-plus]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const input = btn.parentElement.querySelector('[data-quantity-input]');
+      if (input) {
+        input.value = parseInt(input.value) + 1;
+        updateFormQuantity(input.value);
+      }
+    });
+  });
+
+  function updateFormQuantity(value) {
+    const formQuantity = document.querySelector('[data-form-quantity]');
+    if (formQuantity) formQuantity.value = value;
+  }
+
+  /* ---- Variant Picker ---- */
+
+  const variantSelects = document.querySelectorAll('[data-option-index]');
+  if (variantSelects.length > 0) {
+    variantSelects.forEach((select) => {
+      select.addEventListener('change', () => {
+        const productData = document.querySelector('[data-product]');
+        if (!productData) return;
+
+        // Construct selected options
+        const selectedOptions = [];
+        variantSelects.forEach((s) => selectedOptions.push(s.value));
+
+        // Find matching variant from product JSON (if available)
+        // Basic URL-based approach for simplicity
+        const params = new URLSearchParams(window.location.search);
+        variantSelects.forEach((s, i) => {
+          params.set(`option${i + 1}`, s.value);
+        });
+      });
+    });
+  }
+
+  /* ---- Collection Sort ---- */
+
+  const sortSelect = document.querySelector('[data-sort-select]');
+  if (sortSelect) {
+    sortSelect.addEventListener('change', () => {
+      const url = new URL(window.location.href);
+      url.searchParams.set('sort_by', sortSelect.value);
+      window.location.href = url.toString();
+    });
+  }
+
+  /* ---- Slideshow ---- */
+
+  const slideshow = document.querySelector('[data-slideshow]');
+  if (slideshow) {
+    const slides = slideshow.querySelectorAll('[data-slide]');
+    const dots = slideshow.querySelectorAll('[data-slideshow-dot]');
+    const prevBtn = slideshow.querySelector('[data-slideshow-prev]');
+    const nextBtn = slideshow.querySelector('[data-slideshow-next]');
+    let currentSlide = 0;
+    let autoplayTimer = null;
+
+    function goToSlide(index) {
+      slides.forEach((s) => s.classList.remove('slideshow__slide--active'));
+      dots.forEach((d) => d.classList.remove('slideshow__dot--active'));
+
+      currentSlide = ((index % slides.length) + slides.length) % slides.length;
+      slides[currentSlide].classList.add('slideshow__slide--active');
+      if (dots[currentSlide]) dots[currentSlide].classList.add('slideshow__dot--active');
+    }
+
+    if (prevBtn) prevBtn.addEventListener('click', () => { goToSlide(currentSlide - 1); resetAutoplay(); });
+    if (nextBtn) nextBtn.addEventListener('click', () => { goToSlide(currentSlide + 1); resetAutoplay(); });
+
+    dots.forEach((dot) => {
+      dot.addEventListener('click', () => {
+        goToSlide(parseInt(dot.dataset.slideshowDot));
+        resetAutoplay();
+      });
+    });
+
+    // Autoplay
+    function startAutoplay() {
+      autoplayTimer = setInterval(() => goToSlide(currentSlide + 1), 5000);
+    }
+
+    function resetAutoplay() {
+      if (autoplayTimer) clearInterval(autoplayTimer);
+      startAutoplay();
+    }
+
+    if (slides.length > 1) startAutoplay();
+  }
+
+  /* ---- Video Cover Play ---- */
+
+  document.querySelectorAll('[data-video-play]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const cover = btn.closest('[data-video-cover]');
+      const embed = cover?.parentElement?.querySelector('[data-video-embed]');
+      if (cover && embed) {
+        cover.style.display = 'none';
+        embed.classList.remove('video-section__embed--hidden');
+        embed.style.display = 'block';
+
+        // Autoplay the video
+        const iframe = embed.querySelector('iframe');
+        if (iframe) {
+          const src = iframe.src;
+          if (src.includes('youtube')) {
+            iframe.src = src + (src.includes('?') ? '&' : '?') + 'autoplay=1';
+          } else if (src.includes('vimeo')) {
+            iframe.src = src + (src.includes('?') ? '&' : '?') + 'autoplay=1';
+          }
+        }
+      }
+    });
+  });
+
   /* ---- Scroll Animations ---- */
 
   if ('IntersectionObserver' in window) {
     const animatedElements = document.querySelectorAll(
-      '.section__header, .features__card, .product-tiers__card, .testimonials__card, .featured-collections__card'
+      '.section__header, .features__card, .product-tiers__card, .testimonials__card, .featured-collections__card, .multicolumn__item, .blog-posts__card, .collection-list__card, .faq__item, .image-text__media, .image-text__content'
     );
 
     const observer = new IntersectionObserver(
