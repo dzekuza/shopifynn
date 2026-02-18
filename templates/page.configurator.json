@@ -1,0 +1,17 @@
+{
+  "sections": {
+    "configurator": {
+      "type": "configurator",
+      "settings": {
+        "classic_base_price": 5000,
+        "premium_base_price": 7000,
+        "signature_base_price": 9000,
+        "integrated_oven_addon": 500,
+        "size_l_multiplier": "1.15",
+        "size_xl_multiplier": "1.30",
+        "background_color": "#ffffff"
+      }
+    }
+  },
+  "order": ["configurator"]
+}
