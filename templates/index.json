@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "hero": {
@@ -7,21 +16,19 @@
         "subtitle": "Handcrafted in Scandinavia",
         "heading": "Nordic Warmth, Crafted for You",
         "text": "Premium hot and cold tubs designed with Nordic precision and built to last a lifetime.",
-        "button_text": "Explore Collection"
+        "button_text": "Explore Collection",
+        "button_url": "shopify://collections"
       }
     },
     "featured-collections": {
       "type": "featured-collections",
-      "settings": {
-        "heading": "Our Collections",
-        "subheading": "From soothing warmth to invigorating cold — find your perfect tub."
-      },
       "blocks": {
         "hot-tubs": {
           "type": "collection_card",
           "settings": {
             "heading": "Hot Tubs",
             "description": "Experience the warmth of Nordic craftsmanship. Relax, unwind, and reconnect.",
+            "link": "",
             "link_text": "Explore Hot Tubs"
           }
         },
@@ -30,18 +37,22 @@
           "settings": {
             "heading": "Cold Tubs",
             "description": "Invigorate your body and mind with cold water therapy, the Nordic way.",
+            "link": "",
             "link_text": "Explore Cold Tubs"
           }
         }
       },
-      "block_order": ["hot-tubs", "cold-tubs"]
+      "block_order": [
+        "hot-tubs",
+        "cold-tubs"
+      ],
+      "settings": {
+        "heading": "Our Collections",
+        "subheading": "From soothing warmth to invigorating cold — find your perfect tub."
+      }
     },
     "product-tiers": {
       "type": "product-tiers",
-      "settings": {
-        "heading": "Choose Your Experience",
-        "subheading": "Three tiers of Nordic luxury, each built with the same uncompromising quality."
-      },
       "blocks": {
         "classic": {
           "type": "tier",
@@ -54,7 +65,8 @@
             "feature_3": "Energy-efficient heating",
             "feature_4": "5-year warranty",
             "featured": false,
-            "button_text": "Learn More"
+            "button_text": "Learn More",
+            "button_url": ""
           }
         },
         "premium": {
@@ -68,7 +80,8 @@
             "feature_3": "Advanced jet system",
             "feature_4": "7-year warranty",
             "featured": true,
-            "button_text": "Learn More"
+            "button_text": "Learn More",
+            "button_url": ""
           }
         },
         "signature": {
@@ -82,18 +95,23 @@
             "feature_3": "Smart temperature control",
             "feature_4": "10-year warranty",
             "featured": false,
-            "button_text": "Learn More"
+            "button_text": "Learn More",
+            "button_url": ""
           }
         }
       },
-      "block_order": ["classic", "premium", "signature"]
+      "block_order": [
+        "classic",
+        "premium",
+        "signature"
+      ],
+      "settings": {
+        "heading": "Choose Your Experience",
+        "subheading": "Three tiers of Nordic luxury, each built with the same uncompromising quality."
+      }
     },
     "features": {
       "type": "features",
-      "settings": {
-        "heading": "Why Aurowe",
-        "subheading": "Built on Nordic traditions, designed for modern living."
-      },
       "blocks": {
         "handcrafted": {
           "type": "feature",
@@ -128,30 +146,78 @@
           }
         }
       },
-      "block_order": ["handcrafted", "sustainable", "warranty", "custom"]
+      "block_order": [
+        "handcrafted",
+        "sustainable",
+        "warranty",
+        "custom"
+      ],
+      "settings": {
+        "heading": "Why Aurowe",
+        "subheading": "Built on Nordic traditions, designed for modern living."
+      }
     },
     "gallery": {
       "type": "lifestyle-gallery",
+      "blocks": {
+        "img1": {
+          "type": "image",
+          "settings": {
+            "alt": "",
+            "size": "large"
+          }
+        },
+        "img2": {
+          "type": "image",
+          "settings": {
+            "alt": "",
+            "size": "small"
+          }
+        },
+        "img3": {
+          "type": "image",
+          "settings": {
+            "alt": "",
+            "size": "small"
+          }
+        },
+        "img4": {
+          "type": "image",
+          "settings": {
+            "alt": "",
+            "size": "small"
+          }
+        },
+        "img5": {
+          "type": "image",
+          "settings": {
+            "alt": "",
+            "size": "small"
+          }
+        },
+        "img6": {
+          "type": "image",
+          "settings": {
+            "alt": "",
+            "size": "large"
+          }
+        }
+      },
+      "block_order": [
+        "img1",
+        "img2",
+        "img3",
+        "img4",
+        "img5",
+        "img6"
+      ],
       "settings": {
         "heading": "Life with Aurowe",
         "subheading": "See how our tubs transform outdoor living spaces."
-      },
-      "blocks": {
-        "img1": { "type": "image", "settings": { "size": "large" } },
-        "img2": { "type": "image", "settings": { "size": "small" } },
-        "img3": { "type": "image", "settings": { "size": "small" } },
-        "img4": { "type": "image", "settings": { "size": "small" } },
-        "img5": { "type": "image", "settings": { "size": "small" } },
-        "img6": { "type": "image", "settings": { "size": "large" } }
-      },
-      "block_order": ["img1", "img2", "img3", "img4", "img5", "img6"]
+      }
     },
     "testimonials": {
       "type": "testimonials",
-      "settings": {
-        "heading": "What Our Customers Say",
-        "subheading": "Join thousands of happy Aurowe owners across Europe."
-      },
       "blocks": {
         "review-1": {
           "type": "testimonial",
@@ -181,7 +247,15 @@
           }
         }
       },
-      "block_order": ["review-1", "review-2", "review-3"]
+      "block_order": [
+        "review-1",
+        "review-2",
+        "review-3"
+      ],
+      "settings": {
+        "heading": "What Our Customers Say",
+        "subheading": "Join thousands of happy Aurowe owners across Europe."
+      }
     },
     "newsletter": {
       "type": "newsletter",
