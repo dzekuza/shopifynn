@@ -1,10 +1,20 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "main-product": {
       "type": "main-product",
       "blocks": {
         "title": {
-          "type": "title"
+          "type": "title",
+          "settings": {}
         },
         "rating": {
           "type": "rating",
@@ -21,13 +31,16 @@
           }
         },
         "separator-1": {
-          "type": "separator"
+          "type": "separator",
+          "settings": {}
         },
         "variant_picker": {
-          "type": "variant_picker"
+          "type": "variant_picker",
+          "settings": {}
         },
         "quantity": {
-          "type": "quantity_selector"
+          "type": "quantity_selector",
+          "settings": {}
         },
         "buy_buttons": {
           "type": "buy_buttons",
@@ -37,10 +50,12 @@
           }
         },
         "separator-2": {
-          "type": "separator"
+          "type": "separator",
+          "settings": {}
         },
         "description": {
-          "type": "description"
+          "type": "description",
+          "settings": {}
         },
         "specs": {
           "type": "collapsible_tab",
@@ -55,7 +70,7 @@
           "settings": {
             "heading": "Shipping & Returns",
             "icon": "truck",
-            "content": "<p>Free shipping on orders over \u20ac500. Delivery within 4-6 weeks. 30-day return policy.</p>"
+            "content": "<p>Free shipping on orders over €500. Delivery within 4-6 weeks. 30-day return policy.</p>"
           }
         },
         "warranty": {
@@ -67,7 +82,8 @@
           }
         },
         "share": {
-          "type": "share"
+          "type": "share",
+          "settings": {}
         }
       },
       "block_order": [
@@ -84,8 +100,11 @@
         "shipping",
         "warranty",
         "share"
-      ]
+      ],
+      "settings": {}
     }
   },
-  "order": ["main-product"]
+  "order": [
+    "main-product"
+  ]
 }

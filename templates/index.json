@@ -12,6 +12,7 @@
     "hero": {
       "type": "hero",
       "settings": {
+        "image": "shopify://shop_images/Luxury_Wellness_Estate_Isometric.png",
         "overlay_opacity": 30,
         "subtitle": "Handcrafted in Scandinavia",
         "heading": "Nordic Warmth, Crafted for You",
