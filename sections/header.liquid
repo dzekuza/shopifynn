@@ -1,0 +1,83 @@
+{%- liquid
+  assign logo = settings.logo
+  assign logo_width = settings.logo_width
+-%}
+
+<header class="header" data-header>
+  {% if section.settings.announcement_text != blank %}
+    <div class="announcement-bar">
+      <p>{{ section.settings.announcement_text }}</p>
+    </div>
+  {% endif %}
+
+  <div class="header__inner container">
+    <a href="/" class="header__logo">
+      {% if logo %}
+        <img
+          src="{{ logo | image_url: width: logo_width }}"
+          alt="{{ shop.name }}"
+          width="{{ logo_width }}"
+          height="{{ logo_width | divided_by: logo.aspect_ratio }}"
+          loading="eager"
+        >
+      {% else %}
+        <span class="header__logo-text">{{ settings.logo_text }}</span>
+      {% endif %}
+    </a>
+
+    <nav class="header__nav" data-nav>
+      {% for link in section.settings.menu.links %}
+        <a href="{{ link.url }}" class="header__nav-link {% if link.active %}is-active{% endif %}">
+          {{ link.title }}
+        </a>
+      {% endfor %}
+    </nav>
+
+    <div class="header__actions">
+      <a href="/cart" class="header__cart" aria-label="Cart">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <path d="M16 10a4 4 0 01-8 0"/>
+        </svg>
+        <span class="header__cart-count" data-cart-count>{{ cart.item_count }}</span>
+      </a>
+
+      <button class="header__menu-toggle" data-menu-toggle aria-label="Menu" aria-expanded="false">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="header__mobile-nav" data-mobile-nav>
+    <div class="header__mobile-nav-inner">
+      {% for link in section.settings.menu.links %}
+        <a href="{{ link.url }}" class="header__mobile-link">{{ link.title }}</a>
+      {% endfor %}
+    </div>
+  </div>
+</header>
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    {
+      "type": "text",
+      "id": "announcement_text",
+      "label": "Announcement text",
+      "default": "Free shipping on orders over €500"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Navigation menu",
+      "default": "main-menu"
+    }
+  ]
+}
+{% endschema %}

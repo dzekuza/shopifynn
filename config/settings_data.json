@@ -1,0 +1,17 @@
+{
+  "current": {
+    "color_primary": "#1a1a1a",
+    "color_secondary": "#8B7355",
+    "color_accent": "#C4A882",
+    "color_background": "#FAFAF8",
+    "color_surface": "#F0EDE8",
+    "color_text": "#1a1a1a",
+    "color_text_muted": "#6B6B6B",
+    "font_heading": "dm_sans_n7",
+    "font_body": "dm_sans_n4",
+    "logo_width": 140,
+    "logo_text": "AUROWE",
+    "sections": {},
+    "content_for_index": []
+  }
+}

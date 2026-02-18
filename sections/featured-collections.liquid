@@ -1,0 +1,128 @@
+<section class="featured-collections section">
+  <div class="container">
+    {% if section.settings.heading != blank %}
+      <div class="section__header">
+        <h2 class="section__heading">{{ section.settings.heading }}</h2>
+        {% if section.settings.subheading != blank %}
+          <p class="section__subheading">{{ section.settings.subheading }}</p>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    <div class="featured-collections__grid">
+      {% for block in section.blocks %}
+        <a href="{{ block.settings.link }}" class="featured-collections__card" {{ block.shopify_attributes }}>
+          <div class="featured-collections__image-wrap">
+            {% if block.settings.image %}
+              <img
+                src="{{ block.settings.image | image_url: width: 900 }}"
+                srcset="
+                  {{ block.settings.image | image_url: width: 450 }} 450w,
+                  {{ block.settings.image | image_url: width: 700 }} 700w,
+                  {{ block.settings.image | image_url: width: 900 }} 900w
+                "
+                sizes="(max-width: 768px) 100vw, 50vw"
+                alt="{{ block.settings.heading | escape }}"
+                loading="lazy"
+                class="featured-collections__image"
+              >
+            {% else %}
+              <div class="featured-collections__placeholder"></div>
+            {% endif %}
+            <div class="featured-collections__overlay"></div>
+          </div>
+          <div class="featured-collections__text">
+            <h3 class="featured-collections__title">{{ block.settings.heading }}</h3>
+            {% if block.settings.description != blank %}
+              <p class="featured-collections__desc">{{ block.settings.description }}</p>
+            {% endif %}
+            <span class="featured-collections__link-text">
+              {{ block.settings.link_text | default: 'Explore' }}
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+              </svg>
+            </span>
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Featured Collections",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Our Collections"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "From soothing warmth to invigorating cold — find your perfect tub."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection_card",
+      "name": "Collection Card",
+      "limit": 4,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Hot Tubs"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "Experience the warmth of Nordic craftsmanship."
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        },
+        {
+          "type": "text",
+          "id": "link_text",
+          "label": "Link text",
+          "default": "Explore"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured Collections",
+      "blocks": [
+        {
+          "type": "collection_card",
+          "settings": {
+            "heading": "Hot Tubs",
+            "description": "Experience the warmth of Nordic craftsmanship."
+          }
+        },
+        {
+          "type": "collection_card",
+          "settings": {
+            "heading": "Cold Tubs",
+            "description": "Invigorate your body with cold water therapy."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,205 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "settings": {
+        "overlay_opacity": 30,
+        "subtitle": "Handcrafted in Scandinavia",
+        "heading": "Nordic Warmth, Crafted for You",
+        "text": "Premium hot and cold tubs designed with Nordic precision and built to last a lifetime.",
+        "button_text": "Explore Collection"
+      }
+    },
+    "featured-collections": {
+      "type": "featured-collections",
+      "settings": {
+        "heading": "Our Collections",
+        "subheading": "From soothing warmth to invigorating cold — find your perfect tub."
+      },
+      "blocks": {
+        "hot-tubs": {
+          "type": "collection_card",
+          "settings": {
+            "heading": "Hot Tubs",
+            "description": "Experience the warmth of Nordic craftsmanship. Relax, unwind, and reconnect.",
+            "link_text": "Explore Hot Tubs"
+          }
+        },
+        "cold-tubs": {
+          "type": "collection_card",
+          "settings": {
+            "heading": "Cold Tubs",
+            "description": "Invigorate your body and mind with cold water therapy, the Nordic way.",
+            "link_text": "Explore Cold Tubs"
+          }
+        }
+      },
+      "block_order": ["hot-tubs", "cold-tubs"]
+    },
+    "product-tiers": {
+      "type": "product-tiers",
+      "settings": {
+        "heading": "Choose Your Experience",
+        "subheading": "Three tiers of Nordic luxury, each built with the same uncompromising quality."
+      },
+      "blocks": {
+        "classic": {
+          "type": "tier",
+          "settings": {
+            "name": "Nordic Elite Classic",
+            "price": "€5,000",
+            "description": "The perfect entry into Nordic bathing culture.",
+            "feature_1": "Seats 2–4 persons",
+            "feature_2": "Thermowood exterior",
+            "feature_3": "Energy-efficient heating",
+            "feature_4": "5-year warranty",
+            "featured": false,
+            "button_text": "Learn More"
+          }
+        },
+        "premium": {
+          "type": "tier",
+          "settings": {
+            "name": "Nordic Elite Premium",
+            "price": "€7,000",
+            "description": "Enhanced comfort with premium materials and features.",
+            "feature_1": "Seats 4–6 persons",
+            "feature_2": "Premium thermowood finish",
+            "feature_3": "Advanced jet system",
+            "feature_4": "7-year warranty",
+            "featured": true,
+            "button_text": "Learn More"
+          }
+        },
+        "signature": {
+          "type": "tier",
+          "settings": {
+            "name": "Nordic Elite Signature",
+            "price": "€9,000",
+            "description": "The ultimate Nordic bathing experience, fully customizable.",
+            "feature_1": "Seats 6–8 persons",
+            "feature_2": "Custom wood & liner selection",
+            "feature_3": "Smart temperature control",
+            "feature_4": "10-year warranty",
+            "featured": false,
+            "button_text": "Learn More"
+          }
+        }
+      },
+      "block_order": ["classic", "premium", "signature"]
+    },
+    "features": {
+      "type": "features",
+      "settings": {
+        "heading": "Why Aurowe",
+        "subheading": "Built on Nordic traditions, designed for modern living."
+      },
+      "blocks": {
+        "handcrafted": {
+          "type": "feature",
+          "settings": {
+            "icon": "craft",
+            "heading": "Handcrafted in Scandinavia",
+            "text": "Each tub is meticulously built by skilled Nordic artisans using time-honored techniques."
+          }
+        },
+        "sustainable": {
+          "type": "feature",
+          "settings": {
+            "icon": "leaf",
+            "heading": "Sustainable Materials",
+            "text": "Responsibly sourced thermowood and eco-friendly finishes that stand the test of time."
+          }
+        },
+        "warranty": {
+          "type": "feature",
+          "settings": {
+            "icon": "shield",
+            "heading": "Up to 10-Year Warranty",
+            "text": "We stand behind every tub with industry-leading warranty coverage."
+          }
+        },
+        "custom": {
+          "type": "feature",
+          "settings": {
+            "icon": "palette",
+            "heading": "Fully Customizable",
+            "text": "Choose your size, wood finish, liner color, and equipment to match your vision."
+          }
+        }
+      },
+      "block_order": ["handcrafted", "sustainable", "warranty", "custom"]
+    },
+    "gallery": {
+      "type": "lifestyle-gallery",
+      "settings": {
+        "heading": "Life with Aurowe",
+        "subheading": "See how our tubs transform outdoor living spaces."
+      },
+      "blocks": {
+        "img1": { "type": "image", "settings": { "size": "large" } },
+        "img2": { "type": "image", "settings": { "size": "small" } },
+        "img3": { "type": "image", "settings": { "size": "small" } },
+        "img4": { "type": "image", "settings": { "size": "small" } },
+        "img5": { "type": "image", "settings": { "size": "small" } },
+        "img6": { "type": "image", "settings": { "size": "large" } }
+      },
+      "block_order": ["img1", "img2", "img3", "img4", "img5", "img6"]
+    },
+    "testimonials": {
+      "type": "testimonials",
+      "settings": {
+        "heading": "What Our Customers Say",
+        "subheading": "Join thousands of happy Aurowe owners across Europe."
+      },
+      "blocks": {
+        "review-1": {
+          "type": "testimonial",
+          "settings": {
+            "quote": "The best investment we've made for our home. The craftsmanship is simply outstanding and the whole family enjoys it year-round.",
+            "name": "Anna S.",
+            "location": "Stockholm, Sweden",
+            "rating": 5
+          }
+        },
+        "review-2": {
+          "type": "testimonial",
+          "settings": {
+            "quote": "From ordering to delivery, the experience was seamless. The tub looks even better in person than on the website.",
+            "name": "Marc D.",
+            "location": "Munich, Germany",
+            "rating": 5
+          }
+        },
+        "review-3": {
+          "type": "testimonial",
+          "settings": {
+            "quote": "We use the cold tub every morning. It has completely transformed our wellness routine. Exceptional quality.",
+            "name": "Elise R.",
+            "location": "Oslo, Norway",
+            "rating": 5
+          }
+        }
+      },
+      "block_order": ["review-1", "review-2", "review-3"]
+    },
+    "newsletter": {
+      "type": "newsletter",
+      "settings": {
+        "heading": "Stay in the Loop",
+        "subheading": "Get the latest on new models, exclusive offers, and Nordic wellness tips.",
+        "placeholder": "Enter your email",
+        "button_text": "Subscribe"
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "featured-collections",
+    "product-tiers",
+    "features",
+    "gallery",
+    "testimonials",
+    "newsletter"
+  ]
+}
