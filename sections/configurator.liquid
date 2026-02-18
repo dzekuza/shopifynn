@@ -886,12 +886,6 @@
     ]}
   };
 
-  const PRODUCT_DATA = JSON.parse(
-    document.querySelector('[data-product-images]')?.textContent || '{}'
-  );
-
-  const getProductData = (model, size) => PRODUCT_DATA[`${model}_${size}`] || null;
-
   class NordicEliteConfigurator extends HTMLElement {
     constructor() {
       super();
@@ -901,6 +895,7 @@
     }
 
     connectedCallback() {
+      this.#parseProductData();
       this.#cacheElements();
       this.#readPrices();
       this.#setupEventListeners();
@@ -909,6 +904,15 @@
     disconnectedCallback() {
       document.removeEventListener('keydown', this._boundHandleKeydown);
       if (this.abortController) this.abortController.abort();
+    }
+
+    #parseProductData() {
+      const script = this.querySelector('[data-product-images]');
+      this.productData = script ? JSON.parse(script.textContent) : {};
+    }
+
+    #getProductData(model, size) {
+      return this.productData[`${model}_${size}`] || null;
     }
 
     #cacheElements() {
@@ -1071,7 +1075,7 @@
     }
 
     #selectGalleryThumb(index) {
-      const productData = getProductData(this.state.model, this.state.size);
+      const productData = this.#getProductData(this.state.model, this.state.size);
       const images = productData?.images || [];
       if (index < 0 || index >= images.length) return;
       this.state.imageIndex = index;
@@ -1083,7 +1087,7 @@
 
     #updateImages() {
       if (!this.state.model || !this.state.size) return;
-      const productData = getProductData(this.state.model, this.state.size);
+      const productData = this.#getProductData(this.state.model, this.state.size);
       const images = productData?.images || [];
       const placeholder = this.querySelector('[data-main-placeholder]');
       if (images.length === 0) {
@@ -1213,7 +1217,7 @@
     }
 
     #resolveVariantId() {
-      const productData = getProductData(this.state.model, this.state.size);
+      const productData = this.#getProductData(this.state.model, this.state.size);
       if (!productData) return null;
       const variants = productData.variants || [];
       if (variants.length === 0) return productData.variant_id;
@@ -1252,7 +1256,10 @@
     #handleKeydown(e) { if (e.key === 'Escape') this.#hideCartError(); }
   }
 
-  customElements.define('nordic-elite-configurator-{{ cfg_id }}', NordicEliteConfigurator);
+  const tagName = 'nordic-elite-configurator-{{ cfg_id }}';
+  if (!customElements.get(tagName)) {
+    customElements.define(tagName, NordicEliteConfigurator);
+  }
 })();
 </script>
 
