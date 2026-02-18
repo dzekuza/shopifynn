@@ -579,12 +579,7 @@
 
 <nordic-elite-configurator-{{ cfg_id }}
   class="ne-configurator ne-configurator-{{ cfg_id }}"
-  data-classic-price="{{ section.settings.classic_base_price }}"
-  data-premium-price="{{ section.settings.premium_base_price }}"
-  data-signature-price="{{ section.settings.signature_base_price }}"
   data-oven-addon="{{ section.settings.integrated_oven_addon }}"
-  data-size-l-multiplier="{{ section.settings.size_l_multiplier }}"
-  data-size-xl-multiplier="{{ section.settings.size_xl_multiplier }}"
 >
   <div class="ne-configurator__container">
 
@@ -617,15 +612,15 @@
       {%- comment -%} Product image data from Liquid product pickers {%- endcomment -%}
       <script type="application/json" data-product-images>
       {
-        "classic_m":    { "id": {{ section.settings.classic_m_product.id | default: "null" }}, "images": [{% for img in section.settings.classic_m_product.images limit:4 %}{% unless forloop.first %},{% endunless %}{"src":"{{ img | image_url: width: 1200 }}","thumb":"{{ img | image_url: width: 200 }}","alt":{{ img.alt | default: "Classic M" | json }}}{% endfor %}], "variant_id": {{ section.settings.classic_m_product.first_available_variant.id | default: "null" }}, "variants": [{% for v in section.settings.classic_m_product.variants %}{% unless forloop.first %},{% endunless %}{"id":{{ v.id }},"options":{{ v.options | json }}}{% endfor %}] },
-        "classic_l":    { "id": {{ section.settings.classic_l_product.id | default: "null" }}, "images": [{% for img in section.settings.classic_l_product.images limit:4 %}{% unless forloop.first %},{% endunless %}{"src":"{{ img | image_url: width: 1200 }}","thumb":"{{ img | image_url: width: 200 }}","alt":{{ img.alt | default: "Classic L" | json }}}{% endfor %}], "variant_id": {{ section.settings.classic_l_product.first_available_variant.id | default: "null" }}, "variants": [{% for v in section.settings.classic_l_product.variants %}{% unless forloop.first %},{% endunless %}{"id":{{ v.id }},"options":{{ v.options | json }}}{% endfor %}] },
-        "classic_xl":   { "id": {{ section.settings.classic_xl_product.id | default: "null" }}, "images": [{% for img in section.settings.classic_xl_product.images limit:4 %}{% unless forloop.first %},{% endunless %}{"src":"{{ img | image_url: width: 1200 }}","thumb":"{{ img | image_url: width: 200 }}","alt":{{ img.alt | default: "Classic XL" | json }}}{% endfor %}], "variant_id": {{ section.settings.classic_xl_product.first_available_variant.id | default: "null" }}, "variants": [{% for v in section.settings.classic_xl_product.variants %}{% unless forloop.first %},{% endunless %}{"id":{{ v.id }},"options":{{ v.options | json }}}{% endfor %}] },
-        "premium_m":    { "id": {{ section.settings.premium_m_product.id | default: "null" }}, "images": [{% for img in section.settings.premium_m_product.images limit:4 %}{% unless forloop.first %},{% endunless %}{"src":"{{ img | image_url: width: 1200 }}","thumb":"{{ img | image_url: width: 200 }}","alt":{{ img.alt | default: "Premium M" | json }}}{% endfor %}], "variant_id": {{ section.settings.premium_m_product.first_available_variant.id | default: "null" }}, "variants": [{% for v in section.settings.premium_m_product.variants %}{% unless forloop.first %},{% endunless %}{"id":{{ v.id }},"options":{{ v.options | json }}}{% endfor %}] },
-        "premium_l":    { "id": {{ section.settings.premium_l_product.id | default: "null" }}, "images": [{% for img in section.settings.premium_l_product.images limit:4 %}{% unless forloop.first %},{% endunless %}{"src":"{{ img | image_url: width: 1200 }}","thumb":"{{ img | image_url: width: 200 }}","alt":{{ img.alt | default: "Premium L" | json }}}{% endfor %}], "variant_id": {{ section.settings.premium_l_product.first_available_variant.id | default: "null" }}, "variants": [{% for v in section.settings.premium_l_product.variants %}{% unless forloop.first %},{% endunless %}{"id":{{ v.id }},"options":{{ v.options | json }}}{% endfor %}] },
-        "premium_xl":   { "id": {{ section.settings.premium_xl_product.id | default: "null" }}, "images": [{% for img in section.settings.premium_xl_product.images limit:4 %}{% unless forloop.first %},{% endunless %}{"src":"{{ img | image_url: width: 1200 }}","thumb":"{{ img | image_url: width: 200 }}","alt":{{ img.alt | default: "Premium XL" | json }}}{% endfor %}], "variant_id": {{ section.settings.premium_xl_product.first_available_variant.id | default: "null" }}, "variants": [{% for v in section.settings.premium_xl_product.variants %}{% unless forloop.first %},{% endunless %}{"id":{{ v.id }},"options":{{ v.options | json }}}{% endfor %}] },
-        "signature_m":  { "id": {{ section.settings.signature_m_product.id | default: "null" }}, "images": [{% for img in section.settings.signature_m_product.images limit:4 %}{% unless forloop.first %},{% endunless %}{"src":"{{ img | image_url: width: 1200 }}","thumb":"{{ img | image_url: width: 200 }}","alt":{{ img.alt | default: "Signature M" | json }}}{% endfor %}], "variant_id": {{ section.settings.signature_m_product.first_available_variant.id | default: "null" }}, "variants": [{% for v in section.settings.signature_m_product.variants %}{% unless forloop.first %},{% endunless %}{"id":{{ v.id }},"options":{{ v.options | json }}}{% endfor %}] },
-        "signature_l":  { "id": {{ section.settings.signature_l_product.id | default: "null" }}, "images": [{% for img in section.settings.signature_l_product.images limit:4 %}{% unless forloop.first %},{% endunless %}{"src":"{{ img | image_url: width: 1200 }}","thumb":"{{ img | image_url: width: 200 }}","alt":{{ img.alt | default: "Signature L" | json }}}{% endfor %}], "variant_id": {{ section.settings.signature_l_product.first_available_variant.id | default: "null" }}, "variants": [{% for v in section.settings.signature_l_product.variants %}{% unless forloop.first %},{% endunless %}{"id":{{ v.id }},"options":{{ v.options | json }}}{% endfor %}] },
-        "signature_xl": { "id": {{ section.settings.signature_xl_product.id | default: "null" }}, "images": [{% for img in section.settings.signature_xl_product.images limit:4 %}{% unless forloop.first %},{% endunless %}{"src":"{{ img | image_url: width: 1200 }}","thumb":"{{ img | image_url: width: 200 }}","alt":{{ img.alt | default: "Signature XL" | json }}}{% endfor %}], "variant_id": {{ section.settings.signature_xl_product.first_available_variant.id | default: "null" }}, "variants": [{% for v in section.settings.signature_xl_product.variants %}{% unless forloop.first %},{% endunless %}{"id":{{ v.id }},"options":{{ v.options | json }}}{% endfor %}] }
+        "classic_m":    { "id": {{ section.settings.classic_m_product.id | default: "null" }}, "price": {{ section.settings.classic_m_product.price | default: 0 }}, "images": [{% for img in section.settings.classic_m_product.images limit:4 %}{% unless forloop.first %},{% endunless %}{"src":"{{ img | image_url: width: 1200 }}","thumb":"{{ img | image_url: width: 200 }}","alt":{{ img.alt | default: "Classic M" | json }}}{% endfor %}], "variant_id": {{ section.settings.classic_m_product.first_available_variant.id | default: "null" }}, "variants": [{% for v in section.settings.classic_m_product.variants %}{% unless forloop.first %},{% endunless %}{"id":{{ v.id }},"options":{{ v.options | json }}}{% endfor %}] },
+        "classic_l":    { "id": {{ section.settings.classic_l_product.id | default: "null" }}, "price": {{ section.settings.classic_l_product.price | default: 0 }}, "images": [{% for img in section.settings.classic_l_product.images limit:4 %}{% unless forloop.first %},{% endunless %}{"src":"{{ img | image_url: width: 1200 }}","thumb":"{{ img | image_url: width: 200 }}","alt":{{ img.alt | default: "Classic L" | json }}}{% endfor %}], "variant_id": {{ section.settings.classic_l_product.first_available_variant.id | default: "null" }}, "variants": [{% for v in section.settings.classic_l_product.variants %}{% unless forloop.first %},{% endunless %}{"id":{{ v.id }},"options":{{ v.options | json }}}{% endfor %}] },
+        "classic_xl":   { "id": {{ section.settings.classic_xl_product.id | default: "null" }}, "price": {{ section.settings.classic_xl_product.price | default: 0 }}, "images": [{% for img in section.settings.classic_xl_product.images limit:4 %}{% unless forloop.first %},{% endunless %}{"src":"{{ img | image_url: width: 1200 }}","thumb":"{{ img | image_url: width: 200 }}","alt":{{ img.alt | default: "Classic XL" | json }}}{% endfor %}], "variant_id": {{ section.settings.classic_xl_product.first_available_variant.id | default: "null" }}, "variants": [{% for v in section.settings.classic_xl_product.variants %}{% unless forloop.first %},{% endunless %}{"id":{{ v.id }},"options":{{ v.options | json }}}{% endfor %}] },
+        "premium_m":    { "id": {{ section.settings.premium_m_product.id | default: "null" }}, "price": {{ section.settings.premium_m_product.price | default: 0 }}, "images": [{% for img in section.settings.premium_m_product.images limit:4 %}{% unless forloop.first %},{% endunless %}{"src":"{{ img | image_url: width: 1200 }}","thumb":"{{ img | image_url: width: 200 }}","alt":{{ img.alt | default: "Premium M" | json }}}{% endfor %}], "variant_id": {{ section.settings.premium_m_product.first_available_variant.id | default: "null" }}, "variants": [{% for v in section.settings.premium_m_product.variants %}{% unless forloop.first %},{% endunless %}{"id":{{ v.id }},"options":{{ v.options | json }}}{% endfor %}] },
+        "premium_l":    { "id": {{ section.settings.premium_l_product.id | default: "null" }}, "price": {{ section.settings.premium_l_product.price | default: 0 }}, "images": [{% for img in section.settings.premium_l_product.images limit:4 %}{% unless forloop.first %},{% endunless %}{"src":"{{ img | image_url: width: 1200 }}","thumb":"{{ img | image_url: width: 200 }}","alt":{{ img.alt | default: "Premium L" | json }}}{% endfor %}], "variant_id": {{ section.settings.premium_l_product.first_available_variant.id | default: "null" }}, "variants": [{% for v in section.settings.premium_l_product.variants %}{% unless forloop.first %},{% endunless %}{"id":{{ v.id }},"options":{{ v.options | json }}}{% endfor %}] },
+        "premium_xl":   { "id": {{ section.settings.premium_xl_product.id | default: "null" }}, "price": {{ section.settings.premium_xl_product.price | default: 0 }}, "images": [{% for img in section.settings.premium_xl_product.images limit:4 %}{% unless forloop.first %},{% endunless %}{"src":"{{ img | image_url: width: 1200 }}","thumb":"{{ img | image_url: width: 200 }}","alt":{{ img.alt | default: "Premium XL" | json }}}{% endfor %}], "variant_id": {{ section.settings.premium_xl_product.first_available_variant.id | default: "null" }}, "variants": [{% for v in section.settings.premium_xl_product.variants %}{% unless forloop.first %},{% endunless %}{"id":{{ v.id }},"options":{{ v.options | json }}}{% endfor %}] },
+        "signature_m":  { "id": {{ section.settings.signature_m_product.id | default: "null" }}, "price": {{ section.settings.signature_m_product.price | default: 0 }}, "images": [{% for img in section.settings.signature_m_product.images limit:4 %}{% unless forloop.first %},{% endunless %}{"src":"{{ img | image_url: width: 1200 }}","thumb":"{{ img | image_url: width: 200 }}","alt":{{ img.alt | default: "Signature M" | json }}}{% endfor %}], "variant_id": {{ section.settings.signature_m_product.first_available_variant.id | default: "null" }}, "variants": [{% for v in section.settings.signature_m_product.variants %}{% unless forloop.first %},{% endunless %}{"id":{{ v.id }},"options":{{ v.options | json }}}{% endfor %}] },
+        "signature_l":  { "id": {{ section.settings.signature_l_product.id | default: "null" }}, "price": {{ section.settings.signature_l_product.price | default: 0 }}, "images": [{% for img in section.settings.signature_l_product.images limit:4 %}{% unless forloop.first %},{% endunless %}{"src":"{{ img | image_url: width: 1200 }}","thumb":"{{ img | image_url: width: 200 }}","alt":{{ img.alt | default: "Signature L" | json }}}{% endfor %}], "variant_id": {{ section.settings.signature_l_product.first_available_variant.id | default: "null" }}, "variants": [{% for v in section.settings.signature_l_product.variants %}{% unless forloop.first %},{% endunless %}{"id":{{ v.id }},"options":{{ v.options | json }}}{% endfor %}] },
+        "signature_xl": { "id": {{ section.settings.signature_xl_product.id | default: "null" }}, "price": {{ section.settings.signature_xl_product.price | default: 0 }}, "images": [{% for img in section.settings.signature_xl_product.images limit:4 %}{% unless forloop.first %},{% endunless %}{"src":"{{ img | image_url: width: 1200 }}","thumb":"{{ img | image_url: width: 200 }}","alt":{{ img.alt | default: "Signature XL" | json }}}{% endfor %}], "variant_id": {{ section.settings.signature_xl_product.first_available_variant.id | default: "null" }}, "variants": [{% for v in section.settings.signature_xl_product.variants %}{% unless forloop.first %},{% endunless %}{"id":{{ v.id }},"options":{{ v.options | json }}}{% endfor %}] }
       }
       </script>
     </div>
@@ -641,36 +636,51 @@
         </div>
 
         <div class="ne-configurator__model-cards" data-model-cards>
+          {%- assign classic_from = section.settings.classic_m_product.price | default: 0 -%}
           <div class="ne-configurator__model-card" data-model="classic" tabindex="0" role="button" aria-pressed="false">
             <div class="ne-configurator__model-info">
               <h3 class="ne-configurator__model-name">Nordic Elite Classic</h3>
               <p class="ne-configurator__model-desc">Entry-level premium hot tub</p>
             </div>
             <div class="ne-configurator__model-pricing">
-              <div class="ne-configurator__price-from">From &euro;{{ section.settings.classic_base_price }}</div>
-              <div class="ne-configurator__price-monthly">or &euro;{{ section.settings.classic_base_price | times: 1.0 | divided_by: 24 | round: 2 }}/mo. for 24 mo.*</div>
+              {%- if classic_from > 0 -%}
+                <div class="ne-configurator__price-from">From {{ classic_from | money }}</div>
+                <div class="ne-configurator__price-monthly">or {{ classic_from | divided_by: 24 | money }}/mo. for 24 mo.*</div>
+              {%- else -%}
+                <div class="ne-configurator__price-from">&mdash;</div>
+              {%- endif -%}
             </div>
           </div>
 
+          {%- assign premium_from = section.settings.premium_m_product.price | default: 0 -%}
           <div class="ne-configurator__model-card" data-model="premium" tabindex="0" role="button" aria-pressed="false">
             <div class="ne-configurator__model-info">
               <h3 class="ne-configurator__model-name">Nordic Elite Premium</h3>
               <p class="ne-configurator__model-desc">Enhanced features and materials</p>
             </div>
             <div class="ne-configurator__model-pricing">
-              <div class="ne-configurator__price-from">From &euro;{{ section.settings.premium_base_price }}</div>
-              <div class="ne-configurator__price-monthly">or &euro;{{ section.settings.premium_base_price | times: 1.0 | divided_by: 24 | round: 2 }}/mo. for 24 mo.*</div>
+              {%- if premium_from > 0 -%}
+                <div class="ne-configurator__price-from">From {{ premium_from | money }}</div>
+                <div class="ne-configurator__price-monthly">or {{ premium_from | divided_by: 24 | money }}/mo. for 24 mo.*</div>
+              {%- else -%}
+                <div class="ne-configurator__price-from">&mdash;</div>
+              {%- endif -%}
             </div>
           </div>
 
+          {%- assign signature_from = section.settings.signature_m_product.price | default: 0 -%}
           <div class="ne-configurator__model-card" data-model="signature" tabindex="0" role="button" aria-pressed="false">
             <div class="ne-configurator__model-info">
               <h3 class="ne-configurator__model-name">Nordic Elite Signature</h3>
               <p class="ne-configurator__model-desc">Ultimate luxury experience</p>
             </div>
             <div class="ne-configurator__model-pricing">
-              <div class="ne-configurator__price-from">From &euro;{{ section.settings.signature_base_price }}</div>
-              <div class="ne-configurator__price-monthly">or &euro;{{ section.settings.signature_base_price | times: 1.0 | divided_by: 24 | round: 2 }}/mo. for 24 mo.*</div>
+              {%- if signature_from > 0 -%}
+                <div class="ne-configurator__price-from">From {{ signature_from | money }}</div>
+                <div class="ne-configurator__price-monthly">or {{ signature_from | divided_by: 24 | money }}/mo. for 24 mo.*</div>
+              {%- else -%}
+                <div class="ne-configurator__price-from">&mdash;</div>
+              {%- endif -%}
             </div>
           </div>
         </div>
@@ -940,14 +950,7 @@
     }
 
     #readPrices() {
-      this.basePrices = {
-        classic: parseFloat(this.dataset.classicPrice) || 0,
-        premium: parseFloat(this.dataset.premiumPrice) || 0,
-        signature: parseFloat(this.dataset.signaturePrice) || 0
-      };
       this.ovenAddon = parseFloat(this.dataset.ovenAddon) || 500;
-      this.sizeLMultiplier = parseFloat(this.dataset.sizeLMultiplier) || 1.15;
-      this.sizeXlMultiplier = parseFloat(this.dataset.sizeXlMultiplier) || 1.3;
     }
 
     #setupEventListeners() {
@@ -1178,10 +1181,11 @@
 
     #updatePrice() {
       if (!this.state.model || !this.state.size) return;
-      const base = this.basePrices[this.state.model];
-      const sizeMultipliers = { m: 1, l: this.sizeLMultiplier, xl: this.sizeXlMultiplier };
+      const productData = this.#getProductData(this.state.model, this.state.size);
+      const productPrice = productData?.price || 0;
+      const basePrice = productPrice / 100;
       const oven = this.state.oven === 'integrated' ? this.ovenAddon : 0;
-      const total = Math.round(base * sizeMultipliers[this.state.size] + oven);
+      const total = Math.round(basePrice + oven);
       this.totalPrice.textContent = formatPrice(total);
     }
 
@@ -1292,12 +1296,7 @@
       "type": "header",
       "content": "Pricing"
     },
-    { "type": "number", "id": "classic_base_price", "label": "Classic base price (M size, \u20ac)", "default": 5000 },
-    { "type": "number", "id": "premium_base_price", "label": "Premium base price (M size, \u20ac)", "default": 7000 },
-    { "type": "number", "id": "signature_base_price", "label": "Signature base price (M size, \u20ac)", "default": 9000 },
     { "type": "number", "id": "integrated_oven_addon", "label": "Integrated oven add-on price (\u20ac)", "default": 500 },
-    { "type": "text", "id": "size_l_multiplier", "label": "L size price multiplier (e.g. 1.15 = +15%)", "default": "1.15" },
-    { "type": "text", "id": "size_xl_multiplier", "label": "XL size price multiplier (e.g. 1.30 = +30%)", "default": "1.30" },
     {
       "type": "header",
       "content": "Links"
