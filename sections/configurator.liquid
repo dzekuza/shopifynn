@@ -1,1515 +1,365 @@
 {%- comment -%}
-  Nordic Elite Hot Tub Configurator
-  Apple-style product configurator for Nordic Elite hot tubs.
-  Supports Classic, Premium, and Signature tiers across M, L, XL sizes.
-  Adapted from block format to standalone section for Aurowe theme.
+  Nordic Elite Hot Tub Configurator v2
+  Dynamic 15-step configurator reading from Shopify products & collections.
+  All product data is serialized to JSON and rendered by configurator.js.
 {%- endcomment -%}
 
 {%- assign cfg_id = section.id | replace: '_', '' | downcase -%}
+{%- assign tag_name = 'hot-tub-cfg-' | append: cfg_id -%}
 
-{% stylesheet %}
-  .ne-configurator {
-    display: block;
-    width: 100%;
-  }
-
-  .ne-configurator__container {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 40px;
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 40px 24px;
-  }
-
-  @media screen and (min-width: 990px) {
-    .ne-configurator__container {
-      grid-template-columns: 1fr 1fr;
-      gap: 60px;
-      padding: 60px 40px;
-    }
-  }
-
-  .ne-configurator__image-section {
-    position: relative;
-    top: 0;
-  }
-
-  @media screen and (min-width: 990px) {
-    .ne-configurator__image-section {
-      position: sticky;
-      top: 100px;
-      height: fit-content;
-    }
-  }
-
-  .ne-configurator__main-image-wrapper {
-    position: relative;
-    width: 100%;
-    border-radius: 12px;
-    overflow: hidden;
-    background-color: var(--color-surface, #EDF2F5);
-    border: 1px solid rgba(0, 0, 0, 0.08);
-    margin-bottom: 16px;
-    aspect-ratio: 4 / 3;
-  }
-
-  .ne-configurator__main-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    transition: opacity 0.25s ease;
-  }
-
-  .ne-configurator__main-image--fade {
-    opacity: 0;
-  }
-
-  .ne-configurator__placeholder {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    color: var(--color-text-muted, #86868b);
-    font-size: 14px;
-    text-align: center;
-    padding: 24px;
-  }
-
-  .ne-configurator__placeholder svg {
-    width: 56px;
-    height: 56px;
-    opacity: 0.35;
-  }
-
-  .ne-configurator__gallery {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
-  }
-
-  .ne-configurator__thumb {
-    position: relative;
-    width: 100%;
-    aspect-ratio: 1;
-    border-radius: 8px;
-    overflow: hidden;
-    border: 2px solid rgba(0, 0, 0, 0.08);
-    cursor: pointer;
-    transition: border-color 0.2s ease, transform 0.2s ease;
-    background-color: var(--color-surface, #EDF2F5);
-  }
-
-  .ne-configurator__thumb:hover {
-    border-color: var(--color-accent, #5EC2AA);
-    transform: scale(1.04);
-  }
-
-  .ne-configurator__thumb--active {
-    border-color: var(--color-accent, #5EC2AA);
-    border-width: 3px;
-  }
-
-  .ne-configurator__thumb img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-  }
-
-  .ne-configurator__config-section {
-    display: flex;
-    flex-direction: column;
-    gap: 40px;
-  }
-
-  .ne-configurator__section {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-
-  .ne-configurator__section-title {
-    font-family: var(--font-heading);
-    font-size: 24px;
-    font-weight: 600;
-    color: var(--color-primary, #1A2332);
-    margin: 0;
-    letter-spacing: -0.4px;
-  }
-
-  @media screen and (min-width: 990px) {
-    .ne-configurator__section-title {
-      font-size: 28px;
-    }
-  }
-
-  .ne-configurator__section-subtitle {
-    font-size: 16px;
-    font-weight: 600;
-    color: var(--color-primary, #1d1d1f);
-    margin: 0 0 10px 0;
-  }
-
-  .ne-configurator__divider {
-    height: 1px;
-    background-color: rgba(0, 0, 0, 0.08);
-  }
-
-  /* Model cards */
-  .ne-configurator__model-cards {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .ne-configurator__model-card {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 18px 22px;
-    border: 2px solid rgba(0, 0, 0, 0.08);
-    border-radius: 12px;
-    background-color: #ffffff;
-    cursor: pointer;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
-    -webkit-tap-highlight-color: transparent;
-  }
-
-  .ne-configurator__model-card:hover {
-    border-color: var(--color-accent, #5EC2AA);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  }
-
-  .ne-configurator__model-card--selected {
-    border-color: var(--color-accent, #5EC2AA);
-    background-color: rgba(94, 194, 170, 0.08);
-  }
-
-  .ne-configurator__model-info {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-  }
-
-  .ne-configurator__model-name {
-    font-family: var(--font-heading);
-    font-size: 17px;
-    font-weight: 600;
-    color: var(--color-primary, #1A2332);
-    margin: 0;
-  }
-
-  .ne-configurator__model-desc {
-    font-size: 13px;
-    color: var(--color-text-muted, #86868b);
-    margin: 0;
-  }
-
-  .ne-configurator__model-pricing {
-    text-align: right;
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-  }
-
-  .ne-configurator__price-from {
-    font-size: 15px;
-    font-weight: 500;
-    color: var(--color-primary, #1d1d1f);
-    white-space: nowrap;
-  }
-
-  .ne-configurator__price-monthly {
-    font-size: 12px;
-    color: var(--color-text-muted, #86868b);
-    white-space: nowrap;
-  }
-
-  /* Helper text */
-  .ne-configurator__helper {
-    display: flex;
-    align-items: flex-start;
-    gap: 8px;
-    font-size: 13px;
-    color: var(--color-text-muted, #86868b);
-    line-height: 1.5;
-  }
-
-  .ne-configurator__helper-icon {
-    width: 15px;
-    height: 15px;
-    flex-shrink: 0;
-    margin-top: 1px;
-  }
-
-  /* Size buttons */
-  .ne-configurator__size-buttons {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 10px;
-  }
-
-  @media screen and (min-width: 750px) {
-    .ne-configurator__size-buttons {
-      grid-template-columns: repeat(3, 1fr);
-    }
-  }
-
-  .ne-configurator__size-btn {
-    padding: 14px 18px;
-    border: 2px solid rgba(0, 0, 0, 0.08);
-    border-radius: 12px;
-    background-color: #ffffff;
-    cursor: pointer;
-    transition: border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
-    text-align: center;
-    -webkit-tap-highlight-color: transparent;
-    font-family: inherit;
-  }
-
-  .ne-configurator__size-btn:hover {
-    border-color: var(--color-accent, #5EC2AA);
-  }
-
-  .ne-configurator__size-btn--selected {
-    background-color: var(--color-accent, #5EC2AA);
-    border-color: var(--color-accent, #5EC2AA);
-    color: var(--color-primary, #1A2332);
-  }
-
-  .ne-configurator__size-name {
-    font-size: 15px;
-    font-weight: 600;
-    margin: 0 0 3px 0;
-  }
-
-  .ne-configurator__size-capacity {
-    font-size: 12px;
-    opacity: 0.7;
-    margin: 0;
-  }
-
-  .ne-configurator__dimensions {
-    font-size: 13px;
-    color: var(--color-text-muted, #86868b);
-    margin-top: 4px;
-  }
-
-  /* Heating option cards */
-  .ne-configurator__heating-options {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-  }
-
-  .ne-configurator__heating-card {
-    border: 2px solid rgba(0, 0, 0, 0.08);
-    border-radius: 12px;
-    background-color: #ffffff;
-    cursor: pointer;
-    transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
-    overflow: hidden;
-    -webkit-tap-highlight-color: transparent;
-    position: relative;
-  }
-
-  .ne-configurator__heating-card:hover {
-    border-color: var(--color-accent, #5EC2AA);
-  }
-
-  .ne-configurator__heating-card--selected {
-    border-color: var(--color-accent, #5EC2AA);
-    background-color: rgba(94, 194, 170, 0.04);
-    box-shadow: 0 0 0 1px var(--color-accent, #5EC2AA);
-  }
-
-  .ne-configurator__heating-card__image {
-    width: 100%;
-    aspect-ratio: 4 / 3;
-    object-fit: cover;
-    display: block;
-    background-color: var(--color-surface, #EDF2F5);
-  }
-
-  .ne-configurator__heating-card__placeholder {
-    width: 100%;
-    aspect-ratio: 4 / 3;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: var(--color-surface, #EDF2F5);
-    color: var(--color-text-muted, #86868b);
-    font-size: 13px;
-  }
-
-  .ne-configurator__heating-card__body {
-    padding: 12px 14px;
-  }
-
-  .ne-configurator__heating-card__title {
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--color-primary, #1A2332);
-    margin: 0 0 2px 0;
-  }
-
-  .ne-configurator__heating-card__desc {
-    font-size: 12px;
-    color: var(--color-text-muted, #86868b);
-    margin: 0;
-    line-height: 1.4;
-  }
-
-  .ne-configurator__heating-card__check {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    background-color: var(--color-accent, #5EC2AA);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.15);
-  }
-
-  .ne-configurator__heating-card--selected .ne-configurator__heating-card__check {
-    display: flex;
-  }
-
-  @media screen and (max-width: 480px) {
-    .ne-configurator__heating-options {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  /* Radio options */
-  .ne-configurator__radio-group {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .ne-configurator__radio-label {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    cursor: pointer;
-  }
-
-  .ne-configurator__radio-input {
-    width: 18px;
-    height: 18px;
-    accent-color: var(--color-accent, #5EC2AA);
-    cursor: pointer;
-    flex-shrink: 0;
-  }
-
-  .ne-configurator__radio-text {
-    font-size: 15px;
-    color: var(--color-primary, #1d1d1f);
-  }
-
-  .ne-configurator__radio-helper {
-    font-size: 12px;
-    color: var(--color-text-muted, #86868b);
-    margin-left: 28px;
-    margin-top: -6px;
-  }
-
-  /* Material toggle */
-  .ne-configurator__material-toggle {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 14px;
-  }
-
-  .ne-configurator__material-btn {
-    padding: 8px 16px;
-    border: 2px solid rgba(0, 0, 0, 0.08);
-    border-radius: 20px;
-    background-color: #ffffff;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    color: var(--color-primary, #1d1d1f);
-    font-family: inherit;
-  }
-
-  .ne-configurator__material-btn:hover {
-    border-color: var(--color-accent, #5EC2AA);
-  }
-
-  .ne-configurator__material-btn--selected {
-    background-color: var(--color-accent, #5EC2AA);
-    border-color: var(--color-accent, #5EC2AA);
-    color: var(--color-primary, #1A2332);
-  }
-
-  /* Color swatches */
-  .ne-configurator__swatches {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    align-items: center;
-  }
-
-  .ne-configurator__swatch {
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-    border: 2px solid rgba(0, 0, 0, 0.08);
-    cursor: pointer;
-    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
-    position: relative;
-    flex-shrink: 0;
-  }
-
-  .ne-configurator__swatch:hover {
-    transform: scale(1.12);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
-  }
-
-  .ne-configurator__swatch--selected {
-    border-color: var(--color-accent, #5EC2AA);
-    border-width: 3px;
-  }
-
-  .ne-configurator__swatch--selected::after {
-    content: '\2713';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: #ffffff;
-    font-size: 16px;
-    font-weight: 700;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
-    pointer-events: none;
-  }
-
-  .ne-configurator__collection-label {
-    font-size: 13px;
-    color: var(--color-text-muted, #86868b);
-    margin: 0 0 10px 0;
-  }
-
-  .ne-configurator__cedar-label {
-    font-size: 14px;
-    color: var(--color-primary, #1d1d1f);
-    font-style: italic;
-  }
-
-  /* Equipment list */
-  .ne-configurator__equipment-list {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-
-  .ne-configurator__equipment-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    font-size: 15px;
-    color: var(--color-primary, #1d1d1f);
-    line-height: 1.55;
-  }
-
-  .ne-configurator__equipment-item::before {
-    content: '\2014';
-    color: var(--color-text-muted, #86868b);
-    flex-shrink: 0;
-  }
-
-  /* Bottom / CTA */
-  .ne-configurator__bottom {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    padding-top: 28px;
-    border-top: 1px solid rgba(0, 0, 0, 0.08);
-  }
-
-  .ne-configurator__total-price {
-    font-family: var(--font-heading);
-    font-size: 40px;
-    font-weight: 600;
-    color: var(--color-primary, #1A2332);
-    letter-spacing: -1px;
-  }
-
-  @media screen and (min-width: 990px) {
-    .ne-configurator__total-price {
-      font-size: 48px;
-    }
-  }
-
-  .ne-configurator__cta-btn {
-    padding: 16px 28px;
-    background-color: var(--color-accent, #5EC2AA);
-    color: var(--color-primary, #1A2332);
-    border: none;
-    border-radius: 12px;
-    font-size: 17px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
-    width: 100%;
-    font-family: inherit;
-  }
-
-  .ne-configurator__cta-btn:hover:not(:disabled) {
-    background-color: var(--color-secondary, #3A8F7D);
-    color: #ffffff;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 14px rgba(58, 143, 125, 0.35);
-  }
-
-  .ne-configurator__cta-btn:disabled {
-    opacity: 0.45;
-    cursor: not-allowed;
-    transform: none !important;
-    box-shadow: none !important;
-  }
-
-  .ne-configurator__specs-link {
-    color: var(--color-secondary, #3A8F7D);
-    font-size: 15px;
-    text-decoration: none;
-    text-align: center;
-    display: block;
-  }
-
-  .ne-configurator__specs-link:hover {
-    text-decoration: underline;
-  }
-
-  .ne-configurator__error {
-    font-size: 13px;
-    color: #ff3b30;
-    display: none;
-  }
-
-  .ne-configurator__error--visible {
-    display: block;
-  }
-
-  /* Loading */
-  .ne-configurator__img-loading {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: var(--color-surface, #EDF2F5);
-    border-radius: 12px;
-  }
-
-  .ne-configurator__spinner {
-    width: 28px;
-    height: 28px;
-    border: 3px solid rgba(0, 0, 0, 0.08);
-    border-top-color: var(--color-accent, #5EC2AA);
-    border-radius: 50%;
-    animation: ne-spin 0.7s linear infinite;
-  }
-
-  @keyframes ne-spin {
-    to { transform: rotate(360deg); }
-  }
-
-  /* Step progression */
-  .ne-configurator__section-title-row {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 0;
-  }
-
-  .ne-configurator__step-badge {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    background: var(--color-accent, #5EC2AA);
-    color: var(--color-primary, #1A2332);
-    font-size: 13px;
-    font-weight: 700;
-    flex-shrink: 0;
-  }
-
-  .ne-configurator__section--locked {
-    opacity: 0.3;
-    pointer-events: none;
-    user-select: none;
-    transition: opacity 0.4s ease;
-  }
-{% endstylesheet %}
 
 {% style %}
-  .ne-configurator-{{ cfg_id }} {
-    background-color: {{ section.settings.background_color }};
-    font-family: var(--font-body);
-  }
-  .ne-configurator-{{ cfg_id }} .ne-configurator__container {
-    padding-top: {{ section.settings.padding_top }}px;
-    padding-bottom: {{ section.settings.padding_bottom }}px;
-  }
-  @media screen and (min-width: 990px) {
-    .ne-configurator-{{ cfg_id }} .ne-configurator__container {
-      padding-top: {{ section.settings.padding_top }}px;
-      padding-bottom: {{ section.settings.padding_bottom }}px;
-    }
-  }
-  .ne-configurator-{{ cfg_id }} .ne-configurator__section-title {
-    font-size: {% if section.settings.heading_size == 'small' %}20px{% elsif section.settings.heading_size == 'large' %}28px{% else %}24px{% endif %};
-  }
-  @media screen and (min-width: 990px) {
-    .ne-configurator-{{ cfg_id }} .ne-configurator__section-title {
-      font-size: {% if section.settings.heading_size == 'small' %}24px{% elsif section.settings.heading_size == 'large' %}32px{% else %}28px{% endif %};
-    }
-  }
+  .cfg-{{ cfg_id }} { background-color: {{ section.settings.background_color }}; }
+  .cfg-{{ cfg_id }} .cfg__wrap { padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px; }
 {% endstyle %}
 
-<nordic-elite-configurator-{{ cfg_id }}
-  class="ne-configurator ne-configurator-{{ cfg_id }}"
-  data-oven-addon="{{ section.settings.integrated_oven_addon }}"
->
-  <div class="ne-configurator__container">
+{%- comment -%} ═══════════ HTML ═══════════ {%- endcomment -%}
+<{{ tag_name }} class="cfg cfg-{{ cfg_id }}" data-cfg-tag="{{ tag_name }}">
+  <div class="cfg__wrap">
 
-    {%- comment -%} ===== LEFT: IMAGE PANEL ===== {%- endcomment -%}
-    <div class="ne-configurator__image-section">
-      <div class="ne-configurator__main-image-wrapper">
-        <div class="ne-configurator__img-loading" data-img-loading style="display:none;">
-          <div class="ne-configurator__spinner"></div>
-        </div>
-        <div class="ne-configurator__placeholder" data-main-placeholder>
+    {%- comment -%} ── LEFT: Image panel ── {%- endcomment -%}
+    <div class="cfg__images">
+      <div class="cfg__main-wrap">
+        <div class="cfg__loader" data-img-loading style="display:none;"><div class="cfg__spinner"></div></div>
+        <div class="cfg__placeholder" data-main-placeholder>
           {%- if section.settings.default_image != blank -%}
-            <img
-              src="{{ section.settings.default_image | image_url: width: 1200 }}"
-              alt="{{ section.settings.default_image.alt | default: 'Nordic Elite hot tub' }}"
-              style="width:100%;height:100%;object-fit:cover;"
-              loading="eager"
-            >
+            <img src="{{ section.settings.default_image | image_url: width: 1200 }}" alt="Nordic Elite hot tub" style="width:100%;height:100%;object-fit:cover;" loading="eager">
           {%- else -%}
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-              <rect x="3" y="3" width="18" height="18" rx="2"/>
-              <circle cx="8.5" cy="8.5" r="1.5"/>
-              <path d="m21 15-5-5L5 21"/>
-            </svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
             <span>Select a model to preview your hot tub</span>
           {%- endif -%}
         </div>
-        <img
-          src=""
-          alt="Nordic Elite hot tub"
-          class="ne-configurator__main-image"
-          data-main-image
-          loading="eager"
-          style="display:none;"
-        >
+        <img src="" alt="Hot tub preview" class="cfg-main-image" data-main-image loading="eager" style="display:none;">
       </div>
-
-      <div class="ne-configurator__gallery" data-gallery></div>
-
-      {%- comment -%} Product image data from Liquid product pickers {%- endcomment -%}
-      <script type="application/json" data-product-images>
-      {
-        "classic_m":    { "id": {{ section.settings.classic_m_product.id | default: "null" }}, "price": {{ section.settings.classic_m_product.price | default: 0 }}, "images": [{% for img in section.settings.classic_m_product.images limit:4 %}{% unless forloop.first %},{% endunless %}{"src":"{{ img | image_url: width: 1200 }}","thumb":"{{ img | image_url: width: 200 }}","alt":{{ img.alt | default: "Classic M" | json }}}{% endfor %}], "variant_id": {{ section.settings.classic_m_product.first_available_variant.id | default: "null" }}, "variants": [{% for v in section.settings.classic_m_product.variants %}{% unless forloop.first %},{% endunless %}{"id":{{ v.id }},"options":{{ v.options | json }}}{% endfor %}] },
-        "classic_l":    { "id": {{ section.settings.classic_l_product.id | default: "null" }}, "price": {{ section.settings.classic_l_product.price | default: 0 }}, "images": [{% for img in section.settings.classic_l_product.images limit:4 %}{% unless forloop.first %},{% endunless %}{"src":"{{ img | image_url: width: 1200 }}","thumb":"{{ img | image_url: width: 200 }}","alt":{{ img.alt | default: "Classic L" | json }}}{% endfor %}], "variant_id": {{ section.settings.classic_l_product.first_available_variant.id | default: "null" }}, "variants": [{% for v in section.settings.classic_l_product.variants %}{% unless forloop.first %},{% endunless %}{"id":{{ v.id }},"options":{{ v.options | json }}}{% endfor %}] },
-        "classic_xl":   { "id": {{ section.settings.classic_xl_product.id | default: "null" }}, "price": {{ section.settings.classic_xl_product.price | default: 0 }}, "images": [{% for img in section.settings.classic_xl_product.images limit:4 %}{% unless forloop.first %},{% endunless %}{"src":"{{ img | image_url: width: 1200 }}","thumb":"{{ img | image_url: width: 200 }}","alt":{{ img.alt | default: "Classic XL" | json }}}{% endfor %}], "variant_id": {{ section.settings.classic_xl_product.first_available_variant.id | default: "null" }}, "variants": [{% for v in section.settings.classic_xl_product.variants %}{% unless forloop.first %},{% endunless %}{"id":{{ v.id }},"options":{{ v.options | json }}}{% endfor %}] },
-        "premium_m":    { "id": {{ section.settings.premium_m_product.id | default: "null" }}, "price": {{ section.settings.premium_m_product.price | default: 0 }}, "images": [{% for img in section.settings.premium_m_product.images limit:4 %}{% unless forloop.first %},{% endunless %}{"src":"{{ img | image_url: width: 1200 }}","thumb":"{{ img | image_url: width: 200 }}","alt":{{ img.alt | default: "Premium M" | json }}}{% endfor %}], "variant_id": {{ section.settings.premium_m_product.first_available_variant.id | default: "null" }}, "variants": [{% for v in section.settings.premium_m_product.variants %}{% unless forloop.first %},{% endunless %}{"id":{{ v.id }},"options":{{ v.options | json }}}{% endfor %}] },
-        "premium_l":    { "id": {{ section.settings.premium_l_product.id | default: "null" }}, "price": {{ section.settings.premium_l_product.price | default: 0 }}, "images": [{% for img in section.settings.premium_l_product.images limit:4 %}{% unless forloop.first %},{% endunless %}{"src":"{{ img | image_url: width: 1200 }}","thumb":"{{ img | image_url: width: 200 }}","alt":{{ img.alt | default: "Premium L" | json }}}{% endfor %}], "variant_id": {{ section.settings.premium_l_product.first_available_variant.id | default: "null" }}, "variants": [{% for v in section.settings.premium_l_product.variants %}{% unless forloop.first %},{% endunless %}{"id":{{ v.id }},"options":{{ v.options | json }}}{% endfor %}] },
-        "premium_xl":   { "id": {{ section.settings.premium_xl_product.id | default: "null" }}, "price": {{ section.settings.premium_xl_product.price | default: 0 }}, "images": [{% for img in section.settings.premium_xl_product.images limit:4 %}{% unless forloop.first %},{% endunless %}{"src":"{{ img | image_url: width: 1200 }}","thumb":"{{ img | image_url: width: 200 }}","alt":{{ img.alt | default: "Premium XL" | json }}}{% endfor %}], "variant_id": {{ section.settings.premium_xl_product.first_available_variant.id | default: "null" }}, "variants": [{% for v in section.settings.premium_xl_product.variants %}{% unless forloop.first %},{% endunless %}{"id":{{ v.id }},"options":{{ v.options | json }}}{% endfor %}] },
-        "signature_m":  { "id": {{ section.settings.signature_m_product.id | default: "null" }}, "price": {{ section.settings.signature_m_product.price | default: 0 }}, "images": [{% for img in section.settings.signature_m_product.images limit:4 %}{% unless forloop.first %},{% endunless %}{"src":"{{ img | image_url: width: 1200 }}","thumb":"{{ img | image_url: width: 200 }}","alt":{{ img.alt | default: "Signature M" | json }}}{% endfor %}], "variant_id": {{ section.settings.signature_m_product.first_available_variant.id | default: "null" }}, "variants": [{% for v in section.settings.signature_m_product.variants %}{% unless forloop.first %},{% endunless %}{"id":{{ v.id }},"options":{{ v.options | json }}}{% endfor %}] },
-        "signature_l":  { "id": {{ section.settings.signature_l_product.id | default: "null" }}, "price": {{ section.settings.signature_l_product.price | default: 0 }}, "images": [{% for img in section.settings.signature_l_product.images limit:4 %}{% unless forloop.first %},{% endunless %}{"src":"{{ img | image_url: width: 1200 }}","thumb":"{{ img | image_url: width: 200 }}","alt":{{ img.alt | default: "Signature L" | json }}}{% endfor %}], "variant_id": {{ section.settings.signature_l_product.first_available_variant.id | default: "null" }}, "variants": [{% for v in section.settings.signature_l_product.variants %}{% unless forloop.first %},{% endunless %}{"id":{{ v.id }},"options":{{ v.options | json }}}{% endfor %}] },
-        "signature_xl": { "id": {{ section.settings.signature_xl_product.id | default: "null" }}, "price": {{ section.settings.signature_xl_product.price | default: 0 }}, "images": [{% for img in section.settings.signature_xl_product.images limit:4 %}{% unless forloop.first %},{% endunless %}{"src":"{{ img | image_url: width: 1200 }}","thumb":"{{ img | image_url: width: 200 }}","alt":{{ img.alt | default: "Signature XL" | json }}}{% endfor %}], "variant_id": {{ section.settings.signature_xl_product.first_available_variant.id | default: "null" }}, "variants": [{% for v in section.settings.signature_xl_product.variants %}{% unless forloop.first %},{% endunless %}{"id":{{ v.id }},"options":{{ v.options | json }}}{% endfor %}] }
-      }
-      </script>
+      <div class="cfg__gallery" data-gallery></div>
     </div>
 
-    {%- comment -%} ===== RIGHT: CONFIG PANEL ===== {%- endcomment -%}
-    <div class="ne-configurator__config-section">
+    {%- comment -%} ── RIGHT: Config steps ── {%- endcomment -%}
+    <div class="cfg__steps" data-steps>
 
-      {%- comment -%} STEP 1: MODEL {%- endcomment -%}
-      <div class="ne-configurator__section" data-section="1">
-        <div class="ne-configurator__section-title-row">
-          <span class="ne-configurator__step-badge" aria-hidden="true">1</span>
-          <h2 class="ne-configurator__section-title">Model. Which is best for you?</h2>
-        </div>
+      {%- for i in (1..15) -%}
+        {%- assign locked = '' -%}
+        {%- if i > 1 -%}{%- assign locked = ' cfg-step--locked' -%}{%- endif -%}
+        {%- assign step_hidden = false -%}
 
-        <div class="ne-configurator__model-cards" data-model-cards>
-          {%- assign classic_from = section.settings.classic_m_product.price | default: 0 -%}
-          <div class="ne-configurator__model-card" data-model="classic" tabindex="0" role="button" aria-pressed="false">
-            <div class="ne-configurator__model-info">
-              <h3 class="ne-configurator__model-name">Nordic Elite Classic</h3>
-              <p class="ne-configurator__model-desc">Entry-level premium hot tub</p>
-            </div>
-            <div class="ne-configurator__model-pricing">
-              {%- if classic_from > 0 -%}
-                <div class="ne-configurator__price-from">From {{ classic_from | money }}</div>
-                <div class="ne-configurator__price-monthly">or {{ classic_from | divided_by: 24 | money }}/mo. for 24 mo.*</div>
-              {%- else -%}
-                <div class="ne-configurator__price-from">&mdash;</div>
-              {%- endif -%}
-            </div>
+        {%- case i -%}
+          {%- when 1 -%}{%- assign s_title = 'Your Hot Tub' -%}{%- assign s_sub = 'Choose model and size.' -%}
+          {%- when 2 -%}{%- assign s_title = 'Fiberglass Liner' -%}{%- assign s_sub = 'Select collection & color.' -%}
+          {%- when 3 -%}{%- assign s_title = 'Hot Tub Insulation' -%}{%- assign s_sub = 'Additional insulation layer.' -%}
+          {%- when 4 -%}{%- assign s_title = 'Heating System' -%}{%- assign s_sub = 'External or internal oven.' -%}
+          {%- when 5 -%}{%- assign s_title = 'Exterior Panel' -%}{%- assign s_sub = 'Pick your wood finish.' -%}
+          {%- when 6 -%}{%- assign s_title = 'Hydro Massage' -%}{%- assign s_sub = 'Select system & nozzle count.' -%}
+          {%- when 7 -%}{%- assign s_title = 'Air System' -%}{%- assign s_sub = 'Select system & nozzle count.' -%}
+          {%- when 8 -%}{%- assign s_title = 'Filter System' -%}{%- assign s_sub = 'Filtration options.' -%}
+          {%- when 9 -%}{%- assign s_title = 'LED Lighting' -%}{%- assign s_sub = 'Choose lamp size & quantity.' -%}
+          {%- when 10 -%}{%- assign s_title = 'Thermometer' -%}{%- assign s_sub = 'Temperature monitoring.' -%}
+          {%- when 11 -%}{%- assign s_title = 'Stairs' -%}{%- assign s_sub = 'Matching exterior material.' -%}
+          {%- when 12 -%}{%- assign s_title = 'Hot Tub Head Pillows' -%}{%- assign s_sub = 'Comfort accessories.' -%}
+          {%- when 13 -%}{%- assign s_title = 'Cover' -%}{%- assign s_sub = 'Protect your hot tub.' -%}
+          {%- when 14 -%}{%- assign s_title = 'Control Installation' -%}{%- assign s_sub = 'Mark installation locations.' -%}
+          {%- when 15 -%}{%- assign s_title = 'Heater Connection Type' -%}{%- assign s_sub = 'Connection angle.' -%}
+        {%- endcase -%}
+
+        <div class="cfg-step{{ locked }}" data-step="{{ i }}">
+          <div class="cfg-step__header">
+            <span class="cfg-step__badge" aria-hidden="true">{{ i }}</span>
+            <h3 class="cfg-step__title">{{ s_title }}</h3>
           </div>
-
-          {%- assign premium_from = section.settings.premium_m_product.price | default: 0 -%}
-          <div class="ne-configurator__model-card" data-model="premium" tabindex="0" role="button" aria-pressed="false">
-            <div class="ne-configurator__model-info">
-              <h3 class="ne-configurator__model-name">Nordic Elite Premium</h3>
-              <p class="ne-configurator__model-desc">Enhanced features and materials</p>
-            </div>
-            <div class="ne-configurator__model-pricing">
-              {%- if premium_from > 0 -%}
-                <div class="ne-configurator__price-from">From {{ premium_from | money }}</div>
-                <div class="ne-configurator__price-monthly">or {{ premium_from | divided_by: 24 | money }}/mo. for 24 mo.*</div>
-              {%- else -%}
-                <div class="ne-configurator__price-from">&mdash;</div>
-              {%- endif -%}
-            </div>
-          </div>
-
-          {%- assign signature_from = section.settings.signature_m_product.price | default: 0 -%}
-          <div class="ne-configurator__model-card" data-model="signature" tabindex="0" role="button" aria-pressed="false">
-            <div class="ne-configurator__model-info">
-              <h3 class="ne-configurator__model-name">Nordic Elite Signature</h3>
-              <p class="ne-configurator__model-desc">Ultimate luxury experience</p>
-            </div>
-            <div class="ne-configurator__model-pricing">
-              {%- if signature_from > 0 -%}
-                <div class="ne-configurator__price-from">From {{ signature_from | money }}</div>
-                <div class="ne-configurator__price-monthly">or {{ signature_from | divided_by: 24 | money }}/mo. for 24 mo.*</div>
-              {%- else -%}
-                <div class="ne-configurator__price-from">&mdash;</div>
-              {%- endif -%}
-            </div>
+          <p class="cfg-step__subtitle">{{ s_sub }}</p>
+          <div class="cfg-step__body">
+            {%- comment -%} Content rendered by JS from JSON data {%- endcomment -%}
           </div>
         </div>
 
-        <div class="ne-configurator__helper">
-          <svg class="ne-configurator__helper-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-            <circle cx="12" cy="12" r="10"></circle>
-            <line x1="12" y1="16" x2="12" y2="12"></line>
-            <line x1="12" y1="8" x2="12.01" y2="8"></line>
-          </svg>
-          <span>Need help choosing a model? Explore the differences in features and materials.</span>
+        {%- unless i == 15 -%}<div class="cfg-divider"></div>{%- endunless -%}
+      {%- endfor -%}
+
+      {%- comment -%} ── Summary ── {%- endcomment -%}
+      <div class="cfg-step" data-step="summary">
+        <div class="cfg-step__header">
+          <span class="cfg-step__badge" aria-hidden="true">✓</span>
+          <h3 class="cfg-step__title">Your Configuration</h3>
         </div>
+        <ul data-summary-list style="list-style: disc; padding-left: 20px;"></ul>
       </div>
 
-      <div class="ne-configurator__divider"></div>
-
-      {%- comment -%} STEP 2: SIZE {%- endcomment -%}
-      <div class="ne-configurator__section ne-configurator__section--locked" data-section="2">
-        <div class="ne-configurator__section-title-row">
-          <span class="ne-configurator__step-badge" aria-hidden="true">2</span>
-          <h2 class="ne-configurator__section-title">Size. Choose your capacity.</h2>
-        </div>
-
-        <div class="ne-configurator__size-buttons" data-size-buttons>
-          <button class="ne-configurator__size-btn" data-size="m" aria-pressed="false">
-            <div class="ne-configurator__size-name">M &mdash; Compact</div>
-            <div class="ne-configurator__size-capacity">2&ndash;4 persons</div>
-          </button>
-          <button class="ne-configurator__size-btn" data-size="l" aria-pressed="false">
-            <div class="ne-configurator__size-name">L &mdash; Standard</div>
-            <div class="ne-configurator__size-capacity">4&ndash;6 persons</div>
-          </button>
-          <button class="ne-configurator__size-btn" data-size="xl" aria-pressed="false">
-            <div class="ne-configurator__size-name">XL &mdash; Large</div>
-            <div class="ne-configurator__size-capacity">6&ndash;8 persons</div>
-          </button>
-        </div>
-
-        <div class="ne-configurator__dimensions" data-dimensions>
-          Dimensions: 100&times;180 / 120&times;200 cm (outside, rectangular)
-        </div>
+      {%- comment -%} ── Price + CTA ── {%- endcomment -%}
+      <div class="cfg__bottom">
+        <div class="cfg__total" data-total-price aria-live="polite" style="visibility:hidden;">—</div>
+        <p class="cfg__error" data-cart-error></p>
+        <button class="cfg__cta" data-add-to-cart disabled>Select a model to start</button>
+        {%- if section.settings.specs_page != blank -%}
+          <a href="{{ section.settings.specs_page }}" class="cfg__specs-link">View full specifications</a>
+        {%- endif -%}
       </div>
-
-      <div class="ne-configurator__divider"></div>
-
-      {%- comment -%} STEP 3: FINISH {%- endcomment -%}
-      <div class="ne-configurator__section ne-configurator__section--locked" data-section="3">
-        <div class="ne-configurator__section-title-row">
-          <span class="ne-configurator__step-badge" aria-hidden="true">3</span>
-          <h2 class="ne-configurator__section-title">Finish. Pick your favorite.</h2>
-        </div>
-
-        {%- comment -%} Heating system {%- endcomment -%}
-        <div>
-          <h3 class="ne-configurator__section-subtitle">Heating system</h3>
-          <div class="ne-configurator__heating-options" data-heating-options>
-            <div class="ne-configurator__heating-card ne-configurator__heating-card--selected" data-heating="external" tabindex="0" role="button" aria-pressed="true" aria-label="External oven">
-              <div class="ne-configurator__heating-card__check">
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7L5.5 10L11.5 4" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              </div>
-              {%- if section.settings.external_oven_image -%}
-                <img class="ne-configurator__heating-card__image" src="{{ section.settings.external_oven_image | image_url: width: 600 }}" alt="External oven" loading="lazy" width="300" height="225">
-              {%- else -%}
-                <div class="ne-configurator__heating-card__placeholder">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
-                </div>
-              {%- endif -%}
-              <div class="ne-configurator__heating-card__body">
-                <p class="ne-configurator__heating-card__title">External oven</p>
-                <p class="ne-configurator__heating-card__desc">Standard 30 kW wood-burning oven</p>
-              </div>
-            </div>
-            <div class="ne-configurator__heating-card" data-heating="integrated" tabindex="0" role="button" aria-pressed="false" aria-label="Integrated oven">
-              <div class="ne-configurator__heating-card__check">
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7L5.5 10L11.5 4" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              </div>
-              {%- if section.settings.integrated_oven_image -%}
-                <img class="ne-configurator__heating-card__image" src="{{ section.settings.integrated_oven_image | image_url: width: 600 }}" alt="Integrated oven" loading="lazy" width="300" height="225">
-              {%- else -%}
-                <div class="ne-configurator__heating-card__placeholder">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
-                </div>
-              {%- endif -%}
-              <div class="ne-configurator__heating-card__body">
-                <p class="ne-configurator__heating-card__title">Integrated oven</p>
-                <p class="ne-configurator__heating-card__desc">30 kW wood-burning oven (+&euro;{{ section.settings.integrated_oven_addon }})</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {%- comment -%} Fiberglass liner {%- endcomment -%}
-        <div style="margin-top: 8px;">
-          <h3 class="ne-configurator__section-subtitle">Color</h3>
-          <p class="ne-configurator__collection-label">Fiberglass liner &ndash; <span data-collection-name>Pearl Collection</span></p>
-          <div class="ne-configurator__swatches" data-liner-swatches>
-            <div class="ne-configurator__swatch ne-configurator__swatch--selected" data-color="azure-pearl" style="background-color: #b8d9e8;" title="Azure Pearl" tabindex="0" role="button" aria-pressed="true" aria-label="Azure Pearl"></div>
-            <div class="ne-configurator__swatch" data-color="ivory-pearl" style="background-color: #f0ede0;" title="Ivory Pearl" tabindex="0" role="button" aria-pressed="false" aria-label="Ivory Pearl"></div>
-            <div class="ne-configurator__swatch" data-color="silver-pearl" style="background-color: #b8bec4;" title="Silver Pearl" tabindex="0" role="button" aria-pressed="false" aria-label="Silver Pearl"></div>
-            <div class="ne-configurator__swatch" data-color="midnight-pearl" style="background-color: #232d3a;" title="Midnight Pearl" tabindex="0" role="button" aria-pressed="false" aria-label="Midnight Pearl"></div>
-          </div>
-        </div>
-
-        {%- comment -%} Exterior panels {%- endcomment -%}
-        <div style="margin-top: 8px;" data-exterior-section>
-          <h3 class="ne-configurator__section-subtitle">Exterior panels</h3>
-
-          <div class="ne-configurator__material-toggle" data-material-toggle style="display: none;">
-            <button class="ne-configurator__material-btn ne-configurator__material-btn--selected" data-material="wpc" aria-pressed="true">WPC</button>
-            <button class="ne-configurator__material-btn" data-material="thermal" aria-pressed="false">Thermal wood</button>
-          </div>
-          <p class="ne-configurator__helper" data-material-note style="display:none; margin-bottom: 10px;">
-            <svg class="ne-configurator__helper-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-            Thermal wood available in one color only
-          </p>
-
-          <p class="ne-configurator__collection-label" data-exterior-label>Painted spruce wood &mdash; 6 RAL colors</p>
-          <div class="ne-configurator__swatches" data-exterior-swatches>
-            <div class="ne-configurator__swatch ne-configurator__swatch--selected" data-color="anthracite-grey" style="background-color: #383E42;" title="RAL 7016 Anthracite Grey" tabindex="0" role="button" aria-label="Anthracite Grey"></div>
-            <div class="ne-configurator__swatch" data-color="jet-black" style="background-color: #14171a;" title="RAL 9005 Jet Black" tabindex="0" role="button" aria-label="Jet Black"></div>
-            <div class="ne-configurator__swatch" data-color="chocolate-brown" style="background-color: #44220E;" title="RAL 8017 Chocolate Brown" tabindex="0" role="button" aria-label="Chocolate Brown"></div>
-            <div class="ne-configurator__swatch" data-color="fir-green" style="background-color: #27352A;" title="RAL 6009 Fir Green" tabindex="0" role="button" aria-label="Fir Green"></div>
-            <div class="ne-configurator__swatch" data-color="light-grey" style="background-color: #c8ccc8;" title="RAL 7035 Light Grey" tabindex="0" role="button" aria-label="Light Grey"></div>
-            <div class="ne-configurator__swatch" data-color="pure-white" style="background-color: #f4f4f0; border-color: #c8ccc8;" title="RAL 9010 Pure White" tabindex="0" role="button" aria-label="Pure White"></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="ne-configurator__divider"></div>
-
-      {%- comment -%} STEP 4: EQUIPMENT {%- endcomment -%}
-      <div class="ne-configurator__section ne-configurator__section--locked" data-section="4">
-        <div class="ne-configurator__section-title-row">
-          <span class="ne-configurator__step-badge" aria-hidden="true">4</span>
-          <h2 class="ne-configurator__section-title">What's included</h2>
-        </div>
-        <ul class="ne-configurator__equipment-list" data-equipment-list>
-          <li class="ne-configurator__equipment-item">Insulated fiberglass construction</li>
-          <li class="ne-configurator__equipment-item" data-eq-hydro>Hydromassage system: 6 nozzles, 1.1 kW</li>
-          <li class="ne-configurator__equipment-item" data-eq-air>Air massage system: 6 nozzles</li>
-          <li class="ne-configurator__equipment-item" data-eq-led>LED lighting: 1 LED lamp (7 colors), &Oslash; 50 mm</li>
-          <li class="ne-configurator__equipment-item" data-eq-oven>Standard 30 kW wood-burning oven (75 cm), standard chimney, metal oven door</li>
-          <li class="ne-configurator__equipment-item" data-eq-stairs>Stairs: painted spruce wood, matching exterior color</li>
-          <li class="ne-configurator__equipment-item" data-eq-thermo>Floating thermometer</li>
-          <li class="ne-configurator__equipment-item" data-eq-pillows style="display:none;">Head pillows: 2 pcs</li>
-          <li class="ne-configurator__equipment-item">Thermal cover included</li>
-        </ul>
-      </div>
-
-      {%- comment -%} BOTTOM: PRICE + CTA {%- endcomment -%}
-      <div class="ne-configurator__bottom">
-        <div class="ne-configurator__total-price" data-total-price aria-live="polite" style="visibility:hidden;">&mdash;</div>
-        <p class="ne-configurator__error" data-cart-error></p>
-        <button class="ne-configurator__cta-btn" data-add-to-cart aria-label="Add Nordic Elite hot tub to cart" disabled>
-          Select model &amp; size to continue
-        </button>
-        <a href="{{ section.settings.specs_page }}" class="ne-configurator__specs-link">
-          View full specifications
-        </a>
-      </div>
-
     </div>
   </div>
-</nordic-elite-configurator-{{ cfg_id }}>
 
-<script>
-(function() {
-  const formatPrice = (amount) => {
-    return amount.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' EUR';
-  };
-
-  const DIMENSIONS = {
-    m:  'Outside: 100\u00d7180 cm / 120\u00d7200 cm (rectangular)',
-    l:  'Inside \u00d8 180 cm / Outside \u00d8 200 cm (round)',
-    xl: 'Inside \u00d8 200 cm / Outside \u00d8 225 cm (round)'
-  };
-
-  const EQUIPMENT = {
-    classic: {
-      m: { hydro: 'Hydromassage: 6 nozzles, 1.1 kW', air: 'Air massage system: 6 nozzles', led: 'LED lighting: 1 LED lamp (7 colors), \u00d8 50 mm', oven: { external: 'Standard 30 kW wood-burning oven (75 cm), standard chimney, metal oven door', integrated: 'Integrated 30 kW wood-burning oven' }, stairs: 'Stairs: painted spruce wood, matching exterior color', thermo: 'Floating thermometer', pillows: null },
-      l: { hydro: 'Hydromassage: 8 nozzles, 1.1 kW', air: 'Air massage system: 9 nozzles', led: 'LED lighting: 2 LED lamps (7 colors), \u00d8 50 mm', oven: { external: 'Standard 30 kW wood-burning oven (75 cm), standard chimney, metal oven door', integrated: 'Integrated 30 kW wood-burning oven' }, stairs: 'Stairs: painted spruce wood, matching exterior color', thermo: 'Floating thermometer', pillows: null },
-      xl: { hydro: 'Hydromassage: 10 nozzles, 1.5 kW', air: 'Air massage system: 12 nozzles', led: 'LED lighting: 2 LED lamps (7 colors), \u00d8 65 mm', oven: { external: 'Standard 30 kW wood-burning oven (75 cm), standard chimney, metal oven door', integrated: 'Integrated 30 kW wood-burning oven' }, stairs: 'Stairs: painted spruce wood, matching exterior color', thermo: 'Floating thermometer', pillows: null }
-    },
-    premium: {
-      m: { hydro: 'Hydromassage: 6 nozzles, 1.1 kW', air: 'Air massage system: 6 nozzles with LED (7 colors)', led: null, oven: { external: 'Wood-burning 30 kW oven (75 cm), chimney protection, glass door', integrated: 'Integrated 30 kW wood-burning oven, chimney protection, glass door' }, stairs: 'Stairs: same material and color as exterior', thermo: 'Integrated electronic thermometer', pillows: '2 pcs' },
-      l: { hydro: 'Hydromassage: 8 nozzles, 1.1 kW', air: 'Air massage system: 9 nozzles with LED (7 colors)', led: null, oven: { external: 'Wood-burning 30 kW oven (75 cm), chimney protection, glass door', integrated: 'Integrated 30 kW wood-burning oven, chimney protection, glass door' }, stairs: 'Stairs: same material and color as exterior', thermo: 'Integrated electronic thermometer', pillows: '6 pcs' },
-      xl: { hydro: 'Hydromassage: 10 nozzles, 1.5 kW', air: 'Air massage system: 12 nozzles with LED (7 colors)', led: null, oven: { external: 'Wood-burning 30 kW oven (75 cm), chimney protection, glass door', integrated: 'Integrated 30 kW wood-burning oven, chimney protection, glass door' }, stairs: 'Stairs: same material and color as exterior', thermo: 'Integrated electronic thermometer', pillows: '8 pcs' }
-    },
-    signature: {
-      m: { hydro: 'Hydromassage: 6 nozzles, 1.1 kW', air: 'Air massage system: 6 nozzles with LED (7 colors)', led: null, oven: { external: 'External AISI 316 stainless steel oven, chimney protection, glass door', integrated: 'Integrated AISI 316 stainless steel oven, chimney protection, glass door' }, stairs: 'Stairs: cedar wood', thermo: 'Integrated electronic thermometer', pillows: '2 pcs' },
-      l: { hydro: 'Hydromassage: 8 nozzles, 1.1 kW', air: 'Air massage system: 9 nozzles with LED (7 colors)', led: null, oven: { external: 'External AISI 316 stainless steel oven, chimney protection, glass door', integrated: 'Integrated AISI 316 stainless steel oven, chimney protection, glass door' }, stairs: 'Stairs: cedar wood', thermo: 'Integrated electronic thermometer', pillows: '6 pcs' },
-      xl: { hydro: 'Hydromassage: 10 nozzles, 1.5 kW', air: 'Air massage system: 12 nozzles with LED (7 colors)', led: null, oven: { external: 'External AISI 316 stainless steel oven, chimney protection, glass door', integrated: 'Integrated AISI 316 stainless steel oven, chimney protection, glass door' }, stairs: 'Stairs: cedar wood', thermo: 'Integrated electronic thermometer', pillows: '8 pcs' }
-    }
-  };
-
-  const LINER_SWATCHES = {
-    classic: [
-      { color: 'azure-pearl', bg: '#b8d9e8', label: 'Azure Pearl' },
-      { color: 'ivory-pearl', bg: '#f0ede0', label: 'Ivory Pearl' },
-      { color: 'silver-pearl', bg: '#b8bec4', label: 'Silver Pearl' },
-      { color: 'midnight-pearl', bg: '#232d3a', label: 'Midnight Pearl' }
-    ],
-    premium: [
-      { color: 'crystal-granite', bg: '#dcdcdc', label: 'Crystal Granite' },
-      { color: 'glacier-granite', bg: '#a0b4c8', label: 'Glacier Granite' },
-      { color: 'arctic-granite', bg: '#5a6472', label: 'Arctic Granite' }
-    ],
-    signature: [
-      { color: 'crystal-granite', bg: '#dcdcdc', label: 'Crystal Granite' },
-      { color: 'glacier-granite', bg: '#a0b4c8', label: 'Glacier Granite' },
-      { color: 'arctic-granite', bg: '#5a6472', label: 'Arctic Granite' }
-    ]
-  };
-
-  const LINER_COLLECTION_NAME = { classic: 'Pearl Collection', premium: 'Granite Collection', signature: 'Granite Collection' };
-
-  const EXTERIOR_SWATCHES = {
-    classic: { label: 'Painted spruce wood \u2014 6 RAL colors', swatches: [
-      { color: 'anthracite-grey', bg: '#383E42', label: 'RAL 7016 Anthracite Grey' },
-      { color: 'jet-black', bg: '#14171a', label: 'RAL 9005 Jet Black' },
-      { color: 'chocolate-brown', bg: '#44220E', label: 'RAL 8017 Chocolate Brown' },
-      { color: 'fir-green', bg: '#27352A', label: 'RAL 6009 Fir Green' },
-      { color: 'light-grey', bg: '#c8ccc8', label: 'RAL 7035 Light Grey' },
-      { color: 'pure-white', bg: '#f4f4f0', label: 'RAL 9010 Pure White', border: '#c8ccc8' }
-    ]},
-    premium_wpc: { label: 'WPC (Wood Plastic Composite)', swatches: [
-      { color: 'wpc-grey', bg: '#7A7A72', label: 'Grey' },
-      { color: 'wpc-brown', bg: '#8B6343', label: 'Brown' },
-      { color: 'wpc-black', bg: '#1a1a1a', label: 'Black' }
-    ]},
-    premium_thermal: { label: 'Thermal wood \u2014 1 color', swatches: [
-      { color: 'thermal-brown', bg: '#5C3D1E', label: 'Thermal Wood Natural Brown' }
-    ]},
-    signature: { label: 'Cedar wood \u2014 natural', swatches: [
-      { color: 'cedar-natural', bg: '#C68642', label: 'Cedar Natural' }
-    ]}
-  };
-
-  class NordicEliteConfigurator extends HTMLElement {
-    constructor() {
-      super();
-      this.state = { model: null, size: null, oven: 'external', linerColor: null, exteriorColor: null, exteriorMaterial: 'painted-spruce', imageIndex: 0 };
-      this.abortController = null;
-      this._boundHandleKeydown = this.#handleKeydown.bind(this);
-    }
-
-    connectedCallback() {
-      this.#parseProductData();
-      this.#cacheElements();
-      this.#readPrices();
-      this.#setupEventListeners();
-    }
-
-    disconnectedCallback() {
-      document.removeEventListener('keydown', this._boundHandleKeydown);
-      if (this.abortController) this.abortController.abort();
-    }
-
-    #parseProductData() {
-      const script = this.querySelector('[data-product-images]');
-      this.productData = script ? JSON.parse(script.textContent) : {};
-    }
-
-    #getProductData(model, size) {
-      return this.productData[`${model}_${size}`] || null;
-    }
-
-    #cacheElements() {
-      this.mainImage = this.querySelector('[data-main-image]');
-      this.imgLoading = this.querySelector('[data-img-loading]');
-      this.gallery = this.querySelector('[data-gallery]');
-      this.dimensionsEl = this.querySelector('[data-dimensions]');
-      this.collectionName = this.querySelector('[data-collection-name]');
-      this.linerSwatches = this.querySelector('[data-liner-swatches]');
-      this.exteriorLabel = this.querySelector('[data-exterior-label]');
-      this.exteriorSwatches = this.querySelector('[data-exterior-swatches]');
-      this.materialToggle = this.querySelector('[data-material-toggle]');
-      this.materialNote = this.querySelector('[data-material-note]');
-      this.heatingOptions = this.querySelector('[data-heating-options]');
-      this.totalPrice = this.querySelector('[data-total-price]');
-      this.addToCartBtn = this.querySelector('[data-add-to-cart]');
-      this.cartError = this.querySelector('[data-cart-error]');
-      this.eqHydro = this.querySelector('[data-eq-hydro]');
-      this.eqAir = this.querySelector('[data-eq-air]');
-      this.eqLed = this.querySelector('[data-eq-led]');
-      this.eqOven = this.querySelector('[data-eq-oven]');
-      this.eqStairs = this.querySelector('[data-eq-stairs]');
-      this.eqThermo = this.querySelector('[data-eq-thermo]');
-      this.eqPillows = this.querySelector('[data-eq-pillows]');
-    }
-
-    #readPrices() {
-      this.ovenAddon = parseFloat(this.dataset.ovenAddon) || 500;
-    }
-
-    #setupEventListeners() {
-      this.querySelector('[data-model-cards]').addEventListener('click', (e) => {
-        const card = e.target.closest('[data-model]');
-        if (card) this.#selectModel(card.dataset.model);
-      });
-      this.querySelector('[data-model-cards]').addEventListener('keydown', (e) => {
-        if (e.key !== 'Enter' && e.key !== ' ') return;
-        const card = e.target.closest('[data-model]');
-        if (!card) return;
-        e.preventDefault();
-        this.#selectModel(card.dataset.model);
-      });
-      this.querySelector('[data-size-buttons]').addEventListener('click', (e) => {
-        const btn = e.target.closest('[data-size]');
-        if (btn) this.#selectSize(btn.dataset.size);
-      });
-      this.heatingOptions.addEventListener('click', (e) => {
-        const card = e.target.closest('[data-heating]');
-        if (card) this.#selectHeating(card.dataset.heating);
-      });
-      this.heatingOptions.addEventListener('keydown', (e) => {
-        if (e.key !== 'Enter' && e.key !== ' ') return;
-        const card = e.target.closest('[data-heating]');
-        if (!card) return;
-        e.preventDefault();
-        this.#selectHeating(card.dataset.heating);
-      });
-      this.materialToggle.addEventListener('click', (e) => {
-        const btn = e.target.closest('[data-material]');
-        if (btn) this.#selectMaterial(btn.dataset.material);
-      });
-      this.linerSwatches.addEventListener('click', (e) => {
-        const sw = e.target.closest('[data-color]');
-        if (sw) this.#selectSwatch(this.linerSwatches, sw, 'linerColor');
-      });
-      this.linerSwatches.addEventListener('keydown', (e) => {
-        if (e.key !== 'Enter' && e.key !== ' ') return;
-        const sw = e.target.closest('[data-color]');
-        if (!sw) return;
-        e.preventDefault();
-        this.#selectSwatch(this.linerSwatches, sw, 'linerColor');
-      });
-      this.exteriorSwatches.addEventListener('click', (e) => {
-        const sw = e.target.closest('[data-color]');
-        if (sw) this.#selectSwatch(this.exteriorSwatches, sw, 'exteriorColor');
-      });
-      this.exteriorSwatches.addEventListener('keydown', (e) => {
-        if (e.key !== 'Enter' && e.key !== ' ') return;
-        const sw = e.target.closest('[data-color]');
-        if (!sw) return;
-        e.preventDefault();
-        this.#selectSwatch(this.exteriorSwatches, sw, 'exteriorColor');
-      });
-      this.gallery.addEventListener('click', (e) => {
-        const thumb = e.target.closest('[data-thumb]');
-        if (thumb) this.#selectGalleryThumb(parseInt(thumb.dataset.thumb));
-      });
-      this.gallery.addEventListener('keydown', (e) => {
-        if (e.key !== 'Enter' && e.key !== ' ') return;
-        const thumb = e.target.closest('[data-thumb]');
-        if (!thumb) return;
-        e.preventDefault();
-        this.#selectGalleryThumb(parseInt(thumb.dataset.thumb));
-      });
-      this.addToCartBtn.addEventListener('click', () => this.#handleAddToCart());
-    }
-
-    #selectModel(model) {
-      const changed = this.state.model !== model;
-      this.state.model = model;
-      this.state.imageIndex = 0;
-      for (const card of this.querySelectorAll('[data-model]')) {
-        const isSelected = card.dataset.model === model;
-        card.classList.toggle('ne-configurator__model-card--selected', isSelected);
-        card.setAttribute('aria-pressed', String(isSelected));
-      }
-      this.#updateLinerSwatches();
-      this.#updateExteriorSection();
-      this.#updateEquipment();
-      this.#updatePrice();
-      this.#updateImages();
-      if (changed) { this.#unlockSection(2); this.#scrollToSection(2); }
-    }
-
-    #selectSize(size) {
-      const changed = this.state.size !== size;
-      this.state.size = size;
-      this.state.imageIndex = 0;
-      for (const btn of this.querySelectorAll('[data-size]')) {
-        const isSelected = btn.dataset.size === size;
-        btn.classList.toggle('ne-configurator__size-btn--selected', isSelected);
-        btn.setAttribute('aria-pressed', String(isSelected));
-      }
-      this.dimensionsEl.textContent = 'Dimensions: ' + DIMENSIONS[size];
-      this.#updateEquipment();
-      this.#updatePrice();
-      this.#updateImages();
-      if (changed) {
-        this.#unlockSection(3);
-        this.#unlockSection(4);
-        this.#scrollToSection(3);
-        this.addToCartBtn.disabled = false;
-        this.addToCartBtn.textContent = 'Add to Cart';
-        this.totalPrice.style.visibility = 'visible';
-      }
-    }
-
-    #selectHeating(value) {
-      this.state.oven = value;
-      for (const card of this.heatingOptions.querySelectorAll('[data-heating]')) {
-        const isSelected = card.dataset.heating === value;
-        card.classList.toggle('ne-configurator__heating-card--selected', isSelected);
-        card.setAttribute('aria-pressed', String(isSelected));
-      }
-      this.#updateEquipment();
-      this.#updatePrice();
-    }
-
-    #selectMaterial(material) {
-      this.state.exteriorMaterial = material;
-      for (const btn of this.materialToggle.querySelectorAll('[data-material]')) {
-        const isSelected = btn.dataset.material === material;
-        btn.classList.toggle('ne-configurator__material-btn--selected', isSelected);
-        btn.setAttribute('aria-pressed', String(isSelected));
-      }
-      this.materialNote.style.display = material === 'thermal' ? 'flex' : 'none';
-      this.#renderExteriorSwatches(material === 'thermal' ? 'premium_thermal' : 'premium_wpc');
-    }
-
-    #selectSwatch(container, swatch, stateKey) {
-      for (const s of container.querySelectorAll('.ne-configurator__swatch')) {
-        s.classList.remove('ne-configurator__swatch--selected');
-        s.setAttribute('aria-pressed', 'false');
-      }
-      swatch.classList.add('ne-configurator__swatch--selected');
-      swatch.setAttribute('aria-pressed', 'true');
-      this.state[stateKey] = swatch.dataset.color;
-    }
-
-    #selectGalleryThumb(index) {
-      const size = this.state.size || 'm';
-      const productData = this.#getProductData(this.state.model, size);
-      const images = productData?.images || [];
-      if (index < 0 || index >= images.length) return;
-      this.state.imageIndex = index;
-      for (const t of this.gallery.querySelectorAll('[data-thumb]')) {
-        t.classList.toggle('ne-configurator__thumb--active', parseInt(t.dataset.thumb) === index);
-      }
-      this.#swapMainImage(images[index].src);
-    }
-
-    #updateImages() {
-      if (!this.state.model) return;
-      const size = this.state.size || 'm';
-      const productData = this.#getProductData(this.state.model, size);
-      const images = productData?.images || [];
-      const placeholder = this.querySelector('[data-main-placeholder]');
-      if (images.length === 0) {
-        if (placeholder) placeholder.style.display = 'flex';
-        this.mainImage.style.display = 'none';
-        this.gallery.innerHTML = '';
-        return;
-      }
-      if (placeholder) placeholder.style.display = 'none';
-      this.mainImage.style.display = 'block';
-      this.gallery.innerHTML = '';
-      for (let i = 0; i < images.length; i++) {
-        const imgData = images[i];
-        const thumb = document.createElement('div');
-        thumb.className = 'ne-configurator__thumb' + (i === 0 ? ' ne-configurator__thumb--active' : '');
-        thumb.dataset.thumb = String(i);
-        thumb.tabIndex = 0;
-        thumb.setAttribute('role', 'button');
-        thumb.setAttribute('aria-label', `View image ${i + 1}`);
-        const img = document.createElement('img');
-        img.src = imgData.thumb;
-        img.alt = imgData.alt || `Hot tub view ${i + 1}`;
-        img.loading = 'lazy';
-        thumb.appendChild(img);
-        this.gallery.appendChild(thumb);
-      }
-      this.state.imageIndex = 0;
-      this.#swapMainImage(images[0].src);
-    }
-
-    #updateLinerSwatches() {
-      const swatches = LINER_SWATCHES[this.state.model];
-      const collName = LINER_COLLECTION_NAME[this.state.model];
-      this.collectionName.textContent = collName;
-      this.linerSwatches.innerHTML = swatches.map((s, i) =>
-        `<div class="ne-configurator__swatch${i === 0 ? ' ne-configurator__swatch--selected' : ''}" data-color="${s.color}" style="background-color:${s.bg};${s.border ? `border-color:${s.border};` : ''}" title="${s.label}" tabindex="0" role="button" aria-pressed="${i === 0}" aria-label="${s.label}"></div>`
-      ).join('');
-      this.state.linerColor = swatches[0].color;
-    }
-
-    #updateExteriorSection() {
-      const { model } = this.state;
-      if (model === 'classic') {
-        this.materialToggle.style.display = 'none';
-        this.materialNote.style.display = 'none';
-        this.state.exteriorMaterial = 'painted-spruce';
-        this.#renderExteriorSwatches('classic');
-      } else if (model === 'premium') {
-        this.materialToggle.style.display = 'flex';
-        this.materialNote.style.display = 'none';
-        this.state.exteriorMaterial = 'wpc';
-        for (const btn of this.materialToggle.querySelectorAll('[data-material]')) {
-          const isWpc = btn.dataset.material === 'wpc';
-          btn.classList.toggle('ne-configurator__material-btn--selected', isWpc);
-          btn.setAttribute('aria-pressed', String(isWpc));
+  {%- comment -%} ═══════════ PRODUCT DATA (JSON) ═══════════ {%- endcomment -%}
+  <script type="application/json" data-configurator-products>
+  {
+    "base": [
+      {%- assign _base_sep = false -%}
+      {%- if section.settings.base_classic_collection != blank -%}
+        {%- assign col = section.settings.base_classic_collection -%}
+        {%- if _base_sep -%},{%- endif -%}
+        {
+          "key": "classic",
+          "title": {{ col.title | json }},
+          "image": {% if col.image %}{{ col.image | image_url: width: 600 | json }}{% elsif col.products.first.featured_image %}{{ col.products.first.featured_image | image_url: width: 600 | json }}{% else %}null{% endif %},
+          "body": {{ col.description | strip_html | truncate: 200 | json }},
+          {%- assign _bp_min = 999999999 -%}{%- for product in col.products -%}{%- if product.price < _bp_min -%}{%- assign _bp_min = product.price -%}{%- endif -%}{%- endfor -%}
+          "price": {{ _bp_min | default: 0 }},
+          "products": [
+            {%- for product in col.products limit: 10 -%}
+              {%- unless forloop.first -%},{%- endunless -%}
+              {% render 'configurator-product-json', product: product %}
+            {%- endfor -%}
+          ]
         }
-        this.#renderExteriorSwatches('premium_wpc');
-      } else if (model === 'signature') {
-        this.materialToggle.style.display = 'none';
-        this.materialNote.style.display = 'none';
-        this.state.exteriorMaterial = 'cedar';
-        this.#renderExteriorSwatches('signature');
+        {%- assign _base_sep = true -%}
+      {%- endif -%}
+      {%- if section.settings.base_premium_collection != blank -%}
+        {%- assign col = section.settings.base_premium_collection -%}
+        {%- if _base_sep -%},{%- endif -%}
+        {
+          "key": "premium",
+          "title": {{ col.title | json }},
+          "image": {% if col.image %}{{ col.image | image_url: width: 600 | json }}{% elsif col.products.first.featured_image %}{{ col.products.first.featured_image | image_url: width: 600 | json }}{% else %}null{% endif %},
+          "body": {{ col.description | strip_html | truncate: 200 | json }},
+          {%- assign _bp_min = 999999999 -%}{%- for product in col.products -%}{%- if product.price < _bp_min -%}{%- assign _bp_min = product.price -%}{%- endif -%}{%- endfor -%}
+          "price": {{ _bp_min | default: 0 }},
+          "products": [
+            {%- for product in col.products limit: 10 -%}
+              {%- unless forloop.first -%},{%- endunless -%}
+              {% render 'configurator-product-json', product: product %}
+            {%- endfor -%}
+          ]
+        }
+        {%- assign _base_sep = true -%}
+      {%- endif -%}
+      {%- if section.settings.base_signature_collection != blank -%}
+        {%- assign col = section.settings.base_signature_collection -%}
+        {%- if _base_sep -%},{%- endif -%}
+        {
+          "key": "signature",
+          "title": {{ col.title | json }},
+          "image": {% if col.image %}{{ col.image | image_url: width: 600 | json }}{% elsif col.products.first.featured_image %}{{ col.products.first.featured_image | image_url: width: 600 | json }}{% else %}null{% endif %},
+          "body": {{ col.description | strip_html | truncate: 200 | json }},
+          {%- assign _bp_min = 999999999 -%}{%- for product in col.products -%}{%- if product.price < _bp_min -%}{%- assign _bp_min = product.price -%}{%- endif -%}{%- endfor -%}
+          "price": {{ _bp_min | default: 0 }},
+          "products": [
+            {%- for product in col.products limit: 10 -%}
+              {%- unless forloop.first -%},{%- endunless -%}
+              {% render 'configurator-product-json', product: product %}
+            {%- endfor -%}
+          ]
+        }
+        {%- assign _base_sep = true -%}
+      {%- endif -%}
+    ],
+
+    {%- comment -%} ── Collections → JSON arrays ── {%- endcomment -%}
+
+    {%- comment -%} Liners (Step 2) {%- endcomment -%}
+    "liners": [
+      {%- if section.settings.liners_collection != blank -%}
+        {%- for product in section.settings.liners_collection.products limit: 20 -%}
+          {%- unless forloop.first -%},{%- endunless -%}
+          {% render 'configurator-product-json', product: product %}
+        {%- endfor -%}
+      {%- endif -%}
+    ],
+
+    {%- comment -%} Insulation (Step 3) — single product stored as array {%- endcomment -%}
+    "insulations": [
+      {%- if section.settings.insulation_product != blank -%}
+        {%- assign product = section.settings.insulation_product -%}
+        {% render 'configurator-product-json', product: product %}
+      {%- endif -%}
+    ],
+
+    "oven_addons": [
+      {%- if section.settings.oven_addons_collection != blank -%}
+        {%- for product in section.settings.oven_addons_collection.products limit: 10 -%}
+          {%- unless forloop.first -%},{%- endunless -%}
+          {% render 'configurator-product-json', product: product %}
+        {%- endfor -%}
+      {%- endif -%}
+    ],
+
+    {%- comment -%} Exteriors (Step 5) {%- endcomment -%}
+    "exteriors": [
+      {%- if section.settings.exteriors_collection != blank -%}
+        {%- for product in section.settings.exteriors_collection.products limit: 20 -%}
+          {%- unless forloop.first -%},{%- endunless -%}
+          {% render 'configurator-product-json', product: product %}
+        {%- endfor -%}
+      {%- endif -%}
+    ],
+
+    {%- comment -%} Hydro Massage (Step 6) {%- endcomment -%}
+    "hydro": [
+      {%- if section.settings.hydro_collection != blank -%}
+        {%- for product in section.settings.hydro_collection.products limit: 10 -%}
+          {%- unless forloop.first -%},{%- endunless -%}
+          {% render 'configurator-product-json', product: product %}
+        {%- endfor -%}
+      {%- endif -%}
+    ],
+
+    {%- comment -%} Air System (Step 7) {%- endcomment -%}
+    "air": [
+      {%- if section.settings.air_collection != blank -%}
+        {%- for product in section.settings.air_collection.products limit: 10 -%}
+          {%- unless forloop.first -%},{%- endunless -%}
+          {% render 'configurator-product-json', product: product %}
+        {%- endfor -%}
+      {%- endif -%}
+    ],
+
+    {%- comment -%} Filter System (Step 8) {%- endcomment -%}
+    "filters": [
+      {%- if section.settings.filters_collection != blank -%}
+        {%- for product in section.settings.filters_collection.products limit: 10 -%}
+          {%- unless forloop.first -%},{%- endunless -%}
+          {% render 'configurator-product-json', product: product %}
+        {%- endfor -%}
+      {%- endif -%}
+    ],
+
+    {%- comment -%} LED Lighting (Step 9) {%- endcomment -%}
+    "leds": [
+      {%- if section.settings.leds_collection != blank -%}
+        {%- for product in section.settings.leds_collection.products limit: 10 -%}
+          {%- unless forloop.first -%},{%- endunless -%}
+          {% render 'configurator-product-json', product: product %}
+        {%- endfor -%}
+      {%- endif -%}
+    ],
+
+    {%- comment -%} Thermometer (Step 10) {%- endcomment -%}
+    "thermometers": [
+      {%- if section.settings.thermometers_collection != blank -%}
+        {%- for product in section.settings.thermometers_collection.products limit: 10 -%}
+          {%- unless forloop.first -%},{%- endunless -%}
+          {% render 'configurator-product-json', product: product %}
+        {%- endfor -%}
+      {%- endif -%}
+    ],
+
+    {%- comment -%} Stairs (Step 11) {%- endcomment -%}
+    "stairs": [
+      {%- if section.settings.stairs_product != blank -%}
+        {%- assign product = section.settings.stairs_product -%}
+        {% render 'configurator-product-json', product: product %}
+      {%- endif -%}
+    ],
+
+    {%- comment -%} Pillows (Step 12) {%- endcomment -%}
+    "pillows": [
+      {%- if section.settings.pillows_product != blank -%}
+        {%- assign product = section.settings.pillows_product -%}
+        {% render 'configurator-product-json', product: product %}
+      {%- endif -%}
+    ],
+
+    {%- comment -%} Covers (Step 13) {%- endcomment -%}
+    "covers": [
+      {%- if section.settings.covers_collection != blank -%}
+        {%- for product in section.settings.covers_collection.products limit: 10 -%}
+          {%- unless forloop.first -%},{%- endunless -%}
+          {% render 'configurator-product-json', product: product %}
+        {%- endfor -%}
+      {%- endif -%}
+    ],
+
+    {%- comment -%} Heater 90° (Step 15) {%- endcomment -%}
+    "heater_90": {%- if section.settings.heater_90_product != blank -%}
+      {%- assign product = section.settings.heater_90_product -%}
+      {% render 'configurator-product-json', product: product %}
+    {%- else -%}null{%- endif -%},
+
+    {%- comment -%} Diagram images (Steps 14-15) {%- endcomment -%}
+    "diagrams": {
+      "controls": {
+        "image": {% if section.settings.diagram_controls %}{{ section.settings.diagram_controls | image_url: width: 800 | json }}{% else %}null{% endif %}
+      },
+      "heater_conn": {
+        "straight": {% if section.settings.diagram_heater_straight %}{{ section.settings.diagram_heater_straight | image_url: width: 600 | json }}{% else %}null{% endif %},
+        "angle": {% if section.settings.diagram_heater_angle %}{{ section.settings.diagram_heater_angle | image_url: width: 600 | json }}{% else %}null{% endif %}
       }
     }
-
-    #renderExteriorSwatches(key) {
-      const data = EXTERIOR_SWATCHES[key];
-      this.exteriorLabel.textContent = data.label;
-      this.exteriorSwatches.innerHTML = data.swatches.map((s, i) =>
-        `<div class="ne-configurator__swatch${i === 0 ? ' ne-configurator__swatch--selected' : ''}" data-color="${s.color}" style="background-color:${s.bg};${s.border ? `border-color:${s.border};` : ''}" title="${s.label}" tabindex="0" role="button" aria-pressed="${i === 0}" aria-label="${s.label}"></div>`
-      ).join('');
-      this.state.exteriorColor = data.swatches[0].color;
-    }
-
-    #updateEquipment() {
-      if (!this.state.model || !this.state.size) return;
-      const eq = EQUIPMENT[this.state.model][this.state.size];
-      this.eqHydro.textContent = eq.hydro;
-      this.eqAir.textContent = eq.air;
-      this.eqOven.textContent = eq.oven[this.state.oven];
-      this.eqStairs.textContent = eq.stairs;
-      this.eqThermo.textContent = eq.thermo;
-      if (eq.led) { this.eqLed.textContent = eq.led; this.eqLed.style.display = ''; }
-      else { this.eqLed.style.display = 'none'; }
-      if (eq.pillows) { this.eqPillows.textContent = `Head pillows: ${eq.pillows}`; this.eqPillows.style.display = ''; }
-      else { this.eqPillows.style.display = 'none'; }
-    }
-
-    #updatePrice() {
-      if (!this.state.model || !this.state.size) return;
-      const productData = this.#getProductData(this.state.model, this.state.size);
-      const productPrice = productData?.price || 0;
-      const basePrice = productPrice / 100;
-      const oven = this.state.oven === 'integrated' ? this.ovenAddon : 0;
-      const total = Math.round(basePrice + oven);
-      this.totalPrice.textContent = formatPrice(total);
-    }
-
-    #swapMainImage(url) {
-      if (!this.mainImage) return;
-      this.mainImage.classList.add('ne-configurator__main-image--fade');
-      this.imgLoading.style.display = 'flex';
-      setTimeout(() => {
-        this.mainImage.src = url;
-        this.mainImage.onload = () => { this.mainImage.classList.remove('ne-configurator__main-image--fade'); this.imgLoading.style.display = 'none'; };
-        this.mainImage.onerror = () => { this.mainImage.classList.remove('ne-configurator__main-image--fade'); this.imgLoading.style.display = 'none'; };
-      }, 150);
-    }
-
-    async #handleAddToCart() {
-      this.#hideCartError();
-      this.addToCartBtn.disabled = true;
-      const originalText = this.addToCartBtn.textContent;
-      this.addToCartBtn.textContent = 'Adding\u2026';
-      try {
-        const variantId = this.#resolveVariantId();
-        if (!variantId) throw new Error('Product variant not found. Please check your Shopify products.');
-        await this.#addToCart(variantId);
-        this.addToCartBtn.textContent = '\u2713 Added!';
-        window.dispatchEvent(new CustomEvent('cart:refresh'));
-        setTimeout(() => { this.addToCartBtn.textContent = originalText; this.addToCartBtn.disabled = false; }, 2500);
-      } catch (error) {
-        console.error('[NordicElite Configurator]', error);
-        this.#showCartError(error.message || 'Could not add to cart. Please try again.');
-        this.addToCartBtn.textContent = originalText;
-        this.addToCartBtn.disabled = false;
-      }
-    }
-
-    #resolveVariantId() {
-      const productData = this.#getProductData(this.state.model, this.state.size);
-      if (!productData) return null;
-      const variants = productData.variants || [];
-      if (variants.length === 0) return productData.variant_id;
-      if (this.state.linerColor) {
-        const linerColorTitle = this.state.linerColor.replace(/-/g, ' ').toLowerCase();
-        const matched = variants.find(v => Array.isArray(v.options) && v.options.some(o => o.toLowerCase() === linerColorTitle));
-        if (matched) return matched.id;
-      }
-      return productData.variant_id || variants[0]?.id || null;
-    }
-
-    async #addToCart(variantId) {
-      const properties = {
-        'Size': this.state.size.toUpperCase(),
-        'Oven': this.state.oven === 'integrated' ? 'Integrated' : 'External',
-        'Liner Color': this.state.linerColor.replace(/-/g, ' '),
-        'Exterior Color': this.state.exteriorColor.replace(/-/g, ' '),
-        'Exterior Material': this.state.exteriorMaterial.replace(/-/g, ' ')
-      };
-      const response = await fetch('/cart/add.js', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: variantId, quantity: 1, properties })
-      });
-      if (!response.ok) {
-        const err = await response.json().catch(() => ({}));
-        throw new Error(err.description || 'Could not add to cart.');
-      }
-      return response.json();
-    }
-
-    #showCartError(message) { this.cartError.textContent = message; this.cartError.classList.add('ne-configurator__error--visible'); }
-    #hideCartError() { this.cartError.textContent = ''; this.cartError.classList.remove('ne-configurator__error--visible'); }
-    #unlockSection(num) { const s = this.querySelector(`[data-section="${num}"]`); if (s) s.classList.remove('ne-configurator__section--locked'); }
-    #scrollToSection(num) { const s = this.querySelector(`[data-section="${num}"]`); if (!s) return; setTimeout(() => { s.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 120); }
-    #handleKeydown(e) { if (e.key === 'Escape') this.#hideCartError(); }
   }
+  </script>
+</{{ tag_name }}>
 
-  const tagName = 'nordic-elite-configurator-{{ cfg_id }}';
-  if (!customElements.get(tagName)) {
-    customElements.define(tagName, NordicEliteConfigurator);
-  }
-})();
-</script>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.7/dist/purify.min.js" defer></script>
+<script src="{{ 'configurator.js' | asset_url }}" defer></script>
 
+{%- comment -%} ═══════════ SCHEMA ═══════════ {%- endcomment -%}
 {% schema %}
 {
-  "name": "Nordic Elite Configurator",
+  "name": "Hot Tub Configurator",
   "settings": [
-    {
-      "type": "header",
-      "content": "Products \u2014 Classic"
-    },
-    { "type": "product", "id": "classic_m_product", "label": "Classic \u2014 M (Compact)" },
-    { "type": "product", "id": "classic_l_product", "label": "Classic \u2014 L (Standard)" },
-    { "type": "product", "id": "classic_xl_product", "label": "Classic \u2014 XL (Large)" },
-    {
-      "type": "header",
-      "content": "Products \u2014 Premium"
-    },
-    { "type": "product", "id": "premium_m_product", "label": "Premium \u2014 M (Compact)" },
-    { "type": "product", "id": "premium_l_product", "label": "Premium \u2014 L (Standard)" },
-    { "type": "product", "id": "premium_xl_product", "label": "Premium \u2014 XL (Large)" },
-    {
-      "type": "header",
-      "content": "Products \u2014 Signature"
-    },
-    { "type": "product", "id": "signature_m_product", "label": "Signature \u2014 M (Compact)" },
-    { "type": "product", "id": "signature_l_product", "label": "Signature \u2014 L (Standard)" },
-    { "type": "product", "id": "signature_xl_product", "label": "Signature \u2014 XL (Large)" },
-    {
-      "type": "header",
-      "content": "Pricing"
-    },
-    { "type": "number", "id": "integrated_oven_addon", "label": "Integrated oven add-on price (\u20ac)", "default": 500 },
-    {
-      "type": "header",
-      "content": "Heating system images"
-    },
-    { "type": "image_picker", "id": "external_oven_image", "label": "External oven image" },
-    { "type": "image_picker", "id": "integrated_oven_image", "label": "Integrated oven image" },
-    {
-      "type": "header",
-      "content": "Links"
-    },
+    { "type": "header", "content": "Step 1 — Base Products (Model Tiers)" },
+    { "type": "collection", "id": "base_classic_collection", "label": "Nordic Elite Classic collection" },
+    { "type": "collection", "id": "base_premium_collection", "label": "Nordic Elite Premium collection" },
+    { "type": "collection", "id": "base_signature_collection", "label": "Nordic Elite Signature collection" },
+
+    { "type": "header", "content": "Step 2 — Fiberglass Liners" },
+    { "type": "collection", "id": "liners_collection", "label": "Liners collection" },
+
+    { "type": "header", "content": "Step 3 — Insulation" },
+    { "type": "product", "id": "insulation_product", "label": "Insulation product" },
+
+    { "type": "header", "content": "Step 4 — Heating System" },
+    { "type": "collection", "id": "oven_addons_collection", "label": "Oven add-ons (glass door, chimney)" },
+
+    { "type": "header", "content": "Step 5 — Exterior Panels" },
+    { "type": "collection", "id": "exteriors_collection", "label": "Exterior panels collection" },
+
+    { "type": "header", "content": "Step 6 — Hydro Massage" },
+    { "type": "collection", "id": "hydro_collection", "label": "Hydro massage collection" },
+
+    { "type": "header", "content": "Step 7 — Air System" },
+    { "type": "collection", "id": "air_collection", "label": "Air system collection" },
+
+    { "type": "header", "content": "Step 8 — Filter System" },
+    { "type": "collection", "id": "filters_collection", "label": "Filter system collection" },
+
+    { "type": "header", "content": "Step 9 — LED Lighting" },
+    { "type": "collection", "id": "leds_collection", "label": "LED lighting collection" },
+
+    { "type": "header", "content": "Step 10 — Thermometer" },
+    { "type": "collection", "id": "thermometers_collection", "label": "Thermometer collection" },
+
+    { "type": "header", "content": "Step 11 — Stairs" },
+    { "type": "product", "id": "stairs_product", "label": "Stairs product" },
+
+    { "type": "header", "content": "Step 12 — Head Pillows" },
+    { "type": "product", "id": "pillows_product", "label": "Head pillow product" },
+
+    { "type": "header", "content": "Step 13 — Covers" },
+    { "type": "collection", "id": "covers_collection", "label": "Covers collection" },
+
+    { "type": "header", "content": "Step 15 — Heater Connection" },
+    { "type": "product", "id": "heater_90_product", "label": "90° angle connection product" },
+
+    { "type": "header", "content": "Diagram Images (Steps 14-15)" },
+    { "type": "image_picker", "id": "diagram_controls", "label": "Control installation diagram" },
+    { "type": "image_picker", "id": "diagram_heater_straight", "label": "Heater — straight connection" },
+    { "type": "image_picker", "id": "diagram_heater_angle", "label": "Heater — 90° angle connection" },
+
+    { "type": "header", "content": "Design" },
+    { "type": "image_picker", "id": "default_image", "label": "Default image (before selection)" },
     { "type": "url", "id": "specs_page", "label": "Full specifications page URL" },
-    {
-      "type": "header",
-      "content": "Design"
-    },
-    { "type": "image_picker", "id": "default_image", "label": "Default thumbnail (shown before selection)" },
     { "type": "color", "id": "background_color", "label": "Background", "default": "#ffffff" },
-    {
-      "type": "select",
-      "id": "heading_size",
-      "label": "Step heading size",
-      "options": [
-        { "value": "small", "label": "Small" },
-        { "value": "medium", "label": "Medium" },
-        { "value": "large", "label": "Large" }
-      ],
-      "default": "medium"
-    },
-    {
-      "type": "header",
-      "content": "Layout"
-    },
-    {
-      "type": "range",
-      "id": "padding_top",
-      "label": "Top padding",
-      "min": 0,
-      "max": 100,
-      "step": 4,
-      "default": 40,
-      "unit": "px"
-    },
-    {
-      "type": "range",
-      "id": "padding_bottom",
-      "label": "Bottom padding",
-      "min": 0,
-      "max": 100,
-      "step": 4,
-      "default": 40,
-      "unit": "px"
-    }
+    { "type": "range", "id": "padding_top", "label": "Top padding", "min": 0, "max": 100, "step": 4, "default": 40, "unit": "px" },
+    { "type": "range", "id": "padding_bottom", "label": "Bottom padding", "min": 0, "max": 100, "step": 4, "default": 40, "unit": "px" }
   ],
   "presets": [
-    {
-      "name": "Nordic Elite Configurator"
-    }
+    { "name": "Hot Tub Configurator" }
   ]
 }
 {% endschema %}
