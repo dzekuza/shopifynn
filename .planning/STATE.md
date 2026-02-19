@@ -39,6 +39,7 @@ Progress: [███████░░░] 75%
 | Phase 03-performance-and-accessibility P02 | 15 | 2 tasks | 5 files |
 | Phase 02-configurator-stabilization P02 | 2 | 2 tasks | 2 files |
 | Phase 02-configurator-stabilization P04 | 4 | 2 tasks | 2 files |
+| Phase 02-configurator-stabilization P04 | 3 | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -75,6 +76,9 @@ Recent decisions affecting current work:
 - [02-04]: Summary card uses DOM builder (not innerHTML) for XSS safety with product title data
 - [02-04]: _buildConfigSummary() measures TextEncoder byte length and falls back to compact pipe format if >200 bytes
 - [02-04]: CSS for new UI components added to configurator.liquid stylesheet block (separate CSS file was deleted by prior tooling)
+- [Phase 02-configurator-stabilization]: CSS added to configurator.liquid stylesheet block — no separate assets/configurator.css file exists in this project architecture
+- [Phase 02-configurator-stabilization]: Summary card renders to data-summary-card element before CTA button — always visible regardless of step scroll position
+- [Phase 02-configurator-stabilization]: _currentTotal cached in _updatePrice() so _updateSummary() never independently recalculates prices
 
 ### Pending Todos
 
