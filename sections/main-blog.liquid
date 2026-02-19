@@ -18,7 +18,7 @@
                     {{ article.image | image_url: width: 540 }} 540w
                   "
                   sizes="(max-width: 768px) 100vw, 33vw"
-                  alt="{{ article.image.alt | escape | default: article.title }}"
+                  alt="{{ article.image.alt | default: article.title | escape }}"
                   loading="lazy"
                   class="blog-page__image"
                 >

@@ -45,7 +45,7 @@
                 {{ section.settings.image | image_url: width: 720 }} 720w
               "
               sizes="(max-width: 768px) 100vw, 50vw"
-              alt="{{ section.settings.image_alt | escape | default: section.settings.heading }}"
+              alt="{{ section.settings.image_alt | default: section.settings.heading | escape }}"
               loading="lazy"
               class="image-text__image"
             >
