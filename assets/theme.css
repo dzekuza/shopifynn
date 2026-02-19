@@ -973,6 +973,157 @@ ul, ol {
 }
 
 /* ============================================
+   TRUST BADGES
+   ============================================ */
+
+.trust-badges__heading {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 24px;
+}
+
+.trust-badges__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.trust-badges__grid--3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.trust-badges__grid--4 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+@media (min-width: 768px) {
+  .trust-badges__grid--4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.trust-badges__item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 0;
+}
+
+@media (min-width: 768px) {
+  .trust-badges__item {
+    justify-content: center;
+    text-align: center;
+    flex-direction: column;
+    gap: 10px;
+    padding: 0;
+  }
+}
+
+.trust-badges__icon {
+  flex-shrink: 0;
+  color: var(--color-accent, #5EC2AA);
+}
+
+.trust-badges__icon img {
+  display: block;
+}
+
+.trust-badges__title {
+  font-size: 14px;
+  font-weight: 700;
+  margin: 0;
+  color: var(--color-primary);
+}
+
+.trust-badges__desc {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  margin: 2px 0 0 0;
+  line-height: 1.4;
+}
+
+/* ============================================
+   STATS BAR
+   ============================================ */
+
+.stats-bar__heading {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 32px;
+}
+
+.stats-bar__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 32px;
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .stats-bar__grid--3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .stats-bar__grid--4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.stats-bar__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.stats-bar__number {
+  font-family: var(--font-heading);
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+@media (min-width: 768px) {
+  .stats-bar__number {
+    font-size: 3.25rem;
+  }
+}
+
+.stats-bar__label {
+  font-size: 14px;
+  font-weight: 500;
+  opacity: 0.7;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+/* ============================================
+   FOOTER POLICIES
+   ============================================ */
+
+.footer__policies {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  justify-content: center;
+  padding-bottom: 20px;
+  margin-bottom: 4px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.footer__policies a {
+  font-size: 13px;
+  opacity: 0.45;
+  transition: opacity 0.25s ease;
+}
+
+.footer__policies a:hover {
+  opacity: 0.8;
+}
+
+/* ============================================
    PRODUCT CARD (snippet)
    ============================================ */
 
