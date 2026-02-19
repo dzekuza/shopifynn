@@ -354,42 +354,42 @@
       "type": "collapsible-content",
       "blocks": {
         "q1": {
-          "type": "item",
+          "type": "collapsible_row",
           "settings": {
             "heading": "How long does delivery take?",
             "content": "<p>Delivery typically takes 4\u20138 weeks depending on your location and the configuration you choose. All tubs are handcrafted to order, ensuring the highest quality. We ship across Europe with free delivery on orders over \u20ac500.</p>"
           }
         },
         "q2": {
-          "type": "item",
+          "type": "collapsible_row",
           "settings": {
             "heading": "What is included in the warranty?",
             "content": "<p>Our warranty covers structural defects, heating system components, and jet systems. Classic models come with a 5-year warranty, Premium with 7 years, and Signature with a full 10-year warranty. Normal wear and tear is not covered.</p>"
           }
         },
         "q3": {
-          "type": "item",
+          "type": "collapsible_row",
           "settings": {
             "heading": "Do I need professional installation?",
             "content": "<p>Our hot tubs are designed to be placed on any level, solid surface \u2014 no special installation required. Simply connect to a standard power outlet and fill with water. We provide a detailed setup guide with every order, and our support team is available to help.</p>"
           }
         },
         "q4": {
-          "type": "item",
+          "type": "collapsible_row",
           "settings": {
             "heading": "Can I customize my tub?",
             "content": "<p>Absolutely! Use our online configurator to choose your model, size, wood finish, liner color, heating system, and extras. You can also contact us for fully bespoke requests.</p>"
           }
         },
         "q5": {
-          "type": "item",
+          "type": "collapsible_row",
           "settings": {
             "heading": "What maintenance is required?",
             "content": "<p>Maintenance is minimal. We recommend draining and cleaning the tub every 2\u20134 weeks depending on usage. The wood exterior benefits from an annual oil treatment. We provide a complete care guide with every purchase.</p>"
           }
         },
         "q6": {
-          "type": "item",
+          "type": "collapsible_row",
           "settings": {
             "heading": "What is your return policy?",
             "content": "<p>Since each tub is custom-built to your specifications, we do not accept returns on delivered orders. However, if there is any manufacturing defect, we will repair or replace the tub at no cost under our warranty. Please contact us within 14 days of delivery if you notice any issues.</p>"
