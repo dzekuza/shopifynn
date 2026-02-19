@@ -1,0 +1,36 @@
+<section class="section-404" style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;">
+  <div class="container" style="text-align: center; max-width: 600px; margin: 0 auto;">
+    <h1 style="font-size: 4rem; font-weight: 700; margin-bottom: 8px; color: var(--color-primary);">404</h1>
+    <h2 style="font-size: 1.5rem; font-weight: 500; margin-bottom: 16px; color: var(--color-primary);">Page not found</h2>
+    <p style="font-size: 15px; color: var(--color-text-muted); margin-bottom: 32px; line-height: 1.6;">The page you're looking for doesn't exist or has been moved.</p>
+    <a href="/" class="button button--primary" style="display: inline-block; padding: 14px 32px; background-color: var(--color-accent); color: var(--color-primary); border-radius: 8px; font-weight: 600; font-size: 15px; text-decoration: none;">Back to home</a>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "404 Page",
+  "settings": [
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 20,
+      "max": 200,
+      "step": 4,
+      "default": 100,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 20,
+      "max": 200,
+      "step": 4,
+      "default": 100,
+      "unit": "px"
+    }
+  ]
+}
+{% endschema %}
