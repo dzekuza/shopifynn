@@ -34,6 +34,7 @@ Progress: [░░░░░░░░░░] 0%
 - Trend: —
 
 *Updated after each plan completion*
+| Phase 03-performance-and-accessibility P01 | 8 | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -47,6 +48,8 @@ Recent decisions affecting current work:
 - [Init]: Extract configurator CSS to asset file — enables caching, reduces section complexity
 - [Phase 04-visual-polish-and-brand-content]: About page uses section composition only (no main-page) — all content editable via theme editor per BRAND-03
 - [Phase 04-visual-polish-and-brand-content]: Heritage stats bar uses Aurowe bronze accent (#B6754D) for brand consistency
+- [Phase 03-performance-and-accessibility]: Pin CDN versions to exact semver (gsap@3.13.0) to prevent silent breaking changes from floating tags
+- [Phase 03-performance-and-accessibility]: Darkened muted text to #6A6864 (from #7D7B78) — minimum change to achieve 4.5:1 WCAG AA contrast on #F4F1EC
 
 ### Pending Todos
 
