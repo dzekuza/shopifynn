@@ -1,0 +1,199 @@
+{
+  "sections": {
+    "about-hero": {
+      "type": "hero",
+      "settings": {
+        "overlay_opacity": 40,
+        "subtitle": "Our Story",
+        "heading": "Forged in the Nordic Tradition",
+        "text": "For generations, Nordic craftsmen have shaped wood, fire, and water into something extraordinary. At Aurowe, we carry that tradition forward — building tubs that endure, restore, and inspire.",
+        "button_text": "Explore Our Tubs",
+        "button_url": "shopify://collections",
+        "button_style": "primary",
+        "button_2_text": "",
+        "button_2_style": "outline",
+        "heading_size": "large",
+        "text_size": "medium",
+        "text_alignment": "center",
+        "content_width": 800,
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "story-narrative": {
+      "type": "image-with-text",
+      "settings": {
+        "subtitle": "The Craft",
+        "heading": "Built by Hand, Built to Last",
+        "text": "<p>Every Aurowe tub begins as carefully selected Nordic thermowood — timber heat-treated to enhance its natural durability and resistance to the elements. Our craftsmen shape each piece by hand, applying generations of Scandinavian woodworking knowledge to produce something that will outlast trends and seasons. We do not cut corners, because we believe the things that endure are worth making properly.</p>",
+        "button_text": "",
+        "button_style": "primary",
+        "heading_size": "medium",
+        "text_size": "medium",
+        "layout": "image_left",
+        "text_alignment": "left",
+        "color_scheme": "default",
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
+    },
+    "manufacturing-story": {
+      "type": "image-with-text",
+      "settings": {
+        "subtitle": "Nordic Manufacturing",
+        "heading": "Where Nature Meets Precision",
+        "text": "<p>Our production facility sits at the edge of the boreal forest, where the raw material and the craft exist side by side. Sustainably harvested timber is transformed using a combination of traditional joinery techniques and modern engineering — precise tolerances, reliable heating systems, and watertight construction that holds up across decades of Nordic winters and warm summer evenings. This is not mass production. Each tub is built as if it will be the only one.</p>",
+        "button_text": "",
+        "button_style": "primary",
+        "heading_size": "medium",
+        "text_size": "medium",
+        "layout": "image_right",
+        "text_alignment": "left",
+        "color_scheme": "surface",
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
+    },
+    "artisan-profiles": {
+      "type": "multicolumn",
+      "blocks": {
+        "artisan-lars": {
+          "type": "column",
+          "settings": {
+            "heading": "Lars Eriksson",
+            "text": "<p>Master craftsman with over 20 years of thermowood expertise. Lars leads our joinery workshop, where he ensures every structural joint meets the Aurowe standard for strength and longevity.</p>",
+            "text_alignment": "center"
+          }
+        },
+        "artisan-ingrid": {
+          "type": "column",
+          "settings": {
+            "heading": "Ingrid Johansson",
+            "text": "<p>Head of finishing and surface treatment. Ingrid oversees the final stages of production — wood oiling, liner fitting, and quality inspection — bringing two decades of Nordic woodworking precision to every piece that leaves our workshop.</p>",
+            "text_alignment": "center"
+          }
+        },
+        "artisan-erik": {
+          "type": "column",
+          "settings": {
+            "heading": "Erik Lindqvist",
+            "text": "<p>Lead systems engineer responsible for heating and plumbing integration. Erik combines traditional craft knowledge with modern engineering to deliver heating systems that are efficient, reliable, and built for Scandinavian winters.</p>",
+            "text_alignment": "center"
+          }
+        }
+      },
+      "block_order": [
+        "artisan-lars",
+        "artisan-ingrid",
+        "artisan-erik"
+      ],
+      "settings": {
+        "heading": "The Artisans Behind Aurowe",
+        "subheading": "Our tubs are built by people who take pride in their craft. Meet the team behind every Aurowe.",
+        "heading_size": "medium",
+        "text_size": "medium",
+        "text_alignment": "center",
+        "columns": "3",
+        "grid_gap": 32,
+        "image_ratio": "circle",
+        "color_scheme": "default",
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
+    },
+    "heritage-numbers": {
+      "type": "stats-bar",
+      "blocks": {
+        "stat-years": {
+          "type": "stat",
+          "settings": {
+            "number": "25+",
+            "label": "Years of Craftsmanship"
+          }
+        },
+        "stat-tubs": {
+          "type": "stat",
+          "settings": {
+            "number": "10,000+",
+            "label": "Tubs Delivered"
+          }
+        },
+        "stat-timber": {
+          "type": "stat",
+          "settings": {
+            "number": "100%",
+            "label": "Sustainably Sourced Timber"
+          }
+        },
+        "stat-origin": {
+          "type": "stat",
+          "settings": {
+            "number": "Nordic",
+            "label": "Manufacturing Heritage"
+          }
+        }
+      },
+      "block_order": [
+        "stat-years",
+        "stat-tubs",
+        "stat-timber",
+        "stat-origin"
+      ],
+      "settings": {
+        "heading": "",
+        "background_color": "#262626",
+        "text_color": "#ffffff",
+        "accent_color": "#B6754D",
+        "padding_top": 48,
+        "padding_bottom": 48
+      }
+    },
+    "footer-cta": {
+      "type": "rich-text",
+      "blocks": {
+        "cta-heading": {
+          "type": "heading",
+          "settings": {
+            "heading": "Experience the Aurowe Difference",
+            "heading_size": "large"
+          }
+        },
+        "cta-text": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Every detail of an Aurowe tub is an invitation to slow down and feel something genuine. Use our configurator to build your perfect tub, or speak with our team about a bespoke commission.</p>",
+            "text_size": "medium"
+          }
+        },
+        "cta-button": {
+          "type": "button",
+          "settings": {
+            "button_text": "Build Your Tub",
+            "button_url": "/pages/configurator",
+            "button_style": "primary"
+          }
+        }
+      },
+      "block_order": [
+        "cta-heading",
+        "cta-text",
+        "cta-button"
+      ],
+      "settings": {
+        "text_alignment": "center",
+        "content_width": 700,
+        "color_scheme": "surface",
+        "padding_top": 80,
+        "padding_bottom": 80
+      }
+    }
+  },
+  "order": [
+    "about-hero",
+    "story-narrative",
+    "manufacturing-story",
+    "artisan-profiles",
+    "heritage-numbers",
+    "footer-cta"
+  ]
+}
