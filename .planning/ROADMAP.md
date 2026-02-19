@@ -15,7 +15,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [ ] **Phase 1: Security Foundation** - Rotate credentials, purge git history, and fix all XSS-vulnerable innerHTML call sites
 - [ ] **Phase 2: Configurator Stabilization** - Replace fragile string-matching with metafield lookups, consolidate pricing, add validation, and clean up architecture
 - [ ] **Phase 3: Performance and Accessibility** - Eliminate DOM performance problems and meet WCAG 2.1 AA baseline
-- [ ] **Phase 4: Visual Polish and Brand Content** - Elevate section designs to luxury tier and create About/Story page
+- [x] **Phase 4: Visual Polish and Brand Content** - Elevate section designs to luxury tier and create About/Story page (completed 2026-02-19)
 
 ## Phase Details
 
@@ -77,7 +77,7 @@ Plans:
   2. Testimonials display avatar images and star ratings alongside review text
   3. The About/Story page exists and presents the craftsmanship narrative, artisan profiles, and Nordic manufacturing story in an editorial layout — not a plain text page
   4. Typography, spacing, and animation timing are consistent across all sections with no visual inconsistencies between pages
-**Plans:** 1/2 plans executed
+**Plans:** 2/2 plans complete
 Plans:
 - [ ] 04-01-PLAN.md — CSS polish for hero, features, testimonials sections + GSAP animation consistency
 - [ ] 04-02-PLAN.md — Create About/Story page JSON template with editorial section composition
@@ -92,4 +92,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | 1. Security Foundation | 0/2 | Planned | - |
 | 2. Configurator Stabilization | 0/5 | Planned | - |
 | 3. Performance and Accessibility | 0/3 | Planned | - |
-| 4. Visual Polish and Brand Content | 1/2 | In Progress|  |
+| 4. Visual Polish and Brand Content | 2/2 | Complete   | 2026-02-19 |

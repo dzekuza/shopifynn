@@ -31,8 +31,8 @@ Requirements for production-ready launch. Each maps to roadmap phases.
 ### Performance
 
 - [ ] **PERF-01**: Implement image preloading for configurator step transitions
-- [ ] **PERF-02**: Pin GSAP to version 3.13.0 with explicit CDN URL
-- [ ] **PERF-03**: Add GSAP existence check before initializing scroll animations in theme.js
+- [x] **PERF-02**: Pin GSAP to version 3.13.0 with explicit CDN URL
+- [x] **PERF-03**: Add GSAP existence check before initializing scroll animations in theme.js
 - [ ] **PERF-04**: Cache frequently-accessed DOM nodes in _cacheEls() method
 - [ ] **PERF-05**: Add loading="lazy" to non-critical images (thumbnails, below-fold content)
 
@@ -42,14 +42,14 @@ Requirements for production-ready launch. Each maps to roadmap phases.
 - [ ] **A11Y-02**: Implement keyboard navigation for all configurator steps and options
 - [ ] **A11Y-03**: Audit and add alt text to all img tags across sections and snippets
 - [ ] **A11Y-04**: Ensure all interactive touch targets are minimum 44x44px on mobile
-- [ ] **A11Y-05**: Audit color contrast ratios for WCAG 2.1 AA compliance (4.5:1 minimum)
+- [x] **A11Y-05**: Audit color contrast ratios for WCAG 2.1 AA compliance (4.5:1 minimum)
 
 ### Visual Polish
 
-- [ ] **VIS-01**: Elevate hero section to luxury tier — refined typography, spacing, and animations
-- [ ] **VIS-02**: Polish features section — improved layout, icons, and visual hierarchy
-- [ ] **VIS-03**: Upgrade testimonials section — add avatar images and star ratings
-- [ ] **VIS-04**: Refine overall typography, spacing, and animation consistency across all sections
+- [x] **VIS-01**: Elevate hero section to luxury tier — refined typography, spacing, and animations
+- [x] **VIS-02**: Polish features section — improved layout, icons, and visual hierarchy
+- [x] **VIS-03**: Upgrade testimonials section — add avatar images and star ratings
+- [x] **VIS-04**: Refine overall typography, spacing, and animation consistency across all sections
 
 ### Brand Content
 
@@ -126,19 +126,19 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CONF-08 | Phase 2 | Pending |
 | CONF-09 | Phase 2 | Pending |
 | PERF-01 | Phase 3 | Pending |
-| PERF-02 | Phase 3 | Pending |
-| PERF-03 | Phase 3 | Pending |
+| PERF-02 | Phase 3 | Complete |
+| PERF-03 | Phase 3 | Complete |
 | PERF-04 | Phase 3 | Pending |
 | PERF-05 | Phase 3 | Pending |
 | A11Y-01 | Phase 3 | Pending |
 | A11Y-02 | Phase 3 | Pending |
 | A11Y-03 | Phase 3 | Pending |
 | A11Y-04 | Phase 3 | Pending |
-| A11Y-05 | Phase 3 | Pending |
-| VIS-01 | Phase 4 | Pending |
-| VIS-02 | Phase 4 | Pending |
-| VIS-03 | Phase 4 | Pending |
-| VIS-04 | Phase 4 | Pending |
+| A11Y-05 | Phase 3 | Complete |
+| VIS-01 | Phase 4 | Complete |
+| VIS-02 | Phase 4 | Complete |
+| VIS-03 | Phase 4 | Complete |
+| VIS-04 | Phase 4 | Complete |
 | BRAND-01 | Phase 4 | Complete |
 | BRAND-02 | Phase 4 | Complete |
 | BRAND-03 | Phase 4 | Complete |
