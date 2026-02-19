@@ -983,9 +983,9 @@
       return addon?.price || 0;
     }
 
-    /* ── Summary (grouped card displayed on final step / CTA area) ── */
+    /* ── Summary (grouped card displayed before the CTA) ── */
     _updateSummary() {
-      if (!this.summaryList) return;
+      if (!this.summaryCard && !this.summaryList) return;
 
       // Build grouped data structure for display
       const groups = [];
@@ -1000,7 +1000,7 @@
         });
       }
 
-      // Heating group
+      // Heating group (add-ons and alternate connection only — base oven is part of Base Model)
       const heatingItems = [];
       if (this.state.glassDoor) heatingItems.push('Door with glass');
       if (this.state.chimney) heatingItems.push('Chimney heat protection');
@@ -1026,60 +1026,59 @@
       if (this.state.filterEnabled && this.state.filterProduct) accItems.push(`Filter: ${this._getProductTitle('filters', this.state.filterProduct)}`);
       if (accItems.length > 0) groups.push({ heading: 'Accessories', items: accItems });
 
+      // Use cached total from _updatePrice() to avoid recalculation
+      const total = this._currentTotal || 0;
+
+      // Build summary card DOM
+      const buildCard = () => {
+        const card = document.createElement('div');
+        card.className = 'cfg-summary';
+
+        for (const group of groups) {
+          const groupEl = document.createElement('div');
+          groupEl.className = 'cfg-summary__group';
+
+          const headingEl = document.createElement('div');
+          headingEl.className = 'cfg-summary__heading';
+          headingEl.textContent = group.heading;
+          groupEl.appendChild(headingEl);
+
+          const itemsEl = document.createElement('div');
+          itemsEl.className = 'cfg-summary__items';
+          for (const item of group.items) {
+            const line = document.createElement('div');
+            line.textContent = item;
+            itemsEl.appendChild(line);
+          }
+          groupEl.appendChild(itemsEl);
+          card.appendChild(groupEl);
+        }
+
+        if (total > 0) {
+          const totalEl = document.createElement('div');
+          totalEl.className = 'cfg-summary__total';
+          totalEl.textContent = `Total: ${money(total)}`;
+          card.appendChild(totalEl);
+        }
+        return card;
+      };
+
       if (groups.length === 0) {
-        this.summaryList.innerHTML = '';
+        if (this.summaryCard) { this.summaryCard.innerHTML = ''; this.summaryCard.style.display = 'none'; }
+        if (this.summaryList) this.summaryList.innerHTML = '';
         return;
       }
 
-      // Calculate total for display
-      let total = this.state.basePrice || 0;
-      total += this._getSelectedVariantPrice('liners', 'liner', 'linerVariant');
-      total += this._getSelectedVariantPrice('exteriors', 'exterior', 'exteriorVariant');
-      total += this._getSelectedVariantPrice('covers', 'cover', 'coverVariant');
-      if (this.state.insulation) total += this._getProductPrice('insulations');
-      if (this.state.glassDoor) total += this._getAddonPrice('glass');
-      if (this.state.chimney) total += this._getAddonPrice('chimney');
-      total += this._getSelectedProductPrice('hydro', 'hydro');
-      total += this._getSelectedProductPrice('air', 'air');
-      if (this.state.filterEnabled) total += this._getSelectedProductPrice('filters', 'filterProduct');
-      total += this._getSelectedProductPrice('leds', 'led') * (this.state.ledQty || 1);
-      total += this._getSelectedProductPrice('thermometers', 'thermometer');
-      if (this.state.stairs) total += this._getProductPrice('stairs');
-      if (this.state.pillows) total += this._getProductPrice('pillows') * (this.state.pillowQty || 2);
-      if (this.state.heaterConnection === '90-degree') total += this.data.heater_90?.price || 0;
-
-      // Render grouped summary card using DOM builder (no innerHTML with user data)
-      const card = document.createElement('div');
-      card.className = 'cfg-summary';
-
-      for (const group of groups) {
-        const groupEl = document.createElement('div');
-        groupEl.className = 'cfg-summary__group';
-
-        const headingEl = document.createElement('div');
-        headingEl.className = 'cfg-summary__heading';
-        headingEl.textContent = group.heading;
-        groupEl.appendChild(headingEl);
-
-        const itemsEl = document.createElement('div');
-        itemsEl.className = 'cfg-summary__items';
-        for (const item of group.items) {
-          const line = document.createElement('div');
-          line.textContent = item;
-          itemsEl.appendChild(line);
-        }
-        groupEl.appendChild(itemsEl);
-        card.appendChild(groupEl);
+      // Render to summary card (before CTA button)
+      if (this.summaryCard) {
+        this.summaryCard.replaceChildren(buildCard());
+        this.summaryCard.style.display = '';
       }
 
-      if (total > 0) {
-        const totalEl = document.createElement('div');
-        totalEl.className = 'cfg-summary__total';
-        totalEl.textContent = `Total: ${money(total)}`;
-        card.appendChild(totalEl);
+      // Also render to summary list section (existing "Your Configuration" step)
+      if (this.summaryList) {
+        this.summaryList.replaceChildren(buildCard());
       }
-
-      this.summaryList.replaceChildren(card);
     }
 
     _getProductTitle(dataKey, productId) {

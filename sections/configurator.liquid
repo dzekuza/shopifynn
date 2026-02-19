@@ -252,11 +252,12 @@
           <span class="cfg-step__badge" aria-hidden="true">✓</span>
           <h3 class="cfg-step__title">Your Configuration</h3>
         </div>
-        <ul data-summary-list style="list-style: disc; padding-left: 20px;"></ul>
+        <div data-summary-list></div>
       </div>
 
       {%- comment -%} ── Price + CTA ── {%- endcomment -%}
       <div class="cfg__bottom">
+        <div data-summary-card style="display:none;"></div>
         <div class="cfg__total" data-total-price aria-live="polite" style="visibility:hidden;">—</div>
         <p class="cfg__error" data-cart-error></p>
         <button class="cfg__cta" data-add-to-cart disabled>Select a model to start</button>
