@@ -9,13 +9,13 @@
 (function () {
   'use strict';
 
-  /* ── Price formatting ─────────────────────────────────── */
+  /* ══ 1. CONFIG & CONSTANTS ══════════════════════════════════════ */
+
   function money(cents) {
     const val = (cents / 100).toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     return '€' + val;
   }
 
-  /* ── Step definitions (order + labels) ────────────────── */
   const STEPS = [
     { num: 1,  key: 'model_size',  title: 'Your Hot Tub',              subtitle: 'Choose model and size.' },
     { num: 2,  key: 'liner',       title: 'Fiberglass Liner',           subtitle: 'Select collection & color.' },
@@ -34,7 +34,8 @@
     { num: 15, key: 'heater_conn', title: 'Heater Connection Type',     subtitle: 'Connection angle.' },
   ];
 
-  /* ── Main configurator class ──────────────────────────── */
+  /* ══ 2. LIFECYCLE & INITIALIZATION ══════════════════════════════ */
+
   class HotTubConfigurator extends HTMLElement {
     connectedCallback() {
       this.data = JSON.parse(this.querySelector('[data-configurator-products]').textContent);
@@ -78,7 +79,6 @@
       this._bindEvents();
     }
 
-    /* ── Cache DOM refs ────────────────────────────────── */
     _cacheEls() {
       this.stepsContainer = this.querySelector('[data-steps]');
       this.mainImage = this.querySelector('[data-main-image]');
@@ -92,7 +92,8 @@
       this.summaryCard = this.querySelector('[data-summary-card]');
     }
 
-    /* ── Render all step content ───────────────────────── */
+    /* ══ 3. STEP RENDERING ══════════════════════════════════════════ */
+
     _renderSteps() {
       for (const step of STEPS) {
         const el = this.querySelector(`[data-step="${step.num}"]`);
@@ -120,7 +121,6 @@
       }
     }
 
-    /* ── Step 1: Model tier + Size ─────────────────────── */
     _renderModelSizeStep(container) {
       const products = this.data.base || [];
       let html = '';
@@ -151,7 +151,6 @@
       container.innerHTML = html;
     }
 
-    /* ── Step: Collection dropdown (liners, exteriors, covers, etc.) ── */
     _renderCollectionStep(container, dataKey, mode) {
       const products = this.data[dataKey] || [];
       if (products.length === 0) {
@@ -204,7 +203,6 @@
       container.innerHTML = html;
     }
 
-    /* ── Step: Checkbox (insulation, stairs) ────────────── */
     _renderCheckboxStep(container, stateKey) {
       const products = this.data[stateKey + 's'] || this.data[stateKey] || [];
       const product = Array.isArray(products) ? products[0] : products;
@@ -228,7 +226,6 @@
         </label>`;
     }
 
-    /* ── Step: Checkbox + dropdown (filter) ─────────────── */
     _renderCheckboxDropdownStep(container, stateKey, dataKey) {
       const products = this.data[dataKey] || [];
       container.innerHTML = `
@@ -259,7 +256,6 @@
         </div>`;
     }
 
-    /* ── Step: Checkbox + quantity (pillows) ────────────── */
     _renderCheckboxQtyStep(container, stateKey) {
       const products = this.data[stateKey] || [];
       const product = Array.isArray(products) ? products[0] : products;
@@ -291,7 +287,6 @@
       this.state.pillowQty = def;
     }
 
-    /* ── Step 4: Oven type (external/internal → base variant) ── */
     _renderOvenStep(container) {
       const ovenAddons = this.data.oven_addons || [];
 
@@ -330,7 +325,6 @@
       container.innerHTML = html;
     }
 
-    /* ── Step: Diagram (controls, heater connection) ───── */
     _renderDiagramStep(container, key) {
       const imgData = this.data.diagrams?.[key] || {};
       if (key === 'controls') {
@@ -355,7 +349,92 @@
       }
     }
 
-    /* ── Event delegation ──────────────────────────────── */
+    _renderSizeCards(sizes) {
+      const container = this.querySelector('[data-size-cards]');
+      if (!container) return;
+
+      const dims = {
+        XL: 'Inside ∅ 200 cm / Outside ∅ 225 cm',
+        L: 'Inside ∅ 180 cm / Outside ∅ 200 cm',
+        M: '100×80 cm / 120×200 cm',
+      };
+      const persons = { XL: '6–8 persons', L: '6–8 persons', M: '2 persons' };
+
+      container.innerHTML = sizes.map(s => `
+        <div class="cfg-card cfg-card--size" data-action="select-size" data-size="${s.label}" tabindex="0" role="button" aria-pressed="false">
+          <div class="cfg-card__info">
+            <h4 class="cfg-card__name">${s.label}</h4>
+            <p class="cfg-card__desc">${dims[s.label] || ''}</p>
+            <p class="cfg-card__meta">${persons[s.label] || ''}</p>
+          </div>
+          <div class="cfg-card__price">From ${money(s.minPrice)}</div>
+        </div>
+      `).join('');
+    }
+
+    _showVariants(group, product) {
+      const area = this.querySelector(`[data-variant-area="${group}"]`);
+      if (!area) return;
+
+      const swatchContainer = area.querySelector(`[data-variant-swatches="${group}"]`);
+      const pillsContainer = area.querySelector(`[data-variant-pills="${group}"]`);
+      const target = swatchContainer || pillsContainer;
+      if (!target) return;
+
+      const variants = product.variants || [];
+      const isColor = variants.some(v => v.option1 && /pearl|granite|grey|black|brown|white|blue|green|azure|ivory|silver|midnight|crystal|glacier|arctic|anthracite|chocolate|fir|cedar|thermal|ral/i.test(v.option1));
+
+      if (isColor && swatchContainer) {
+        swatchContainer.innerHTML = variants.map((v, i) => `
+          <div class="cfg-swatch ${i === 0 ? 'cfg-swatch--selected' : ''}" data-action="select-variant" data-group="${group}" data-variant-id="${v.id}" data-price="${v.price}" title="${v.option1}" tabindex="0" role="button" aria-pressed="${i === 0}" aria-label="${v.option1}">
+            <span class="cfg-swatch__label">${v.option1}</span>
+          </div>
+        `).join('');
+      } else if (pillsContainer) {
+        pillsContainer.innerHTML = variants.map((v, i) => `
+          <button type="button" class="cfg-pill ${i === 0 ? 'cfg-pill--selected' : ''}" data-action="select-variant" data-group="${group}" data-variant-id="${v.id}" data-price="${v.price}">
+            ${v.option1}${v.option2 ? ' / ' + v.option2 : ''}
+            ${v.price > product.variants[0].price ? ` <span class="cfg-pill__extra">+${money(v.price - product.variants[0].price)}</span>` : ''}
+          </button>
+        `).join('');
+      }
+
+      area.style.display = 'block';
+      this._selectVariant(group, variants[0]?.id, variants[0]?.price);
+
+      target.addEventListener('click', (e) => {
+        const el = e.target.closest('[data-action="select-variant"]');
+        if (!el) return;
+        target.querySelectorAll('.cfg-swatch--selected, .cfg-pill--selected').forEach(s => {
+          s.classList.remove('cfg-swatch--selected', 'cfg-pill--selected');
+          s.setAttribute('aria-pressed', 'false');
+        });
+        el.classList.add(el.classList.contains('cfg-swatch') ? 'cfg-swatch--selected' : 'cfg-pill--selected');
+        el.setAttribute('aria-pressed', 'true');
+        this._selectVariant(group, parseInt(el.dataset.variantId), parseInt(el.dataset.price));
+      });
+    }
+
+    _showQtySelector(group, product) {
+      const area = this.querySelector(`[data-qty-area="${group}"]`);
+      if (!area) return;
+      const valueEl = area.querySelector(`[data-qty-value="${group}"]`);
+      const selectorEl = area.querySelector(`[data-qty-selector="${group}"]`);
+
+      if (valueEl) valueEl.textContent = product.meta?.default_qty || 1;
+      if (selectorEl) {
+        selectorEl.dataset.min = product.meta?.min_qty || 1;
+        selectorEl.dataset.max = product.meta?.max_qty || 12;
+      }
+
+      area.style.display = 'block';
+
+      const qtyMap = { hydro: 'hydroNozzles', air: 'airNozzles', leds: 'ledQty' };
+      if (qtyMap[group]) this.state[qtyMap[group]] = product.meta?.default_qty || 1;
+    }
+
+    /* ══ 4. EVENT HANDLING ══════════════════════════════════════════ */
+
     _bindEvents() {
       this.addEventListener('click', (e) => {
         const target = e.target.closest('[data-action]');
@@ -421,7 +500,6 @@
       this.ctaBtn?.addEventListener('click', () => this._handleAddToCart());
     }
 
-    /* ── Handler: Model tier selection ─────────────────── */
     _handleModelSelect(modelKey) {
       this.state.model = modelKey;
       const tier = (this.data.base || []).find(p => p.key === modelKey);
@@ -456,7 +534,6 @@
       this._updatePrice();
     }
 
-    /* ── Handler: Size selection ───────────────────────── */
     _handleSizeSelect(size) {
       this.state.size = size;
 
@@ -479,7 +556,6 @@
       this._scrollToStep(2);
     }
 
-    /* ── Handler: Product selection (add-on collections) ── */
     _handleProductSelect(group, productId) {
       const products = this.data[group] || [];
       const product = products.find(p => p.id === productId);
@@ -544,7 +620,6 @@
       this._updatePrice();
     }
 
-    /* ── Handler: Oven type (external/internal → base variant) ── */
     _handleOvenTypeToggle(type) {
       this.state.ovenType = type;
 
@@ -625,7 +700,21 @@
       this._updatePrice();
     }
 
-    /* ── Size extraction from products ─────────────────── */
+    /* ══ 5. PRODUCT RESOLUTION ══════════════════════════════════════ */
+
+    _getSizeFromProduct(product) {
+      const text = product.title || '';
+      if (/\bXL\b/i.test(text)) return 'XL';
+      if (/\bM\b/i.test(text) && !/\bXL\b/i.test(text)) return 'M';
+      if (/\bL\b/i.test(text) && !/\bXL\b/i.test(text)) return 'L';
+      return null;
+    }
+
+    _isInternalOvenProduct(product) {
+      const title = (product.title || '').trim();
+      return /\bI\s*$/.test(title) || /internal|integr/i.test(title);
+    }
+
     _extractSizes(products) {
       const sizeMap = new Map();
       const sizeOrder = ['XL', 'L', 'M'];
@@ -645,43 +734,6 @@
       return sizeOrder.filter(s => sizeMap.has(s)).map(s => sizeMap.get(s));
     }
 
-    _getSizeFromProduct(product) {
-      const text = product.title || '';
-      if (/\bXL\b/i.test(text)) return 'XL';
-      if (/\bM\b/i.test(text) && !/\bXL\b/i.test(text)) return 'M';
-      if (/\bL\b/i.test(text) && !/\bXL\b/i.test(text)) return 'L';
-      return null;
-    }
-
-    _isInternalOvenProduct(product) {
-      const title = (product.title || '').trim();
-      return /\bI\s*$/.test(title) || /internal|integr/i.test(title);
-    }
-
-    _renderSizeCards(sizes) {
-      const container = this.querySelector('[data-size-cards]');
-      if (!container) return;
-
-      const dims = {
-        XL: 'Inside ∅ 200 cm / Outside ∅ 225 cm',
-        L: 'Inside ∅ 180 cm / Outside ∅ 200 cm',
-        M: '100×80 cm / 120×200 cm',
-      };
-      const persons = { XL: '6–8 persons', L: '6–8 persons', M: '2 persons' };
-
-      container.innerHTML = sizes.map(s => `
-        <div class="cfg-card cfg-card--size" data-action="select-size" data-size="${s.label}" tabindex="0" role="button" aria-pressed="false">
-          <div class="cfg-card__info">
-            <h4 class="cfg-card__name">${s.label}</h4>
-            <p class="cfg-card__desc">${dims[s.label] || ''}</p>
-            <p class="cfg-card__meta">${persons[s.label] || ''}</p>
-          </div>
-          <div class="cfg-card__price">From ${money(s.minPrice)}</div>
-        </div>
-      `).join('');
-    }
-
-    /* ── Base product resolution (finds product matching size + oven) ── */
     _resolveBaseProduct() {
       const tier = this.state.selectedTier;
       if (!tier || !this.state.size) return;
@@ -753,144 +805,8 @@
       }
     }
 
-    /* ── Variant rendering (add-on products) ───────────── */
-    _showVariants(group, product) {
-      const area = this.querySelector(`[data-variant-area="${group}"]`);
-      if (!area) return;
+    /* ══ 6. PRICE CALCULATION ═══════════════════════════════════════ */
 
-      const swatchContainer = area.querySelector(`[data-variant-swatches="${group}"]`);
-      const pillsContainer = area.querySelector(`[data-variant-pills="${group}"]`);
-      const target = swatchContainer || pillsContainer;
-      if (!target) return;
-
-      const variants = product.variants || [];
-      const isColor = variants.some(v => v.option1 && /pearl|granite|grey|black|brown|white|blue|green|azure|ivory|silver|midnight|crystal|glacier|arctic|anthracite|chocolate|fir|cedar|thermal|ral/i.test(v.option1));
-
-      if (isColor && swatchContainer) {
-        swatchContainer.innerHTML = variants.map((v, i) => `
-          <div class="cfg-swatch ${i === 0 ? 'cfg-swatch--selected' : ''}" data-action="select-variant" data-group="${group}" data-variant-id="${v.id}" data-price="${v.price}" title="${v.option1}" tabindex="0" role="button" aria-pressed="${i === 0}" aria-label="${v.option1}">
-            <span class="cfg-swatch__label">${v.option1}</span>
-          </div>
-        `).join('');
-      } else if (pillsContainer) {
-        pillsContainer.innerHTML = variants.map((v, i) => `
-          <button type="button" class="cfg-pill ${i === 0 ? 'cfg-pill--selected' : ''}" data-action="select-variant" data-group="${group}" data-variant-id="${v.id}" data-price="${v.price}">
-            ${v.option1}${v.option2 ? ' / ' + v.option2 : ''}
-            ${v.price > product.variants[0].price ? ` <span class="cfg-pill__extra">+${money(v.price - product.variants[0].price)}</span>` : ''}
-          </button>
-        `).join('');
-      }
-
-      area.style.display = 'block';
-      this._selectVariant(group, variants[0]?.id, variants[0]?.price);
-
-      target.addEventListener('click', (e) => {
-        const el = e.target.closest('[data-action="select-variant"]');
-        if (!el) return;
-        target.querySelectorAll('.cfg-swatch--selected, .cfg-pill--selected').forEach(s => {
-          s.classList.remove('cfg-swatch--selected', 'cfg-pill--selected');
-          s.setAttribute('aria-pressed', 'false');
-        });
-        el.classList.add(el.classList.contains('cfg-swatch') ? 'cfg-swatch--selected' : 'cfg-pill--selected');
-        el.setAttribute('aria-pressed', 'true');
-        this._selectVariant(group, parseInt(el.dataset.variantId), parseInt(el.dataset.price));
-      });
-    }
-
-    _selectVariant(group, variantId, price) {
-      const variantMap = {
-        'liners': 'linerVariant',
-        'exteriors': 'exteriorVariant',
-        'covers': 'coverVariant',
-      };
-      if (variantMap[group]) {
-        this.state[variantMap[group]] = variantId;
-      }
-      this._updatePrice();
-    }
-
-    _showQtySelector(group, product) {
-      const area = this.querySelector(`[data-qty-area="${group}"]`);
-      if (!area) return;
-      const valueEl = area.querySelector(`[data-qty-value="${group}"]`);
-      const selectorEl = area.querySelector(`[data-qty-selector="${group}"]`);
-
-      if (valueEl) valueEl.textContent = product.meta?.default_qty || 1;
-      if (selectorEl) {
-        selectorEl.dataset.min = product.meta?.min_qty || 1;
-        selectorEl.dataset.max = product.meta?.max_qty || 12;
-      }
-
-      area.style.display = 'block';
-
-      const qtyMap = { hydro: 'hydroNozzles', air: 'airNozzles', leds: 'ledQty' };
-      if (qtyMap[group]) this.state[qtyMap[group]] = product.meta?.default_qty || 1;
-    }
-
-    /* ── Step progression ──────────────────────────────── */
-    _unlockThrough(stepNum) {
-      if (stepNum <= this.maxUnlocked) return;
-      this.maxUnlocked = stepNum;
-      for (let i = 1; i <= STEPS.length; i++) {
-        const el = this.querySelector(`[data-step="${i}"]`);
-        if (!el) continue;
-        el.classList.toggle('cfg-step--locked', i > this.maxUnlocked);
-      }
-      if (this.state.size && this.ctaBtn) {
-        this.ctaBtn.disabled = false;
-        this.ctaBtn.textContent = 'Add to Cart';
-      }
-    }
-
-    _scrollToStep(num) {
-      const el = this.querySelector(`[data-step="${num}"]`);
-      if (!el) return;
-      setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 150);
-    }
-
-    /* ── Validation ────────────────────────────────────── */
-
-    /**
-     * Validates that all required steps have a selection.
-     * REQUIRED: model_size (step 1), liner (step 2), oven/heating (step 4), exterior (step 5)
-     * OPTIONAL: insulation, hydro, air, filter, led, thermometer, stairs, pillows, cover, controls, heater_conn
-     * Returns { valid: boolean, missingStep: string | null }
-     */
-    _validateRequiredSteps() {
-      if (!this.state.model || !this.state.size) {
-        return { valid: false, missingStep: 'model_size' };
-      }
-      if (!this.state.liner) {
-        return { valid: false, missingStep: 'liner' };
-      }
-      // oven step: baseVariantId resolves after model + size + ovenType are set
-      if (!this.state.baseVariantId) {
-        return { valid: false, missingStep: 'oven' };
-      }
-      if (!this.state.exterior) {
-        return { valid: false, missingStep: 'exterior' };
-      }
-      return { valid: true, missingStep: null };
-    }
-
-    /* ── Toast messaging ───────────────────────────────── */
-    _showToast(message, duration = 3000) {
-      const existing = this.querySelector('.cfg-toast');
-      if (existing) existing.remove();
-
-      const toast = document.createElement('div');
-      toast.className = 'cfg-toast';
-      toast.textContent = message;
-      this.appendChild(toast);
-
-      requestAnimationFrame(() => toast.classList.add('cfg-toast--visible'));
-      setTimeout(() => {
-        toast.classList.remove('cfg-toast--visible');
-        toast.addEventListener('transitionend', () => toast.remove(), { once: true });
-      }, duration);
-    }
-
-    /* ── Price calculation ─────────────────────────────── */
     _updatePrice() {
       let total = 0;
 
@@ -983,7 +899,6 @@
       return addon?.price || 0;
     }
 
-    /* ── Summary (grouped card displayed before the CTA) ── */
     _updateSummary() {
       if (!this.summaryCard && !this.summaryList) return;
 
@@ -1086,39 +1001,96 @@
       return products.find(p => p.id === productId)?.title || '—';
     }
 
-    /* ── Image management ──────────────────────────────── */
-    _setMainImage(url) {
-      if (!this.mainImage || !url) return;
-      if (this.placeholder) this.placeholder.style.display = 'none';
-      this.mainImage.style.display = 'block';
-      this.mainImage.classList.add('cfg-main-image--fade');
-      if (this.imgLoader) this.imgLoader.style.display = 'flex';
-      setTimeout(() => {
-        this.mainImage.src = url;
-        this.mainImage.onload = () => { this.mainImage.classList.remove('cfg-main-image--fade'); if (this.imgLoader) this.imgLoader.style.display = 'none'; };
-        this.mainImage.onerror = () => { this.mainImage.classList.remove('cfg-main-image--fade'); if (this.imgLoader) this.imgLoader.style.display = 'none'; };
-      }, 120);
+    _buildConfigSummary() {
+      // Helper: truncate title to max chars
+      const trunc = (str, max = 20) => str && str.length > max ? str.slice(0, max - 1) + '…' : (str || '');
+
+      const lines = [];
+
+      // Base Model group (always present if model + size selected)
+      if (this.state.model && this.state.size) {
+        const tierTitle = trunc(this.state.selectedTier?.title || this.state.model);
+        const ovenLabel = this.state.ovenType === 'internal' ? 'Int.' : 'Ext.';
+        lines.push('Base');
+        lines.push(`  ${tierTitle}, Sz ${this.state.size}, ${ovenLabel}`);
+      }
+
+      // Heating group — only oven addons (glass door, chimney) since oven is part of base
+      const heatingItems = [];
+      if (this.state.glassDoor) heatingItems.push('Glass door');
+      if (this.state.chimney) heatingItems.push('Chimney');
+      if (this.state.heaterConnection !== 'straight') heatingItems.push('90° conn.');
+      if (heatingItems.length > 0) {
+        lines.push('Heat');
+        heatingItems.forEach(i => lines.push(`  ${trunc(i, 22)}`));
+      }
+
+      // Wellness group
+      const wellnessItems = [];
+      if (this.state.hydro) wellnessItems.push(trunc(this._getProductTitle('hydro', this.state.hydro)));
+      if (this.state.air) wellnessItems.push(trunc(this._getProductTitle('air', this.state.air)));
+      if (wellnessItems.length > 0) {
+        lines.push('Wellness');
+        wellnessItems.forEach(i => lines.push(`  ${i}`));
+      }
+
+      // Accessories group
+      const accItems = [];
+      if (this.state.liner) accItems.push(trunc(this._getProductTitle('liners', this.state.liner)));
+      if (this.state.exterior) accItems.push(trunc(this._getProductTitle('exteriors', this.state.exterior)));
+      if (this.state.cover) accItems.push(trunc(this._getProductTitle('covers', this.state.cover)));
+      if (this.state.stairs) accItems.push('Stairs');
+      if (this.state.led) accItems.push(trunc(this._getProductTitle('leds', this.state.led)));
+      if (this.state.pillows) accItems.push(`Pillows x${this.state.pillowQty || 2}`);
+      if (this.state.thermometer) accItems.push(trunc(this._getProductTitle('thermometers', this.state.thermometer)));
+      if (this.state.filterEnabled && this.state.filterProduct) accItems.push(trunc(this._getProductTitle('filters', this.state.filterProduct)));
+      if (accItems.length > 0) {
+        lines.push('Acc');
+        accItems.forEach(i => lines.push(`  ${i}`));
+      }
+
+      const summary = lines.join('\n');
+
+      // Verify byte length — Shopify cart line item property limit is 255 chars, we target <200 bytes
+      const byteLength = new TextEncoder().encode(summary).length;
+      if (byteLength > 200) {
+        // Fallback: compact single-line summary
+        const fallbackParts = [];
+        if (this.state.model && this.state.size) fallbackParts.push(`${trunc(this.state.selectedTier?.title || '', 12)} ${this.state.size}`);
+        if (this.state.ovenType) fallbackParts.push(this.state.ovenType === 'internal' ? 'Int' : 'Ext');
+        if (this.state.liner) fallbackParts.push(trunc(this._getProductTitle('liners', this.state.liner), 12));
+        if (this.state.exterior) fallbackParts.push(trunc(this._getProductTitle('exteriors', this.state.exterior), 12));
+        return fallbackParts.join(' | ');
+      }
+
+      return summary;
     }
 
-    _updateGallery(images) {
-      if (!this.gallery || !images?.length) return;
-      this.gallery.innerHTML = images.map((img, i) => `
-        <div class="cfg-thumb ${i === 0 ? 'cfg-thumb--active' : ''}" data-thumb-idx="${i}" tabindex="0" role="button" aria-label="View image ${i + 1}">
-          <img src="${img.thumb || img.src}" alt="${img.alt || 'Hot tub view'}" loading="lazy">
-        </div>
-      `).join('');
-      if (images[0]) this._setMainImage(images[0].src);
+    /* ══ 7. CART & VALIDATION ═══════════════════════════════════════ */
 
-      this.gallery.addEventListener('click', (e) => {
-        const thumb = e.target.closest('[data-thumb-idx]');
-        if (!thumb) return;
-        const idx = parseInt(thumb.dataset.thumbIdx);
-        this.gallery.querySelectorAll('.cfg-thumb').forEach((t, i) => t.classList.toggle('cfg-thumb--active', i === idx));
-        if (images[idx]) this._setMainImage(images[idx].src);
-      });
+    /**
+     * Validates that all required steps have a selection.
+     * REQUIRED: model_size (step 1), liner (step 2), oven/heating (step 4), exterior (step 5)
+     * OPTIONAL: insulation, hydro, air, filter, led, thermometer, stairs, pillows, cover, controls, heater_conn
+     * Returns { valid: boolean, missingStep: string | null }
+     */
+    _validateRequiredSteps() {
+      if (!this.state.model || !this.state.size) {
+        return { valid: false, missingStep: 'model_size' };
+      }
+      if (!this.state.liner) {
+        return { valid: false, missingStep: 'liner' };
+      }
+      // oven step: baseVariantId resolves after model + size + ovenType are set
+      if (!this.state.baseVariantId) {
+        return { valid: false, missingStep: 'oven' };
+      }
+      if (!this.state.exterior) {
+        return { valid: false, missingStep: 'exterior' };
+      }
+      return { valid: true, missingStep: null };
     }
 
-    /* ── Cart ──────────────────────────────────────────── */
     async _handleAddToCart() {
       this._hideError();
 
@@ -1251,88 +1223,6 @@
       return items;
     }
 
-    _buildConfigSummary() {
-      // Helper: truncate title to max chars
-      const trunc = (str, max = 20) => str && str.length > max ? str.slice(0, max - 1) + '…' : (str || '');
-
-      const lines = [];
-
-      // Base Model group (always present if model + size selected)
-      if (this.state.model && this.state.size) {
-        const tierTitle = trunc(this.state.selectedTier?.title || this.state.model);
-        const ovenLabel = this.state.ovenType === 'internal' ? 'Int.' : 'Ext.';
-        lines.push('Base');
-        lines.push(`  ${tierTitle}, Sz ${this.state.size}, ${ovenLabel}`);
-      }
-
-      // Heating group — only oven addons (glass door, chimney) since oven is part of base
-      const heatingItems = [];
-      if (this.state.glassDoor) heatingItems.push('Glass door');
-      if (this.state.chimney) heatingItems.push('Chimney');
-      if (this.state.heaterConnection !== 'straight') heatingItems.push('90° conn.');
-      if (heatingItems.length > 0) {
-        lines.push('Heat');
-        heatingItems.forEach(i => lines.push(`  ${trunc(i, 22)}`));
-      }
-
-      // Wellness group
-      const wellnessItems = [];
-      if (this.state.hydro) wellnessItems.push(trunc(this._getProductTitle('hydro', this.state.hydro)));
-      if (this.state.air) wellnessItems.push(trunc(this._getProductTitle('air', this.state.air)));
-      if (wellnessItems.length > 0) {
-        lines.push('Wellness');
-        wellnessItems.forEach(i => lines.push(`  ${i}`));
-      }
-
-      // Accessories group
-      const accItems = [];
-      if (this.state.liner) accItems.push(trunc(this._getProductTitle('liners', this.state.liner)));
-      if (this.state.exterior) accItems.push(trunc(this._getProductTitle('exteriors', this.state.exterior)));
-      if (this.state.cover) accItems.push(trunc(this._getProductTitle('covers', this.state.cover)));
-      if (this.state.stairs) accItems.push('Stairs');
-      if (this.state.led) accItems.push(trunc(this._getProductTitle('leds', this.state.led)));
-      if (this.state.pillows) accItems.push(`Pillows x${this.state.pillowQty || 2}`);
-      if (this.state.thermometer) accItems.push(trunc(this._getProductTitle('thermometers', this.state.thermometer)));
-      if (this.state.filterEnabled && this.state.filterProduct) accItems.push(trunc(this._getProductTitle('filters', this.state.filterProduct)));
-      if (accItems.length > 0) {
-        lines.push('Acc');
-        accItems.forEach(i => lines.push(`  ${i}`));
-      }
-
-      const summary = lines.join('\n');
-
-      // Verify byte length — Shopify cart line item property limit is 255 chars, we target <200 bytes
-      const byteLength = new TextEncoder().encode(summary).length;
-      if (byteLength > 200) {
-        // Fallback: compact single-line summary
-        const fallbackParts = [];
-        if (this.state.model && this.state.size) fallbackParts.push(`${trunc(this.state.selectedTier?.title || '', 12)} ${this.state.size}`);
-        if (this.state.ovenType) fallbackParts.push(this.state.ovenType === 'internal' ? 'Int' : 'Ext');
-        if (this.state.liner) fallbackParts.push(trunc(this._getProductTitle('liners', this.state.liner), 12));
-        if (this.state.exterior) fallbackParts.push(trunc(this._getProductTitle('exteriors', this.state.exterior), 12));
-        return fallbackParts.join(' | ');
-      }
-
-      return summary;
-    }
-
-    /* ── Tooltips ──────────────────────────────────────── */
-    _showTooltip(btn) {
-      this._closeTooltips();
-      const text = btn.dataset.tooltip;
-      if (!text) return;
-      const tip = document.createElement('div');
-      tip.className = 'cfg-tooltip';
-      tip.textContent = text;
-      btn.style.position = 'relative';
-      btn.appendChild(tip);
-    }
-
-    _closeTooltips() {
-      this.querySelectorAll('.cfg-tooltip').forEach(t => t.remove());
-    }
-
-    /* ── Errors ────────────────────────────────────────── */
     _showError(msg) {
       if (!this.cartError) return;
       this.cartError.innerHTML = '';
@@ -1350,11 +1240,95 @@
       this.cartError.appendChild(retryBtn);
       this.cartError.style.display = 'flex';
     }
+
     _hideError() {
       if (this.cartError) { this.cartError.innerHTML = ''; this.cartError.style.display = 'none'; }
     }
 
-    /* ── Utility ───────────────────────────────────────── */
+    /* ══ 8. UI UTILITIES ════════════════════════════════════════════ */
+
+    _showToast(message, duration = 3000) {
+      const existing = this.querySelector('.cfg-toast');
+      if (existing) existing.remove();
+
+      const toast = document.createElement('div');
+      toast.className = 'cfg-toast';
+      toast.textContent = message;
+      this.appendChild(toast);
+
+      requestAnimationFrame(() => toast.classList.add('cfg-toast--visible'));
+      setTimeout(() => {
+        toast.classList.remove('cfg-toast--visible');
+        toast.addEventListener('transitionend', () => toast.remove(), { once: true });
+      }, duration);
+    }
+
+    _showTooltip(btn) {
+      this._closeTooltips();
+      const text = btn.dataset.tooltip;
+      if (!text) return;
+      const tip = document.createElement('div');
+      tip.className = 'cfg-tooltip';
+      tip.textContent = text;
+      btn.style.position = 'relative';
+      btn.appendChild(tip);
+    }
+
+    _closeTooltips() {
+      this.querySelectorAll('.cfg-tooltip').forEach(t => t.remove());
+    }
+
+    _setMainImage(url) {
+      if (!this.mainImage || !url) return;
+      if (this.placeholder) this.placeholder.style.display = 'none';
+      this.mainImage.style.display = 'block';
+      this.mainImage.classList.add('cfg-main-image--fade');
+      if (this.imgLoader) this.imgLoader.style.display = 'flex';
+      setTimeout(() => {
+        this.mainImage.src = url;
+        this.mainImage.onload = () => { this.mainImage.classList.remove('cfg-main-image--fade'); if (this.imgLoader) this.imgLoader.style.display = 'none'; };
+        this.mainImage.onerror = () => { this.mainImage.classList.remove('cfg-main-image--fade'); if (this.imgLoader) this.imgLoader.style.display = 'none'; };
+      }, 120);
+    }
+
+    _updateGallery(images) {
+      if (!this.gallery || !images?.length) return;
+      this.gallery.innerHTML = images.map((img, i) => `
+        <div class="cfg-thumb ${i === 0 ? 'cfg-thumb--active' : ''}" data-thumb-idx="${i}" tabindex="0" role="button" aria-label="View image ${i + 1}">
+          <img src="${img.thumb || img.src}" alt="${img.alt || 'Hot tub view'}" loading="lazy">
+        </div>
+      `).join('');
+      if (images[0]) this._setMainImage(images[0].src);
+
+      this.gallery.addEventListener('click', (e) => {
+        const thumb = e.target.closest('[data-thumb-idx]');
+        if (!thumb) return;
+        const idx = parseInt(thumb.dataset.thumbIdx);
+        this.gallery.querySelectorAll('.cfg-thumb').forEach((t, i) => t.classList.toggle('cfg-thumb--active', i === idx));
+        if (images[idx]) this._setMainImage(images[idx].src);
+      });
+    }
+
+    _unlockThrough(stepNum) {
+      if (stepNum <= this.maxUnlocked) return;
+      this.maxUnlocked = stepNum;
+      for (let i = 1; i <= STEPS.length; i++) {
+        const el = this.querySelector(`[data-step="${i}"]`);
+        if (!el) continue;
+        el.classList.toggle('cfg-step--locked', i > this.maxUnlocked);
+      }
+      if (this.state.size && this.ctaBtn) {
+        this.ctaBtn.disabled = false;
+        this.ctaBtn.textContent = 'Add to Cart';
+      }
+    }
+
+    _scrollToStep(num) {
+      const el = this.querySelector(`[data-step="${num}"]`);
+      if (!el) return;
+      setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 150);
+    }
+
     _escAttr(str) {
       return str.replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;');
     }
