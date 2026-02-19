@@ -12,10 +12,28 @@
     "configurator": {
       "type": "configurator",
       "settings": {
+        "classic_m_product": "nordic-elite-m-classic",
+        "classic_l_product": "nordic-elite-l-classic",
+        "classic_xl_product": "nordic-elite-xl-classic",
+        "premium_m_product": "nordic-elite-m-premium",
+        "premium_l_product": "nordic-elite-l-premium",
+        "premium_xl_product": "nordic-elite-xl-premium",
+        "signature_m_product": "nordic-elite-m-signature",
+        "signature_l_product": "nordic-elite-l-signature",
+        "signature_xl_product": "nordic-elite-xl-signature",
         "integrated_oven_addon": 500,
-        "background_color": "#ffffff"
+        "external_oven_image": "shopify://shop_images/OVEN-EXTERNAL-CLASSIC_jpg.jpg",
+        "integrated_oven_image": "shopify://shop_images/OVEN-INTEGRATED-CLASSIC_jpg.jpg",
+        "specs_page": "",
+        "default_image": "shopify://shop_images/Professional_Hot_Tub_Product_Image_3.png",
+        "background_color": "#ffffff",
+        "heading_size": "medium",
+        "padding_top": 40,
+        "padding_bottom": 40
       }
     }
   },
-  "order": ["configurator"]
+  "order": [
+    "configurator"
+  ]
 }
