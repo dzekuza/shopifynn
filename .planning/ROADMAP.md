@@ -29,7 +29,10 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. All innerHTML call sites in configurator.js use textContent, DOM builder APIs, or DOMPurify.sanitize() — no raw string interpolation into innerHTML
   4. DOMPurify 3.2.7 loads on the configurator template and _escAttr() is deleted from the codebase
   5. theme.js uses const/let exclusively — no var declarations remain
-**Plans**: TBD
+**Plans:** 2 plans
+Plans:
+- [ ] 01-01-PLAN.md — Credential management (.gitignore, .env.example, script refactoring) and theme.js var→const/let migration
+- [ ] 01-02-PLAN.md — DOMPurify integration and innerHTML XSS sanitization in configurator.js
 
 ### Phase 2: Configurator Stabilization
 **Goal**: The configurator resolves products reliably via metafields, calculates price from a single source of truth, validates steps before cart add, and is architecturally clean enough to support visual polish
@@ -41,7 +44,13 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. Attempting to add to cart with an incomplete configuration shows a clear validation error — not a silent failure or wrong cart payload
   4. On a cart add failure, the user sees an error message with a retry option rather than a spinner that never resolves
   5. Configurator CSS loads from assets/configurator.css (not embedded in the section file) and only on the configurator template
-**Plans**: TBD
+**Plans:** 5 plans
+Plans:
+- [ ] 02-01-PLAN.md — Extract configurator CSS to asset file and add conditional loading
+- [ ] 02-02-PLAN.md — Replace string-matching with metafield-based product resolution
+- [ ] 02-03-PLAN.md — Unify price calculation, fix event delegation, locale-aware formatting
+- [ ] 02-04-PLAN.md — Step validation, error recovery with retry, grouped configuration summary
+- [ ] 02-05-PLAN.md — Reorganize configurator.js into 8 responsibility groups + human verification
 
 ### Phase 3: Performance and Accessibility
 **Goal**: The configurator and storefront perform well on real devices and meet WCAG 2.1 AA accessibility requirements
@@ -73,7 +82,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Security Foundation | 0/TBD | Not started | - |
+| 1. Security Foundation | 0/2 | Planned | - |
 | 2. Configurator Stabilization | 0/TBD | Not started | - |
 | 3. Performance and Accessibility | 0/TBD | Not started | - |
 | 4. Visual Polish and Brand Content | 0/TBD | Not started | - |
