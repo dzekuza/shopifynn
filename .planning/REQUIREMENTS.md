@@ -30,18 +30,18 @@ Requirements for production-ready launch. Each maps to roadmap phases.
 
 ### Performance
 
-- [ ] **PERF-01**: Implement image preloading for configurator step transitions
+- [x] **PERF-01**: Implement image preloading for configurator step transitions
 - [x] **PERF-02**: Pin GSAP to version 3.13.0 with explicit CDN URL
 - [x] **PERF-03**: Add GSAP existence check before initializing scroll animations in theme.js
-- [ ] **PERF-04**: Cache frequently-accessed DOM nodes in _cacheEls() method
+- [x] **PERF-04**: Cache frequently-accessed DOM nodes in _cacheEls() method
 - [x] **PERF-05**: Add loading="lazy" to non-critical images (thumbnails, below-fold content)
 
 ### Accessibility
 
-- [ ] **A11Y-01**: Add ARIA labels and roles to configurator custom element (step navigation, option selection)
-- [ ] **A11Y-02**: Implement keyboard navigation for all configurator steps and options
+- [x] **A11Y-01**: Add ARIA labels and roles to configurator custom element (step navigation, option selection)
+- [x] **A11Y-02**: Implement keyboard navigation for all configurator steps and options
 - [x] **A11Y-03**: Audit and add alt text to all img tags across sections and snippets
-- [ ] **A11Y-04**: Ensure all interactive touch targets are minimum 44x44px on mobile
+- [x] **A11Y-04**: Ensure all interactive touch targets are minimum 44x44px on mobile
 - [x] **A11Y-05**: Audit color contrast ratios for WCAG 2.1 AA compliance (4.5:1 minimum)
 
 ### Visual Polish
@@ -125,15 +125,15 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CONF-07 | Phase 2 | Complete |
 | CONF-08 | Phase 2 | Complete |
 | CONF-09 | Phase 2 | Pending |
-| PERF-01 | Phase 3 | Pending |
+| PERF-01 | Phase 3 | Complete |
 | PERF-02 | Phase 3 | Complete |
 | PERF-03 | Phase 3 | Complete |
-| PERF-04 | Phase 3 | Pending |
+| PERF-04 | Phase 3 | Complete |
 | PERF-05 | Phase 3 | Complete |
-| A11Y-01 | Phase 3 | Pending |
-| A11Y-02 | Phase 3 | Pending |
+| A11Y-01 | Phase 3 | Complete |
+| A11Y-02 | Phase 3 | Complete |
 | A11Y-03 | Phase 3 | Complete |
-| A11Y-04 | Phase 3 | Pending |
+| A11Y-04 | Phase 3 | Complete |
 | A11Y-05 | Phase 3 | Complete |
 | VIS-01 | Phase 4 | Complete |
 | VIS-02 | Phase 4 | Complete |
