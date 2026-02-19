@@ -22,6 +22,8 @@
         "signature_l_product": "nordic-elite-l-signature",
         "signature_xl_product": "nordic-elite-xl-signature",
         "integrated_oven_addon": 500,
+        "external_oven_image": "shopify://shop_images/OVEN-EXTERNAL-CLASSIC_jpg.jpg",
+        "integrated_oven_image": "shopify://shop_images/OVEN-INTEGRATED-CLASSIC_jpg.jpg",
         "specs_page": "",
         "default_image": "shopify://shop_images/Spa_Plunge_Winter_Terrace.png",
         "background_color": "#ffffff",
