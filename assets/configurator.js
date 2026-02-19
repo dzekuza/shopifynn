@@ -11,8 +11,14 @@
 
   /* ── Price formatting ─────────────────────────────────── */
   function money(cents) {
-    const val = (cents / 100).toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    return '€' + val;
+    const locale = window.__shopLocale || 'de-DE';
+    const currency = window.__shopCurrency || 'EUR';
+    return new Intl.NumberFormat(locale, {
+      style: 'currency',
+      currency: currency,
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(cents / 100);
   }
 
   /* ── Step definitions (order + labels) ────────────────── */
@@ -420,6 +426,13 @@
           case 'heater-conn':
             this._handleHeaterConnection(target.dataset.value);
             break;
+          case 'select-variant':
+            this._handleVariantSelect(
+              target.dataset.group,
+              parseInt(target.dataset.variantId),
+              parseInt(target.dataset.price)
+            );
+            break;
         }
 
         // Tooltip
@@ -824,18 +837,23 @@
 
       area.style.display = 'block';
       this._selectVariant(group, variants[0]?.id, variants[0]?.price);
+    }
 
-      target.addEventListener('click', (e) => {
-        const el = e.target.closest('[data-action="select-variant"]');
-        if (!el) return;
-        target.querySelectorAll('.cfg-swatch--selected, .cfg-pill--selected').forEach(s => {
-          s.classList.remove('cfg-swatch--selected', 'cfg-pill--selected');
-          s.setAttribute('aria-pressed', 'false');
-        });
-        el.classList.add(el.classList.contains('cfg-swatch') ? 'cfg-swatch--selected' : 'cfg-pill--selected');
-        el.setAttribute('aria-pressed', 'true');
-        this._selectVariant(group, parseInt(el.dataset.variantId), parseInt(el.dataset.price));
-      });
+    _handleVariantSelect(group, variantId, price) {
+      // Update visual selection state for swatches and pills
+      const area = this.querySelector(`[data-variant-area="${group}"]`);
+      if (area) {
+        const el = area.querySelector(`[data-action="select-variant"][data-variant-id="${variantId}"]`);
+        if (el) {
+          area.querySelectorAll('.cfg-swatch--selected, .cfg-pill--selected').forEach(s => {
+            s.classList.remove('cfg-swatch--selected', 'cfg-pill--selected');
+            s.setAttribute('aria-pressed', 'false');
+          });
+          el.classList.add(el.classList.contains('cfg-swatch') ? 'cfg-swatch--selected' : 'cfg-pill--selected');
+          el.setAttribute('aria-pressed', 'true');
+        }
+      }
+      this._selectVariant(group, variantId, price);
     }
 
     _selectVariant(group, variantId, price) {
