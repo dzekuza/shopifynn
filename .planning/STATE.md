@@ -60,6 +60,10 @@ Recent decisions affecting current work:
 - [Phase 02-configurator-stabilization]: connectedCallback guard added to prevent null reference when section loads in Shopify theme editor
 - [Phase 01-security-foundation]: DOMPurify loaded via jsDelivr CDN with defer before configurator.js — mixed strategy: sanitize() for product data, DOM builder for summary list, static strings left as-is
 - [Phase 01-security-foundation]: _escAttr() deleted — tooltip interpolation relies on outer DOMPurify.sanitize() call wrapping the full HTML block
+- [01-01]: All 5 setup scripts sanitized (not just 2 planned) — fix-metafields.mjs, list-products.mjs, update-products.mjs also had hardcoded credentials
+- [01-01]: Git history clean for source files — scripts were never committed, no rewrite needed
+- [01-01]: STORE kept as env var with hardcoded default — not a secret but allows flexibility
+- [01-01]: hiddenSelect uses let in theme.js because it is reassigned via chained querySelector on next line
 - [02-01]: Use template.suffix == 'configurator' (not template.name) — page.configurator.json has suffix 'configurator', name 'page'
 - [02-01]: Retain {% style %} block in configurator.liquid for dynamic per-section Liquid variable styles
 
@@ -76,5 +80,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-20
-Stopped at: Completed 01-02-PLAN.md Task 1 — DOMPurify 3.2.7 integrated, 12 innerHTML call sites sanitized, _escAttr removed. Awaiting Task 2 human-verify checkpoint.
+Stopped at: Completed 01-01-PLAN.md — credential management, .gitignore, .env.example, and theme.js const/let migration
 Resume file: None
