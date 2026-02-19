@@ -89,6 +89,7 @@
       this.ctaBtn = this.querySelector('[data-add-to-cart]');
       this.cartError = this.querySelector('[data-cart-error]');
       this.summaryList = this.querySelector('[data-summary-list]');
+      this.summaryCard = this.querySelector('[data-summary-card]');
     }
 
     /* ── Render all step content ───────────────────────── */
@@ -392,6 +393,10 @@
             break;
           case 'heater-conn':
             this._handleHeaterConnection(target.dataset.value);
+            break;
+          case 'retry-cart':
+            this._hideError();
+            this._handleAddToCart();
             break;
         }
 
@@ -843,6 +848,48 @@
       setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 150);
     }
 
+    /* ── Validation ────────────────────────────────────── */
+
+    /**
+     * Validates that all required steps have a selection.
+     * REQUIRED: model_size (step 1), liner (step 2), oven/heating (step 4), exterior (step 5)
+     * OPTIONAL: insulation, hydro, air, filter, led, thermometer, stairs, pillows, cover, controls, heater_conn
+     * Returns { valid: boolean, missingStep: string | null }
+     */
+    _validateRequiredSteps() {
+      if (!this.state.model || !this.state.size) {
+        return { valid: false, missingStep: 'model_size' };
+      }
+      if (!this.state.liner) {
+        return { valid: false, missingStep: 'liner' };
+      }
+      // oven step: baseVariantId resolves after model + size + ovenType are set
+      if (!this.state.baseVariantId) {
+        return { valid: false, missingStep: 'oven' };
+      }
+      if (!this.state.exterior) {
+        return { valid: false, missingStep: 'exterior' };
+      }
+      return { valid: true, missingStep: null };
+    }
+
+    /* ── Toast messaging ───────────────────────────────── */
+    _showToast(message, duration = 3000) {
+      const existing = this.querySelector('.cfg-toast');
+      if (existing) existing.remove();
+
+      const toast = document.createElement('div');
+      toast.className = 'cfg-toast';
+      toast.textContent = message;
+      this.appendChild(toast);
+
+      requestAnimationFrame(() => toast.classList.add('cfg-toast--visible'));
+      setTimeout(() => {
+        toast.classList.remove('cfg-toast--visible');
+        toast.addEventListener('transitionend', () => toast.remove(), { once: true });
+      }, duration);
+    }
+
     /* ── Price calculation ─────────────────────────────── */
     _updatePrice() {
       let total = 0;
@@ -898,6 +945,7 @@
         this.totalPriceEl.style.visibility = this.state.size ? 'visible' : 'hidden';
       }
 
+      this._currentTotal = total;
       this._updateSummary();
     }
 
@@ -935,28 +983,103 @@
       return addon?.price || 0;
     }
 
-    /* ── Summary ───────────────────────────────────────── */
+    /* ── Summary (grouped card displayed on final step / CTA area) ── */
     _updateSummary() {
       if (!this.summaryList) return;
-      const items = [];
-      if (this.state.model) items.push(`Model: ${this.state.selectedTier?.title || this.state.model}`);
-      if (this.state.size) items.push(`Size: ${this.state.size}`);
-      if (this.state.ovenType) items.push(`Oven: ${this.state.ovenType === 'internal' ? 'Internal' : 'External'}`);
-      if (this.state.liner) items.push(`Liner: ${this._getProductTitle('liners', this.state.liner)}`);
-      if (this.state.insulation) items.push('Insulation: Yes');
-      if (this.state.glassDoor) items.push('Door with glass');
-      if (this.state.chimney) items.push('Chimney heat protection');
-      if (this.state.exterior) items.push(`Exterior: ${this._getProductTitle('exteriors', this.state.exterior)}`);
-      if (this.state.hydro) items.push(`Hydro massage: ${this._getProductTitle('hydro', this.state.hydro)} (${this.state.hydroNozzles} nozzles)`);
-      if (this.state.air) items.push(`Air system: ${this._getProductTitle('air', this.state.air)} (${this.state.airNozzles} nozzles)`);
-      if (this.state.filterEnabled && this.state.filterProduct) items.push(`Filter: ${this._getProductTitle('filters', this.state.filterProduct)}`);
-      if (this.state.led) items.push(`LED: ${this._getProductTitle('leds', this.state.led)} ×${this.state.ledQty}`);
-      if (this.state.thermometer) items.push(`Thermometer: ${this._getProductTitle('thermometers', this.state.thermometer)}`);
-      if (this.state.stairs) items.push('Stairs: Yes');
-      if (this.state.pillows) items.push(`Pillows: ${this.state.pillowQty} pcs`);
-      if (this.state.cover) items.push(`Cover: ${this._getProductTitle('covers', this.state.cover)}`);
 
-      this.summaryList.innerHTML = items.map(i => `<li class="cfg-summary-item">${i}</li>`).join('');
+      // Build grouped data structure for display
+      const groups = [];
+
+      // Base Model group
+      if (this.state.model && this.state.size) {
+        const tierTitle = this.state.selectedTier?.title || this.state.model;
+        const ovenLabel = this.state.ovenType === 'internal' ? 'Internal Oven' : 'External Oven';
+        groups.push({
+          heading: 'Base Model',
+          items: [`${tierTitle}, Size ${this.state.size}, ${ovenLabel}`],
+        });
+      }
+
+      // Heating group
+      const heatingItems = [];
+      if (this.state.glassDoor) heatingItems.push('Door with glass');
+      if (this.state.chimney) heatingItems.push('Chimney heat protection');
+      if (this.state.heaterConnection !== 'straight') heatingItems.push('90° angle connection');
+      if (heatingItems.length > 0) groups.push({ heading: 'Heating', items: heatingItems });
+
+      // Wellness group
+      const wellnessItems = [];
+      if (this.state.hydro) wellnessItems.push(`${this._getProductTitle('hydro', this.state.hydro)} (${this.state.hydroNozzles} nozzles)`);
+      if (this.state.air) wellnessItems.push(`${this._getProductTitle('air', this.state.air)} (${this.state.airNozzles} nozzles)`);
+      if (wellnessItems.length > 0) groups.push({ heading: 'Wellness Features', items: wellnessItems });
+
+      // Accessories group
+      const accItems = [];
+      if (this.state.liner) accItems.push(`Liner: ${this._getProductTitle('liners', this.state.liner)}`);
+      if (this.state.insulation) accItems.push('Insulation');
+      if (this.state.exterior) accItems.push(`Exterior: ${this._getProductTitle('exteriors', this.state.exterior)}`);
+      if (this.state.cover) accItems.push(`Cover: ${this._getProductTitle('covers', this.state.cover)}`);
+      if (this.state.stairs) accItems.push('Stairs');
+      if (this.state.led) accItems.push(`LED: ${this._getProductTitle('leds', this.state.led)} ×${this.state.ledQty}`);
+      if (this.state.pillows) accItems.push(`Pillows ×${this.state.pillowQty || 2}`);
+      if (this.state.thermometer) accItems.push(`Thermometer: ${this._getProductTitle('thermometers', this.state.thermometer)}`);
+      if (this.state.filterEnabled && this.state.filterProduct) accItems.push(`Filter: ${this._getProductTitle('filters', this.state.filterProduct)}`);
+      if (accItems.length > 0) groups.push({ heading: 'Accessories', items: accItems });
+
+      if (groups.length === 0) {
+        this.summaryList.innerHTML = '';
+        return;
+      }
+
+      // Calculate total for display
+      let total = this.state.basePrice || 0;
+      total += this._getSelectedVariantPrice('liners', 'liner', 'linerVariant');
+      total += this._getSelectedVariantPrice('exteriors', 'exterior', 'exteriorVariant');
+      total += this._getSelectedVariantPrice('covers', 'cover', 'coverVariant');
+      if (this.state.insulation) total += this._getProductPrice('insulations');
+      if (this.state.glassDoor) total += this._getAddonPrice('glass');
+      if (this.state.chimney) total += this._getAddonPrice('chimney');
+      total += this._getSelectedProductPrice('hydro', 'hydro');
+      total += this._getSelectedProductPrice('air', 'air');
+      if (this.state.filterEnabled) total += this._getSelectedProductPrice('filters', 'filterProduct');
+      total += this._getSelectedProductPrice('leds', 'led') * (this.state.ledQty || 1);
+      total += this._getSelectedProductPrice('thermometers', 'thermometer');
+      if (this.state.stairs) total += this._getProductPrice('stairs');
+      if (this.state.pillows) total += this._getProductPrice('pillows') * (this.state.pillowQty || 2);
+      if (this.state.heaterConnection === '90-degree') total += this.data.heater_90?.price || 0;
+
+      // Render grouped summary card using DOM builder (no innerHTML with user data)
+      const card = document.createElement('div');
+      card.className = 'cfg-summary';
+
+      for (const group of groups) {
+        const groupEl = document.createElement('div');
+        groupEl.className = 'cfg-summary__group';
+
+        const headingEl = document.createElement('div');
+        headingEl.className = 'cfg-summary__heading';
+        headingEl.textContent = group.heading;
+        groupEl.appendChild(headingEl);
+
+        const itemsEl = document.createElement('div');
+        itemsEl.className = 'cfg-summary__items';
+        for (const item of group.items) {
+          const line = document.createElement('div');
+          line.textContent = item;
+          itemsEl.appendChild(line);
+        }
+        groupEl.appendChild(itemsEl);
+        card.appendChild(groupEl);
+      }
+
+      if (total > 0) {
+        const totalEl = document.createElement('div');
+        totalEl.className = 'cfg-summary__total';
+        totalEl.textContent = `Total: ${money(total)}`;
+        card.appendChild(totalEl);
+      }
+
+      this.summaryList.replaceChildren(card);
     }
 
     _getProductTitle(dataKey, productId) {
@@ -999,8 +1122,11 @@
     /* ── Cart ──────────────────────────────────────────── */
     async _handleAddToCart() {
       this._hideError();
-      if (!this.state.size || !this.state.baseVariantId) {
-        this._showError('Please select a model and size first.');
+
+      // Validate all required steps before proceeding to cart API
+      const validation = this._validateRequiredSteps();
+      if (!validation.valid) {
+        this._showToast('Please complete all required selections before adding to cart.');
         return;
       }
 
@@ -1020,7 +1146,7 @@
 
         if (!res.ok) {
           const err = await res.json().catch(() => ({}));
-          throw new Error(err.description || 'Could not add to cart.');
+          throw new Error(err.description || 'Could not add to cart. Please check your connection and try again.');
         }
 
         this.ctaBtn.textContent = '✓ Added to Cart!';
@@ -1127,12 +1253,68 @@
     }
 
     _buildConfigSummary() {
-      const parts = [];
-      if (this.state.selectedTier) parts.push(this.state.selectedTier.title);
-      if (this.state.size) parts.push(`Size: ${this.state.size}`);
-      if (this.state.ovenType) parts.push(`Oven: ${this.state.ovenType}`);
-      if (this.state.heaterConnection !== 'straight') parts.push('Heater: 90°');
-      return parts.join(' | ');
+      // Helper: truncate title to max chars
+      const trunc = (str, max = 20) => str && str.length > max ? str.slice(0, max - 1) + '…' : (str || '');
+
+      const lines = [];
+
+      // Base Model group (always present if model + size selected)
+      if (this.state.model && this.state.size) {
+        const tierTitle = trunc(this.state.selectedTier?.title || this.state.model);
+        const ovenLabel = this.state.ovenType === 'internal' ? 'Int.' : 'Ext.';
+        lines.push('Base');
+        lines.push(`  ${tierTitle}, Sz ${this.state.size}, ${ovenLabel}`);
+      }
+
+      // Heating group — only oven addons (glass door, chimney) since oven is part of base
+      const heatingItems = [];
+      if (this.state.glassDoor) heatingItems.push('Glass door');
+      if (this.state.chimney) heatingItems.push('Chimney');
+      if (this.state.heaterConnection !== 'straight') heatingItems.push('90° conn.');
+      if (heatingItems.length > 0) {
+        lines.push('Heat');
+        heatingItems.forEach(i => lines.push(`  ${trunc(i, 22)}`));
+      }
+
+      // Wellness group
+      const wellnessItems = [];
+      if (this.state.hydro) wellnessItems.push(trunc(this._getProductTitle('hydro', this.state.hydro)));
+      if (this.state.air) wellnessItems.push(trunc(this._getProductTitle('air', this.state.air)));
+      if (wellnessItems.length > 0) {
+        lines.push('Wellness');
+        wellnessItems.forEach(i => lines.push(`  ${i}`));
+      }
+
+      // Accessories group
+      const accItems = [];
+      if (this.state.liner) accItems.push(trunc(this._getProductTitle('liners', this.state.liner)));
+      if (this.state.exterior) accItems.push(trunc(this._getProductTitle('exteriors', this.state.exterior)));
+      if (this.state.cover) accItems.push(trunc(this._getProductTitle('covers', this.state.cover)));
+      if (this.state.stairs) accItems.push('Stairs');
+      if (this.state.led) accItems.push(trunc(this._getProductTitle('leds', this.state.led)));
+      if (this.state.pillows) accItems.push(`Pillows x${this.state.pillowQty || 2}`);
+      if (this.state.thermometer) accItems.push(trunc(this._getProductTitle('thermometers', this.state.thermometer)));
+      if (this.state.filterEnabled && this.state.filterProduct) accItems.push(trunc(this._getProductTitle('filters', this.state.filterProduct)));
+      if (accItems.length > 0) {
+        lines.push('Acc');
+        accItems.forEach(i => lines.push(`  ${i}`));
+      }
+
+      const summary = lines.join('\n');
+
+      // Verify byte length — Shopify cart line item property limit is 255 chars, we target <200 bytes
+      const byteLength = new TextEncoder().encode(summary).length;
+      if (byteLength > 200) {
+        // Fallback: compact single-line summary
+        const fallbackParts = [];
+        if (this.state.model && this.state.size) fallbackParts.push(`${trunc(this.state.selectedTier?.title || '', 12)} ${this.state.size}`);
+        if (this.state.ovenType) fallbackParts.push(this.state.ovenType === 'internal' ? 'Int' : 'Ext');
+        if (this.state.liner) fallbackParts.push(trunc(this._getProductTitle('liners', this.state.liner), 12));
+        if (this.state.exterior) fallbackParts.push(trunc(this._getProductTitle('exteriors', this.state.exterior), 12));
+        return fallbackParts.join(' | ');
+      }
+
+      return summary;
     }
 
     /* ── Tooltips ──────────────────────────────────────── */
@@ -1153,10 +1335,24 @@
 
     /* ── Errors ────────────────────────────────────────── */
     _showError(msg) {
-      if (this.cartError) { this.cartError.textContent = msg; this.cartError.style.display = 'block'; }
+      if (!this.cartError) return;
+      this.cartError.innerHTML = '';
+
+      const msgEl = document.createElement('span');
+      msgEl.textContent = msg;
+
+      const retryBtn = document.createElement('button');
+      retryBtn.type = 'button';
+      retryBtn.className = 'cfg__retry-btn';
+      retryBtn.textContent = 'Try again';
+      retryBtn.dataset.action = 'retry-cart';
+
+      this.cartError.appendChild(msgEl);
+      this.cartError.appendChild(retryBtn);
+      this.cartError.style.display = 'flex';
     }
     _hideError() {
-      if (this.cartError) { this.cartError.textContent = ''; this.cartError.style.display = 'none'; }
+      if (this.cartError) { this.cartError.innerHTML = ''; this.cartError.style.display = 'none'; }
     }
 
     /* ── Utility ───────────────────────────────────────── */
