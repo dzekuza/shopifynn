@@ -37,6 +37,7 @@
         "hot-tubs": {
           "type": "collection_card",
           "settings": {
+            "image": "shopify://shop_images/Professional_Hot_Tub_Product_Image_3.png",
             "video_fit": "cover",
             "heading": "Hot Tubs",
             "description": "Experience the warmth of Nordic craftsmanship. Relax, unwind, and reconnect.",
@@ -48,6 +49,7 @@
         "cold-tubs": {
           "type": "collection_card",
           "settings": {
+            "image": "shopify://shop_images/Product_Mountain_Photoshoot_2.png",
             "video_fit": "cover",
             "heading": "Cold Tubs",
             "description": "Invigorate your body and mind with cold water therapy, the Nordic way.",
