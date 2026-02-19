@@ -37,7 +37,9 @@
   /* ── Main configurator class ──────────────────────────── */
   class HotTubConfigurator extends HTMLElement {
     connectedCallback() {
-      this.data = JSON.parse(this.querySelector('[data-configurator-products]').textContent);
+      const dataEl = this.querySelector('[data-configurator-products]');
+      if (!dataEl) return; // Not in configurator context (e.g., theme editor)
+      this.data = JSON.parse(dataEl.textContent);
       this.state = {
         model: null,               // 'classic', 'premium', 'signature'
         selectedTier: null,        // tier object { key, title, products[] }
@@ -172,7 +174,7 @@
           <div class="cfg-cards" data-size-cards></div>
         </div>`;
 
-      container.innerHTML = html;
+      container.innerHTML = DOMPurify.sanitize(html);
     }
 
     /* ── Step: Collection dropdown (liners, exteriors, covers, etc.) ── */
@@ -199,7 +201,7 @@
                 ${p.body ? `<span class="cfg-radio-card__desc">${p.body}</span>` : ''}
               </span>
               ${p.price > 0 ? `<span class="cfg-radio-card__price">+${money(p.price)}</span>` : ''}
-              ${tooltip ? `<button type="button" class="cfg-tooltip-btn" data-tooltip="${this._escAttr(tooltip)}" aria-label="More info">?</button>` : ''}
+              ${tooltip ? `<button type="button" class="cfg-tooltip-btn" data-tooltip="${tooltip}" aria-label="More info">?</button>` : ''}
             </span>
           </label>`;
       }
@@ -225,7 +227,7 @@
         </div>`;
       }
 
-      container.innerHTML = html;
+      container.innerHTML = DOMPurify.sanitize(html);
     }
 
     /* ── Step: Checkbox (insulation, stairs) ────────────── */
@@ -669,16 +671,11 @@
     }
 
     _getSizeFromProduct(product) {
-      const text = product.title || '';
-      if (/\bXL\b/i.test(text)) return 'XL';
-      if (/\bM\b/i.test(text) && !/\bXL\b/i.test(text)) return 'M';
-      if (/\bL\b/i.test(text) && !/\bXL\b/i.test(text)) return 'L';
-      return null;
+      return product.meta?.size || null;
     }
 
     _isInternalOvenProduct(product) {
-      const title = (product.title || '').trim();
-      return /\bI\s*$/.test(title) || /internal|integr/i.test(title);
+      return product.meta?.oven_type === 'internal';
     }
 
     _renderSizeCards(sizes) {
