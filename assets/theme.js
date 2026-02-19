@@ -64,30 +64,74 @@
     const slider = testimonialSection.querySelector('[data-testimonials-slider]');
     const prevBtn = document.querySelector('[data-testimonials-prev]');
     const nextBtn = document.querySelector('[data-testimonials-next]');
+    const cards = slider ? slider.querySelectorAll('.testimonials__card') : [];
 
-    if (slider && prevBtn && nextBtn) {
-      const cards = slider.querySelectorAll('.testimonials__card');
+    if (slider && cards.length > 0) {
       let currentIndex = 0;
-      const visibleCards = window.innerWidth >= 768 ? 3 : 1;
-      const maxIndex = Math.max(0, cards.length - visibleCards);
 
-      function updateSlider() {
+      function getVisibleCards() {
+        return window.innerWidth >= 768 ? 3 : 1;
+      }
+
+      function getMaxIndex() {
+        return Math.max(0, cards.length - getVisibleCards());
+      }
+
+      function updateSlider(animate) {
         const card = cards[0];
         if (!card) return;
         const gap = 24;
         const cardWidth = card.offsetWidth + gap;
-        slider.style.transform = `translateX(-${currentIndex * cardWidth}px)`;
-        slider.style.transition = 'transform 0.4s ease';
+        slider.style.transition = animate !== false ? 'transform 0.4s ease' : 'none';
+        slider.style.transform = 'translateX(-' + (currentIndex * cardWidth) + 'px)';
       }
 
-      prevBtn.addEventListener('click', () => {
-        currentIndex = Math.max(0, currentIndex - 1);
+      function goTo(index) {
+        currentIndex = Math.max(0, Math.min(getMaxIndex(), index));
         updateSlider();
+      }
+
+      if (prevBtn) {
+        prevBtn.addEventListener('click', function () { goTo(currentIndex - 1); });
+      }
+      if (nextBtn) {
+        nextBtn.addEventListener('click', function () { goTo(currentIndex + 1); });
+      }
+
+      // Touch swipe support
+      let touchStartX = 0;
+      let touchDeltaX = 0;
+
+      slider.addEventListener('touchstart', function (e) {
+        touchStartX = e.touches[0].clientX;
+        touchDeltaX = 0;
+        slider.style.transition = 'none';
+      }, { passive: true });
+
+      slider.addEventListener('touchmove', function (e) {
+        touchDeltaX = e.touches[0].clientX - touchStartX;
+        var card = cards[0];
+        if (!card) return;
+        var gap = 24;
+        var cardWidth = card.offsetWidth + gap;
+        var offset = currentIndex * cardWidth - touchDeltaX;
+        slider.style.transform = 'translateX(-' + offset + 'px)';
+      }, { passive: true });
+
+      slider.addEventListener('touchend', function () {
+        if (touchDeltaX > 50) {
+          goTo(currentIndex - 1);
+        } else if (touchDeltaX < -50) {
+          goTo(currentIndex + 1);
+        } else {
+          updateSlider();
+        }
       });
 
-      nextBtn.addEventListener('click', () => {
-        currentIndex = Math.min(maxIndex, currentIndex + 1);
-        updateSlider();
+      // Recalculate on resize
+      window.addEventListener('resize', function () {
+        currentIndex = Math.min(currentIndex, getMaxIndex());
+        updateSlider(false);
       });
     }
   }

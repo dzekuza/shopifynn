@@ -39,8 +39,8 @@
       </div>
     </div>
 
-    {% if section.blocks.size > 3 %}
-      <div class="testimonials__nav">
+    {% if section.blocks.size > 1 %}
+      <div class="testimonials__nav{% if section.blocks.size <= 3 %} testimonials__nav--mobile-only{% endif %}">
         <button class="testimonials__prev" data-testimonials-prev aria-label="Previous testimonial">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
             <polyline points="15 18 9 12 15 6"/>

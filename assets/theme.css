@@ -177,14 +177,18 @@ ul, ol {
 }
 
 .header {
-  position: sticky;
-  top: 0;
+  position: relative;
   z-index: 100;
   background-color: rgba(248, 251, 252, 0.95);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid rgba(0, 0, 0, 0.06);
   transition: background-color 0.3s ease;
+}
+
+.header--sticky {
+  position: sticky;
+  top: 0;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 .header__inner {
@@ -482,12 +486,24 @@ ul, ol {
 }
 
 @media (min-width: 768px) {
-  .featured-collections__grid {
-    grid-template-columns: 1fr 1fr;
+  .featured-collections__grid--2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .featured-collections__grid--3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .featured-collections__grid--4 {
+    grid-template-columns: repeat(4, 1fr);
   }
 
   .featured-collections__card {
     aspect-ratio: 3 / 4;
+  }
+
+  .featured-collections__grid--4 .featured-collections__card {
+    aspect-ratio: 2 / 3;
   }
 }
 
@@ -717,9 +733,13 @@ ul, ol {
 }
 
 .testimonials__slider {
-  display: grid;
-  grid-template-columns: 1fr;
+  display: flex;
   gap: 24px;
+}
+
+.testimonials__card {
+  min-width: calc(100% - 0px);
+  flex-shrink: 0;
 }
 
 .testimonials__card {
@@ -786,8 +806,12 @@ ul, ol {
 }
 
 @media (min-width: 768px) {
-  .testimonials__slider {
-    grid-template-columns: repeat(3, 1fr);
+  .testimonials__card {
+    min-width: calc((100% - 48px) / 3);
+  }
+
+  .testimonials__nav--mobile-only {
+    display: none;
   }
 }
 
@@ -1515,8 +1539,8 @@ ul, ol {
 }
 
 .product__swatch--active .product__swatch-inner {
-  border-color: var(--color-primary, #1a1a1a);
-  box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--color-primary, #1a1a1a);
+  border-color: transparent;
+  box-shadow: 0 0 0 2px #fff, 0 0 0 3.5px var(--color-primary, #1a1a1a);
 }
 
 .product__swatch-name {
@@ -1747,6 +1771,12 @@ ul, ol {
   .product__grid {
     grid-template-columns: 1fr 1fr;
     gap: 56px;
+    align-items: start;
+  }
+
+  .product__media {
+    position: sticky;
+    top: 92px;
   }
 }
 
@@ -1808,12 +1838,20 @@ ul, ol {
   gap: 24px;
 }
 
-.collection-page__grid--3 {
+.collection-page__grid--mobile-1 {
+  grid-template-columns: 1fr;
+}
+
+.collection-page__grid--mobile-2 {
   grid-template-columns: repeat(2, 1fr);
 }
 
+.collection-page__grid--3 {
+  /* mobile inherits from mobile-columns class above */
+}
+
 .collection-page__grid--4 {
-  grid-template-columns: repeat(2, 1fr);
+  /* mobile inherits from mobile-columns class above */
 }
 
 .collection-page__pagination {

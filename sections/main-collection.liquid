@@ -30,7 +30,7 @@
       </div>
 
       <!-- Product Grid -->
-      <div class="collection-page__grid collection-page__grid--{{ section.settings.columns }}" style="gap: {{ section.settings.grid_gap }}px;">
+      <div class="collection-page__grid collection-page__grid--{{ section.settings.columns }} collection-page__grid--mobile-{{ section.settings.mobile_columns }}" style="gap: {{ section.settings.grid_gap }}px;">
         {% for product in collection.products %}
           <div class="collection-page__item">
             {% render 'product-card', product: product, show_tags: section.settings.show_tags, show_options: section.settings.show_options, show_vendor: section.settings.show_vendor, show_secondary_image: section.settings.show_secondary_image %}
@@ -153,6 +153,16 @@
         { "value": "center", "label": "Center" }
       ],
       "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "mobile_columns",
+      "label": "Mobile columns",
+      "options": [
+        { "value": "1", "label": "1" },
+        { "value": "2", "label": "2" }
+      ],
+      "default": "2"
     },
     {
       "type": "select",

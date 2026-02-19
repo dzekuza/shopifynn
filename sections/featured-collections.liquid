@@ -9,7 +9,7 @@
       </div>
     {% endif %}
 
-    <div class="featured-collections__grid" style="gap: {{ section.settings.grid_gap }}px;">
+    <div class="featured-collections__grid featured-collections__grid--{{ section.settings.columns }}" style="gap: {{ section.settings.grid_gap }}px;">
       {% for block in section.blocks %}
         <a href="{{ block.settings.link }}" class="featured-collections__card" {{ block.shopify_attributes }}>
           <div class="featured-collections__image-wrap">
@@ -115,6 +115,17 @@
         { "value": "right", "label": "Right" }
       ],
       "default": "center"
+    },
+    {
+      "type": "select",
+      "id": "columns",
+      "label": "Desktop columns",
+      "options": [
+        { "value": "2", "label": "2" },
+        { "value": "3", "label": "3" },
+        { "value": "4", "label": "4" }
+      ],
+      "default": "2"
     },
     {
       "type": "range",
