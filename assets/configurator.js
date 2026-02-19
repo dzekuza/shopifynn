@@ -921,95 +921,239 @@
     }
 
     /* ── Price calculation ─────────────────────────────── */
-    _updatePrice() {
-      let total = 0;
 
-      // Base product (resolved variant price includes size + oven)
-      total += this.state.basePrice || 0;
+    /**
+     * Single source of truth for all line items.
+     * Both _updatePrice() and _buildCartItems() consume this.
+     * Returns an array of { variantId, quantity, priceInCents, label, properties }.
+     */
+    _calculateLineItems() {
+      const items = [];
 
-      // Liner
-      total += this._getSelectedVariantPrice('liners', 'liner', 'linerVariant');
-
-      // Insulation
-      if (this.state.insulation) total += this._getProductPrice('insulations');
-
-      // Oven add-ons (glass door, chimney)
-      if (this.state.glassDoor) total += this._getAddonPrice('glass');
-      if (this.state.chimney) total += this._getAddonPrice('chimney');
-
-      // Exterior
-      total += this._getSelectedVariantPrice('exteriors', 'exterior', 'exteriorVariant');
-
-      // Hydro massage
-      total += this._getSelectedProductPrice('hydro', 'hydro');
-
-      // Air system
-      total += this._getSelectedProductPrice('air', 'air');
-
-      // Filter
-      if (this.state.filterEnabled) total += this._getSelectedProductPrice('filters', 'filterProduct');
-
-      // LED
-      total += this._getSelectedProductPrice('leds', 'led') * (this.state.ledQty || 1);
-
-      // Thermometer
-      total += this._getSelectedProductPrice('thermometers', 'thermometer');
-
-      // Stairs
-      if (this.state.stairs) total += this._getProductPrice('stairs');
-
-      // Pillows
-      if (this.state.pillows) total += this._getProductPrice('pillows') * (this.state.pillowQty || 2);
-
-      // Cover
-      total += this._getSelectedVariantPrice('covers', 'cover', 'coverVariant');
-
-      // Heater connection 90°
-      if (this.state.heaterConnection === '90-degree') {
-        total += this.data.heater_90?.price || 0;
+      // 1. Base product (resolved variant — includes model + size + oven)
+      if (this.state.baseVariantId) {
+        items.push({
+          variantId: this.state.baseVariantId,
+          quantity: 1,
+          priceInCents: this.state.basePrice || 0,
+          label: this.state.selectedTier?.title || 'Base',
+          properties: { '_config': 'base', 'Configuration': this._buildConfigSummary() },
+        });
       }
 
-      // Update display
+      // 2. Liner (use selected variant price if available, otherwise product price)
+      if (this.state.liner) {
+        const products = this.data.liners || [];
+        const product = products.find(p => p.id === this.state.liner);
+        if (product) {
+          const variantId = this.state.linerVariant;
+          const variant = variantId ? product.variants?.find(v => v.id === variantId) : null;
+          items.push({
+            variantId: variantId || product.variants?.[0]?.id || null,
+            quantity: 1,
+            priceInCents: variant ? variant.price : product.price,
+            label: 'Liner: ' + product.title,
+            properties: { '_config': 'liner' },
+          });
+        }
+      }
+
+      // 3. Insulation
+      if (this.state.insulation) {
+        const p = (this.data.insulations || [])[0];
+        if (p) {
+          items.push({
+            variantId: p.variants?.[0]?.id || null,
+            quantity: 1,
+            priceInCents: p.price || 0,
+            label: 'Insulation',
+            properties: { '_config': 'insulation' },
+          });
+        }
+      }
+
+      // 4. Oven add-ons (glass door, chimney)
+      if (this.state.glassDoor) {
+        const addon = (this.data.oven_addons || []).find(a => a.title.toLowerCase().includes('glass'));
+        if (addon) {
+          items.push({
+            variantId: addon.variants?.[0]?.id || null,
+            quantity: 1,
+            priceInCents: addon.price || 0,
+            label: addon.title,
+            properties: { '_config': 'oven-addon' },
+          });
+        }
+      }
+      if (this.state.chimney) {
+        const addon = (this.data.oven_addons || []).find(a => a.title.toLowerCase().includes('chimney'));
+        if (addon) {
+          items.push({
+            variantId: addon.variants?.[0]?.id || null,
+            quantity: 1,
+            priceInCents: addon.price || 0,
+            label: addon.title,
+            properties: { '_config': 'oven-addon' },
+          });
+        }
+      }
+
+      // 5. Exterior (use selected variant price if available)
+      if (this.state.exterior) {
+        const products = this.data.exteriors || [];
+        const product = products.find(p => p.id === this.state.exterior);
+        if (product) {
+          const variantId = this.state.exteriorVariant;
+          const variant = variantId ? product.variants?.find(v => v.id === variantId) : null;
+          items.push({
+            variantId: variantId || product.variants?.[0]?.id || null,
+            quantity: 1,
+            priceInCents: variant ? variant.price : product.price,
+            label: 'Exterior: ' + product.title,
+            properties: { '_config': 'exterior' },
+          });
+        }
+      }
+
+      // 6. Hydro massage
+      if (this.state.hydro) {
+        const p = (this.data.hydro || []).find(pr => pr.id === this.state.hydro);
+        if (p) {
+          items.push({
+            variantId: p.variants?.[0]?.id || null,
+            quantity: 1,
+            priceInCents: p.price || 0,
+            label: 'Hydro: ' + p.title,
+            properties: { '_config': 'hydro', 'Nozzles': String(this.state.hydroNozzles) },
+          });
+        }
+      }
+
+      // 7. Air system
+      if (this.state.air) {
+        const p = (this.data.air || []).find(pr => pr.id === this.state.air);
+        if (p) {
+          items.push({
+            variantId: p.variants?.[0]?.id || null,
+            quantity: 1,
+            priceInCents: p.price || 0,
+            label: 'Air: ' + p.title,
+            properties: { '_config': 'air', 'Nozzles': String(this.state.airNozzles) },
+          });
+        }
+      }
+
+      // 8. Filter
+      if (this.state.filterEnabled && this.state.filterProduct) {
+        const p = (this.data.filters || []).find(pr => pr.id === this.state.filterProduct);
+        if (p) {
+          items.push({
+            variantId: p.variants?.[0]?.id || null,
+            quantity: 1,
+            priceInCents: p.price || 0,
+            label: 'Filter: ' + p.title,
+            properties: { '_config': 'filter' },
+          });
+        }
+      }
+
+      // 9. LED lighting (quantity-based)
+      if (this.state.led) {
+        const p = (this.data.leds || []).find(pr => pr.id === this.state.led);
+        if (p) {
+          items.push({
+            variantId: p.variants?.[0]?.id || null,
+            quantity: this.state.ledQty || 1,
+            priceInCents: p.price || 0,
+            label: 'LED: ' + p.title,
+            properties: { '_config': 'led' },
+          });
+        }
+      }
+
+      // 10. Thermometer
+      if (this.state.thermometer) {
+        const p = (this.data.thermometers || []).find(pr => pr.id === this.state.thermometer);
+        if (p) {
+          items.push({
+            variantId: p.variants?.[0]?.id || null,
+            quantity: 1,
+            priceInCents: p.price || 0,
+            label: 'Thermometer: ' + p.title,
+            properties: { '_config': 'thermometer' },
+          });
+        }
+      }
+
+      // 11. Stairs
+      if (this.state.stairs) {
+        const p = (this.data.stairs || [])[0];
+        if (p) {
+          items.push({
+            variantId: p.variants?.[0]?.id || null,
+            quantity: 1,
+            priceInCents: p.price || 0,
+            label: 'Stairs',
+            properties: { '_config': 'stairs' },
+          });
+        }
+      }
+
+      // 12. Pillows (quantity-based)
+      if (this.state.pillows) {
+        const p = (this.data.pillows || [])[0];
+        if (p) {
+          items.push({
+            variantId: p.variants?.[0]?.id || null,
+            quantity: this.state.pillowQty || 2,
+            priceInCents: p.price || 0,
+            label: 'Pillows x' + (this.state.pillowQty || 2),
+            properties: { '_config': 'pillows' },
+          });
+        }
+      }
+
+      // 13. Cover (use selected variant price if available)
+      if (this.state.cover) {
+        const products = this.data.covers || [];
+        const product = products.find(p => p.id === this.state.cover);
+        if (product) {
+          const variantId = this.state.coverVariant;
+          const variant = variantId ? product.variants?.find(v => v.id === variantId) : null;
+          items.push({
+            variantId: variantId || product.variants?.[0]?.id || null,
+            quantity: 1,
+            priceInCents: variant ? variant.price : product.price,
+            label: 'Cover: ' + product.title,
+            properties: { '_config': 'cover' },
+          });
+        }
+      }
+
+      // 15. Heater connection 90 degrees
+      if (this.state.heaterConnection === '90-degree' && this.data.heater_90) {
+        items.push({
+          variantId: this.data.heater_90.variants?.[0]?.id || null,
+          quantity: 1,
+          priceInCents: this.data.heater_90.price || 0,
+          label: 'Heater: 90 degree connection',
+          properties: { '_config': 'heater-connection' },
+        });
+      }
+
+      return items;
+    }
+
+    _updatePrice() {
+      const items = this._calculateLineItems();
+      const total = items.reduce((sum, i) => sum + i.priceInCents * i.quantity, 0);
+
       if (this.totalPriceEl) {
         this.totalPriceEl.textContent = money(total);
         this.totalPriceEl.style.visibility = this.state.size ? 'visible' : 'hidden';
       }
 
       this._updateSummary();
-    }
-
-    _getSelectedVariantPrice(dataKey, stateProductKey, stateVariantKey) {
-      const productId = this.state[stateProductKey];
-      if (!productId) return 0;
-      const products = this.data[dataKey] || [];
-      const product = products.find(p => p.id === productId);
-      if (!product) return 0;
-      const variantId = this.state[stateVariantKey];
-      if (variantId) {
-        const variant = product.variants?.find(v => v.id === variantId);
-        if (variant) return variant.price;
-      }
-      return product.price;
-    }
-
-    _getSelectedProductPrice(dataKey, stateKey) {
-      const productId = this.state[stateKey];
-      if (!productId) return 0;
-      const products = this.data[dataKey] || [];
-      const product = products.find(p => p.id === productId);
-      return product?.price || 0;
-    }
-
-    _getProductPrice(dataKey) {
-      const products = this.data[dataKey] || [];
-      const product = Array.isArray(products) ? products[0] : products;
-      return product?.price || 0;
-    }
-
-    _getAddonPrice(keyword) {
-      const addons = this.data.oven_addons || [];
-      const addon = addons.find(a => a.title.toLowerCase().includes(keyword));
-      return addon?.price || 0;
     }
 
     /* ── Summary ───────────────────────────────────────── */
@@ -1122,95 +1266,13 @@
     }
 
     _buildCartItems() {
-      const items = [];
-      const configSummary = this._buildConfigSummary();
-
-      // 1. Base product (resolved variant — includes model + size + oven)
-      if (this.state.baseVariantId) {
-        items.push({
-          id: this.state.baseVariantId,
-          quantity: 1,
-          properties: { '_config': 'base', 'Configuration': configSummary },
-        });
-      }
-
-      // 2. Liner
-      if (this.state.linerVariant) {
-        items.push({ id: this.state.linerVariant, quantity: 1, properties: { '_config': 'liner' } });
-      }
-
-      // 3. Insulation
-      if (this.state.insulation) {
-        const p = (this.data.insulations || [])[0];
-        if (p?.variants?.[0]?.id) items.push({ id: p.variants[0].id, quantity: 1, properties: { '_config': 'insulation' } });
-      }
-
-      // 4. Oven add-ons (glass door, chimney — no separate oven product)
-      if (this.state.glassDoor) {
-        const addon = (this.data.oven_addons || []).find(a => a.title.toLowerCase().includes('glass'));
-        if (addon?.variants?.[0]?.id) items.push({ id: addon.variants[0].id, quantity: 1, properties: { '_config': 'oven-addon' } });
-      }
-      if (this.state.chimney) {
-        const addon = (this.data.oven_addons || []).find(a => a.title.toLowerCase().includes('chimney'));
-        if (addon?.variants?.[0]?.id) items.push({ id: addon.variants[0].id, quantity: 1, properties: { '_config': 'oven-addon' } });
-      }
-
-      // 5. Exterior
-      if (this.state.exteriorVariant) {
-        items.push({ id: this.state.exteriorVariant, quantity: 1, properties: { '_config': 'exterior' } });
-      }
-
-      // 6-7. Hydro & Air
-      for (const [key, qtyKey] of [['hydro', 'hydroNozzles'], ['air', 'airNozzles']]) {
-        if (this.state[key]) {
-          const p = (this.data[key] || []).find(pr => pr.id === this.state[key]);
-          if (p?.variants?.[0]?.id) {
-            items.push({ id: p.variants[0].id, quantity: 1, properties: { '_config': key, 'Nozzles': String(this.state[qtyKey]) } });
-          }
-        }
-      }
-
-      // 8. Filter
-      if (this.state.filterEnabled && this.state.filterProduct) {
-        const p = (this.data.filters || []).find(pr => pr.id === this.state.filterProduct);
-        if (p?.variants?.[0]?.id) items.push({ id: p.variants[0].id, quantity: 1, properties: { '_config': 'filter' } });
-      }
-
-      // 9. LED
-      if (this.state.led) {
-        const p = (this.data.leds || []).find(pr => pr.id === this.state.led);
-        if (p?.variants?.[0]?.id) items.push({ id: p.variants[0].id, quantity: this.state.ledQty || 1, properties: { '_config': 'led' } });
-      }
-
-      // 10. Thermometer
-      if (this.state.thermometer) {
-        const p = (this.data.thermometers || []).find(pr => pr.id === this.state.thermometer);
-        if (p?.variants?.[0]?.id) items.push({ id: p.variants[0].id, quantity: 1, properties: { '_config': 'thermometer' } });
-      }
-
-      // 11. Stairs
-      if (this.state.stairs) {
-        const p = (this.data.stairs || [])[0];
-        if (p?.variants?.[0]?.id) items.push({ id: p.variants[0].id, quantity: 1, properties: { '_config': 'stairs' } });
-      }
-
-      // 12. Pillows
-      if (this.state.pillows) {
-        const p = (this.data.pillows || [])[0];
-        if (p?.variants?.[0]?.id) items.push({ id: p.variants[0].id, quantity: this.state.pillowQty || 2, properties: { '_config': 'pillows' } });
-      }
-
-      // 13. Cover
-      if (this.state.coverVariant) {
-        items.push({ id: this.state.coverVariant, quantity: 1, properties: { '_config': 'cover' } });
-      }
-
-      // 15. Heater 90°
-      if (this.state.heaterConnection === '90-degree' && this.data.heater_90?.variants?.[0]?.id) {
-        items.push({ id: this.data.heater_90.variants[0].id, quantity: 1, properties: { '_config': 'heater-connection' } });
-      }
-
-      return items;
+      return this._calculateLineItems()
+        .filter(i => i.variantId)
+        .map(i => ({
+          id: i.variantId,
+          quantity: i.quantity,
+          properties: i.properties || {},
+        }));
     }
 
     _buildConfigSummary() {
