@@ -1,0 +1,41 @@
+{%- comment -%}
+  Serializes a product to JSON for the configurator.
+  Usage: {% render 'configurator-product-json', product: product %}
+{%- endcomment -%}
+{
+  "id": {{ product.id }},
+  "title": {{ product.title | json }},
+  "handle": {{ product.handle | json }},
+  "price": {{ product.price | default: 0 }},
+  "image": {% if product.featured_image %}{{ product.featured_image | image_url: width: 600 | json }}{% else %}null{% endif %},
+  "body": {{ product.description | strip_html | truncate: 200 | json }},
+  "variants": [
+    {%- for v in product.variants -%}
+      {%- unless forloop.first -%},{%- endunless -%}
+      {
+        "id": {{ v.id }},
+        "title": {{ v.title | json }},
+        "price": {{ v.price }},
+        "option1": {{ v.option1 | json }},
+        "option2": {{ v.option2 | default: "" | json }},
+        "option3": {{ v.option3 | default: "" | json }},
+        "sku": {{ v.sku | json }},
+        "available": {{ v.available }}
+      }
+    {%- endfor -%}
+  ],
+  "meta": {
+    "step": {{ product.metafields.configurator.step.value | default: 0 }},
+    "input_type": {{ product.metafields.configurator.input_type.value | default: "" | json }},
+    "depends_on": {{ product.metafields.configurator.depends_on.value | default: "" | json }},
+    "default_qty": {{ product.metafields.configurator.default_qty.value | default: 0 }},
+    "min_qty": {{ product.metafields.configurator.min_qty.value | default: 0 }},
+    "max_qty": {{ product.metafields.configurator.max_qty.value | default: 0 }},
+    "info_tooltip": {{ product.metafields.configurator.info_tooltip.value | default: "" | json }},
+    "sort_order": {{ product.metafields.configurator.sort_order.value | default: 0 }},
+    "is_default": {{ product.metafields.configurator.is_default.value | default: "false" }},
+    "oven_type": {{ product.metafields.configurator.oven_type.value | default: "" | json }},
+    "size": {{ product.metafields.configurator.size.value | default: "" | json }},
+    "addon_type": {{ product.metafields.configurator.addon_type.value | default: "" | json }}
+  }
+}
