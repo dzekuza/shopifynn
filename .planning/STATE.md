@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-02-20)
 
 **Core value:** The hot tub configurator must work flawlessly — it's the primary revenue driver where customers build and price their custom configuration across 15 steps.
-**Current focus:** Phase 2 — Configurator Stabilization
+**Current focus:** Phase 3 — Performance and Accessibility (Complete — all 3 plans done)
 
 ## Current Position
 
-Phase: 2 of 4 (Configurator Stabilization)
-Plan: 1 of TBD in current phase
-Status: In progress
-Last activity: 2026-02-20 — Completed 02-01: Extract configurator CSS to asset file
+Phase: 3 of 4 (Performance and Accessibility)
+Plan: 3 of 3 in current phase
+Status: Phase complete
+Last activity: 2026-02-20 — Completed 03-03: Configurator image preloading, DOM caching, ARIA, keyboard nav, touch targets
 
-Progress: [██░░░░░░░░] 20%
+Progress: [███████░░░] 75%
 
 ## Performance Metrics
 
@@ -55,6 +55,8 @@ Recent decisions affecting current work:
 - [Phase 03-performance-and-accessibility]: Darkened muted text to #6A6864 (from #7D7B78) — minimum change to achieve 4.5:1 WCAG AA contrast on #F4F1EC
 - [Phase 03-performance-and-accessibility]: Article featured image gets loading=eager as primary LCP candidate for article page
 - [Phase 03-performance-and-accessibility]: Filter order for alt text: pipe default before escape to ensure all dynamic fallbacks are XSS-escaped
+- [Phase 03-performance-and-accessibility]: inert on .cfg-step__body only keeps step heading accessible while removing body from tab order (WCAG 2.1 keyboard)
+- [Phase 03-performance-and-accessibility]: Fire-and-forget _preloadImage() resolves on both load and error — missing images never block UI transitions
 - [Phase 02-configurator-stabilization]: Metafield-based product lookups replace string matching — eliminates fragility in configurator variant resolution
 - [Phase 02-configurator-stabilization]: Empty string default for absent metafields ensures JS reads never encounter undefined
 - [Phase 02-configurator-stabilization]: connectedCallback guard added to prevent null reference when section loads in Shopify theme editor
@@ -66,6 +68,8 @@ Recent decisions affecting current work:
 - [01-01]: hiddenSelect uses let in theme.js because it is reassigned via chained querySelector on next line
 - [02-01]: Use template.suffix == 'configurator' (not template.name) — page.configurator.json has suffix 'configurator', name 'page'
 - [02-01]: Retain {% style %} block in configurator.liquid for dynamic per-section Liquid variable styles
+- [Phase 02-configurator-stabilization]: _calculateLineItems() returns full line item array enabling display and cart from one source
+- [Phase 02-configurator-stabilization]: money() uses Intl.NumberFormat with window.__shopLocale — de-DE/EUR fallbacks for backward compatibility
 
 ### Pending Todos
 
@@ -80,5 +84,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-20
-Stopped at: Completed 01-01-PLAN.md — credential management, .gitignore, .env.example, and theme.js const/let migration
+Stopped at: Completed 02-03-PLAN.md — unified pricing via _calculateLineItems(), event delegation fix, locale-aware currency formatting
 Resume file: None
