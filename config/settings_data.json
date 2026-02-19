@@ -9,17 +9,67 @@
  */
 {
   "current": {
-    "color_primary": "#1A2332",
-    "color_secondary": "#3A8F7D",
-    "color_accent": "#5EC2AA",
-    "color_background": "#F8FBFC",
-    "color_surface": "#EDF2F5",
-    "color_text": "#1A2332",
-    "color_text_muted": "#6E8494",
-    "font_heading": "dm_sans_n7",
-    "font_body": "dm_sans_n4",
+    "color_primary": "#262626",
+    "color_secondary": "#B6754D",
+    "color_accent": "#C85E3F",
+    "color_background": "#F4F1EC",
+    "color_surface": "#EDE7DD",
+    "color_text": "#262626",
+    "color_text_muted": "#6A6864",
+    "font_heading": "plus_jakarta_sans_n7",
+    "font_body": "plus_jakarta_sans_n4",
+    "logo": "shopify://shop_images/newdarkk.png",
     "logo_width": 140,
     "logo_text": "AUROWE",
+    "sections": {
+      "header": {
+        "type": "header",
+        "settings": {
+          "menu": "main-menu",
+          "sticky_header": true,
+          "announcement_text": "Free shipping on orders over €500",
+          "announcement_bg_color": "#262626",
+          "announcement_text_color": "#ffffff"
+        }
+      },
+      "footer": {
+        "type": "footer",
+        "blocks": {
+          "footer-0": {
+            "type": "link_list",
+            "settings": {
+              "heading": "Shop",
+              "menu": "footer"
+            }
+          },
+          "footer-1": {
+            "type": "link_list",
+            "settings": {
+              "heading": "Customer Service",
+              "menu": "footer"
+            }
+          },
+          "footer-2": {
+            "type": "text",
+            "settings": {
+              "heading": "Contact Us",
+              "text": "<p>info@aurowe.com<br>+358 123 456 789<br>Helsinki, Finland</p>"
+            }
+          }
+        },
+        "block_order": [
+          "footer-0",
+          "footer-1",
+          "footer-2"
+        ],
+        "settings": {
+          "about_text": "Premium Nordic hot and cold tubs, handcrafted with care and built to last a lifetime.",
+          "color_scheme": "dark",
+          "padding_top": 48,
+          "padding_bottom": 32
+        }
+      }
+    },
     "content_for_index": []
   }
 }

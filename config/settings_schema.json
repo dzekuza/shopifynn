@@ -14,48 +14,48 @@
         "type": "color",
         "id": "color_primary",
         "label": "Primary",
-        "default": "#1A2332",
-        "info": "Deep midnight blue for headings"
+        "default": "#262626",
+        "info": "Deep charcoal for headings"
       },
       {
         "type": "color",
         "id": "color_secondary",
         "label": "Secondary",
-        "default": "#3A8F7D",
-        "info": "Deep aurora green accent"
+        "default": "#B6754D",
+        "info": "Warm bronze accent"
       },
       {
         "type": "color",
         "id": "color_accent",
         "label": "Accent",
-        "default": "#5EC2AA",
-        "info": "Aurora teal for CTAs and highlights"
+        "default": "#C85E3F",
+        "info": "Warm terracotta for CTAs and highlights"
       },
       {
         "type": "color",
         "id": "color_background",
         "label": "Background",
-        "default": "#F8FBFC",
-        "info": "Ice white page background"
+        "default": "#F4F1EC",
+        "info": "Warm beige page background"
       },
       {
         "type": "color",
         "id": "color_surface",
         "label": "Surface",
-        "default": "#EDF2F5",
-        "info": "Frost — cards and alternating sections"
+        "default": "#EDE7DD",
+        "info": "Light taupe — cards and alternating sections"
       },
       {
         "type": "color",
         "id": "color_text",
         "label": "Body text",
-        "default": "#1A2332"
+        "default": "#262626"
       },
       {
         "type": "color",
         "id": "color_text_muted",
         "label": "Muted text",
-        "default": "#6E8494"
+        "default": "#6A6864"
       }
     ]
   },
@@ -66,13 +66,13 @@
         "type": "font_picker",
         "id": "font_heading",
         "label": "Heading font",
-        "default": "dm_sans_n7"
+        "default": "plus_jakarta_sans_n7"
       },
       {
         "type": "font_picker",
         "id": "font_body",
         "label": "Body font",
-        "default": "dm_sans_n4"
+        "default": "plus_jakarta_sans_n4"
       }
     ]
   },
