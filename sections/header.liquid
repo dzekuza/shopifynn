@@ -1,6 +1,7 @@
 {%- liquid
   assign logo = settings.logo
   assign logo_width = settings.logo_width
+  assign mega_trigger = section.settings.mega_menu_trigger | strip | downcase
 -%}
 
 <header class="header {% if section.settings.sticky_header %}header--sticky{% endif %}" data-header>
@@ -13,8 +14,11 @@
   <div class="header__inner container">
     <a href="/" class="header__logo">
       {% if logo %}
+        {%- assign logo_width_2x = logo_width | times: 2 -%}
+        {%- assign logo_width_3x = logo_width | times: 3 -%}
         <img
-          src="{{ logo | image_url: width: logo_width }}"
+          src="{{ logo | image_url: width: logo_width_2x }}"
+          srcset="{{ logo | image_url: width: logo_width }} 1x, {{ logo | image_url: width: logo_width_2x }} 2x, {{ logo | image_url: width: logo_width_3x }} 3x"
           alt="{{ shop.name }}"
           width="{{ logo_width }}"
           height="{{ logo_width | divided_by: logo.aspect_ratio }}"
@@ -27,13 +31,96 @@
 
     <nav class="header__nav" data-nav>
       {% for link in section.settings.menu.links %}
-        <a href="{{ link.url }}" class="header__nav-link {% if link.active %}is-active{% endif %}">
-          {{ link.title }}
-        </a>
+        {%- assign link_title_lower = link.title | strip | downcase -%}
+        {% if link.links.size > 0 and link_title_lower == mega_trigger %}
+          {%- comment -%} ===== MEGA MENU (only for the selected trigger item) ===== {%- endcomment -%}
+          <div class="header__mega" data-dropdown>
+            <button type="button" class="header__nav-link header__nav-link--parent {% if link.active or link.child_active %}is-active{% endif %}" data-dropdown-trigger aria-expanded="false">
+              {{ link.title }}
+              <svg class="header__chevron" width="10" height="6" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 1l4 4 4-4"/></svg>
+            </button>
+            <div class="header__mega-panel" data-dropdown-menu>
+              <div class="header__mega-inner container">
+                <div class="header__mega-products">
+                  {% for child in link.links %}
+                    {%- assign child_object = child.object -%}
+                    {% if child.type == 'collection_link' and child_object.products.size > 0 %}
+                      {%- assign featured_product = child_object.products.first -%}
+                      <a href="{{ child.url }}" class="header__mega-product">
+                        <div class="header__mega-product-image">
+                          {% if featured_product.featured_image %}
+                            <img
+                              src="{{ featured_product.featured_image | image_url: width: 300 }}"
+                              alt="{{ child.title | escape }}"
+                              loading="lazy"
+                              width="150"
+                              height="150"
+                            >
+                          {% elsif child_object.image %}
+                            <img
+                              src="{{ child_object.image | image_url: width: 300 }}"
+                              alt="{{ child.title | escape }}"
+                              loading="lazy"
+                              width="150"
+                              height="150"
+                            >
+                          {% else %}
+                            <div class="header__mega-product-placeholder">
+                              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--color-text-muted)" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                            </div>
+                          {% endif %}
+                        </div>
+                        <span class="header__mega-product-title">{{ child.title }}</span>
+                      </a>
+                    {% endif %}
+                  {% endfor %}
+                </div>
+
+                <div class="header__mega-links">
+                  {% for child in link.links %}
+                    <a href="{{ child.url }}" class="header__mega-link {% if child.active %}is-active{% endif %}">
+                      {{ child.title }}
+                    </a>
+                  {% endfor %}
+
+                  {% if section.settings.quiz_text != blank %}
+                    <a href="{{ section.settings.quiz_url }}" class="header__mega-cta">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                      {{ section.settings.quiz_text | upcase }}
+                    </a>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+        {% elsif link.links.size > 0 %}
+          {%- comment -%} ===== REGULAR DROPDOWN (all other items with children) ===== {%- endcomment -%}
+          <div class="header__dropdown" data-dropdown>
+            <button type="button" class="header__nav-link header__nav-link--parent {% if link.active or link.child_active %}is-active{% endif %}" data-dropdown-trigger aria-expanded="false">
+              {{ link.title }}
+              <svg class="header__chevron" width="10" height="6" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 1l4 4 4-4"/></svg>
+            </button>
+            <div class="header__dropdown-menu" data-dropdown-menu>
+              {% for child in link.links %}
+                <a href="{{ child.url }}" class="header__dropdown-link {% if child.active %}is-active{% endif %}">
+                  {{ child.title }}
+                </a>
+              {% endfor %}
+            </div>
+          </div>
+        {% else %}
+          {%- comment -%} ===== SIMPLE LINK (no children) ===== {%- endcomment -%}
+          <a href="{{ link.url }}" class="header__nav-link {% if link.active %}is-active{% endif %}">
+            {{ link.title }}
+          </a>
+        {% endif %}
       {% endfor %}
     </nav>
 
     <div class="header__actions">
+      {% if section.settings.quiz_text != blank %}
+        <a href="{{ section.settings.quiz_url }}" class="header__cta button button--primary">{{ section.settings.quiz_text }}</a>
+      {% endif %}
       <a href="/cart" class="header__cart" aria-label="Cart">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
           <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
@@ -56,7 +143,21 @@
   <div class="header__mobile-nav" data-mobile-nav>
     <div class="header__mobile-nav-inner">
       {% for link in section.settings.menu.links %}
-        <a href="{{ link.url }}" class="header__mobile-link">{{ link.title }}</a>
+        {% if link.links.size > 0 %}
+          <div class="header__mobile-group" data-mobile-dropdown>
+            <button type="button" class="header__mobile-link header__mobile-link--parent" data-mobile-dropdown-trigger aria-expanded="false">
+              {{ link.title }}
+              <svg class="header__mobile-chevron" width="14" height="8" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 1l4 4 4-4"/></svg>
+            </button>
+            <div class="header__mobile-submenu" data-mobile-submenu>
+              {% for child in link.links %}
+                <a href="{{ child.url }}" class="header__mobile-sublink">{{ child.title }}</a>
+              {% endfor %}
+            </div>
+          </div>
+        {% else %}
+          <a href="{{ link.url }}" class="header__mobile-link">{{ link.title }}</a>
+        {% endif %}
       {% endfor %}
     </div>
   </div>
@@ -83,6 +184,28 @@
       "default": true
     },
     {
+      "type": "text",
+      "id": "mega_menu_trigger",
+      "label": "Mega menu item title",
+      "info": "Enter the exact title of the menu item that should use the mega menu (e.g. \"Products\"). All other items with children will use a regular dropdown.",
+      "default": "Products"
+    },
+    {
+      "type": "header",
+      "content": "CTA Button"
+    },
+    {
+      "type": "text",
+      "id": "quiz_text",
+      "label": "CTA button text",
+      "default": "Help me choose"
+    },
+    {
+      "type": "url",
+      "id": "quiz_url",
+      "label": "CTA button link"
+    },
+    {
       "type": "header",
       "content": "Announcement Bar"
     },
@@ -96,7 +219,7 @@
       "type": "color",
       "id": "announcement_bg_color",
       "label": "Background color",
-      "default": "#2a3b4c"
+      "default": "#262626"
     },
     {
       "type": "color",

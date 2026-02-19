@@ -220,9 +220,9 @@
         html += `<div class="cfg-qty-area" data-qty-area="${dataKey}" style="display:none;">
           <label class="cfg-label">Number of nozzles:</label>
           <div class="cfg-qty-selector" data-qty-selector="${dataKey}">
-            <button type="button" class="cfg-qty-btn" data-action="qty-minus" data-group="${dataKey}">−</button>
-            <span class="cfg-qty-value" data-qty-value="${dataKey}">0</span>
-            <button type="button" class="cfg-qty-btn" data-action="qty-plus" data-group="${dataKey}">+</button>
+            <button type="button" class="cfg-qty-btn" data-action="qty-minus" data-group="${dataKey}" aria-label="Decrease quantity">−</button>
+            <span class="cfg-qty-value" data-qty-value="${dataKey}" aria-live="polite">0</span>
+            <button type="button" class="cfg-qty-btn" data-action="qty-plus" data-group="${dataKey}" aria-label="Increase quantity">+</button>
           </div>
         </div>`;
       }
@@ -309,9 +309,9 @@
         <div class="cfg-conditional" id="cfg-${stateKey}-qty" style="display:none;">
           <label class="cfg-label">Quantity:</label>
           <div class="cfg-qty-selector" data-qty-selector="${stateKey}" data-min="${min}" data-max="${max}">
-            <button type="button" class="cfg-qty-btn" data-action="qty-minus" data-group="${stateKey}">−</button>
-            <span class="cfg-qty-value" data-qty-value="${stateKey}">${def}</span>
-            <button type="button" class="cfg-qty-btn" data-action="qty-plus" data-group="${stateKey}">+</button>
+            <button type="button" class="cfg-qty-btn" data-action="qty-minus" data-group="${stateKey}" aria-label="Decrease quantity">−</button>
+            <span class="cfg-qty-value" data-qty-value="${stateKey}" aria-live="polite">${def}</span>
+            <button type="button" class="cfg-qty-btn" data-action="qty-plus" data-group="${stateKey}" aria-label="Increase quantity">+</button>
           </div>
         </div>`);
       this.state.pillowQty = def;
@@ -327,8 +327,8 @@
       html += `
         <p class="cfg-label">Select your heating system:</p>
         <div class="cfg-toggle-group" data-oven-type-toggle>
-          <button type="button" class="cfg-toggle-btn cfg-toggle-btn--active" data-action="oven-type" data-value="external">External oven</button>
-          <button type="button" class="cfg-toggle-btn" data-action="oven-type" data-value="internal">Internal oven</button>
+          <button type="button" class="cfg-toggle-btn cfg-toggle-btn--active" data-action="oven-type" data-value="external" aria-pressed="true">External oven</button>
+          <button type="button" class="cfg-toggle-btn" data-action="oven-type" data-value="internal" aria-pressed="false">Internal oven</button>
         </div>
         <p class="cfg-note" data-oven-note></p>`;
 
@@ -432,11 +432,27 @@
 
       // Keyboard support
       this.addEventListener('keydown', (e) => {
-        if (e.key !== 'Enter' && e.key !== ' ') return;
         const target = e.target.closest('[data-action]');
-        if (!target) return;
-        e.preventDefault();
-        target.click();
+
+        // Enter/Space activates buttons and cards
+        if ((e.key === 'Enter' || e.key === ' ') && target) {
+          e.preventDefault();
+          target.click();
+          return;
+        }
+
+        // Arrow key navigation for option groups (cards, swatches, pills)
+        if (e.key === 'ArrowLeft' || e.key === 'ArrowRight' || e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+          const group = e.target.closest('[data-model-cards], [data-size-cards], [data-product-group], [data-variant-swatches], [data-heater-options], .cfg-swatches, .cfg-variant-pills');
+          if (!group) return;
+          const focusable = Array.from(group.querySelectorAll('[tabindex="0"], button:not([disabled]), [data-action]'));
+          const idx = focusable.indexOf(e.target);
+          if (idx === -1) return;
+          e.preventDefault();
+          const delta = (e.key === 'ArrowRight' || e.key === 'ArrowDown') ? 1 : -1;
+          const nextIdx = (idx + delta + focusable.length) % focusable.length;
+          focusable[nextIdx]?.focus();
+        }
       });
 
       // CTA
@@ -575,7 +591,9 @@
 
       // Toggle buttons
       this.querySelectorAll('[data-action="oven-type"]').forEach(btn => {
-        btn.classList.toggle('cfg-toggle-btn--active', btn.dataset.value === type);
+        const active = btn.dataset.value === type;
+        btn.classList.toggle('cfg-toggle-btn--active', active);
+        btn.setAttribute('aria-pressed', String(active));
       });
 
       // Resolve base product with new oven type
@@ -853,11 +871,42 @@
     /* ── Step progression ──────────────────────────────── */
     _unlockThrough(stepNum) {
       if (stepNum <= this.maxUnlocked) return;
+      const prevUnlocked = this.maxUnlocked;
       this.maxUnlocked = stepNum;
       for (let i = 1; i <= STEPS.length; i++) {
         const el = this._stepEls[i];
         if (!el) continue;
-        el.classList.toggle('cfg-step--locked', i > this.maxUnlocked);
+        const locked = i > this.maxUnlocked;
+        el.classList.toggle('cfg-step--locked', locked);
+        el.setAttribute('aria-disabled', String(locked));
+        const body = el.querySelector('.cfg-step__body');
+        if (body) {
+          if (locked) {
+            body.setAttribute('inert', '');
+          } else {
+            body.removeAttribute('inert');
+          }
+        }
+      }
+      // Move focus to the first newly unlocked step
+      const newlyUnlocked = prevUnlocked + 1;
+      if (newlyUnlocked <= this.maxUnlocked && newlyUnlocked <= STEPS.length) {
+        const newStepEl = this._stepEls[newlyUnlocked];
+        if (newStepEl) {
+          setTimeout(() => {
+            // Focus the step title, or first focusable element in body
+            const title = newStepEl.querySelector('.cfg-step__title');
+            const body = newStepEl.querySelector('.cfg-step__body');
+            const focusable = body && body.querySelector('button, [tabindex="0"], input, select, a[href]');
+            const focusTarget = focusable || title;
+            if (focusTarget) {
+              if (!focusTarget.hasAttribute('tabindex') && focusTarget.tagName !== 'BUTTON' && focusTarget.tagName !== 'INPUT') {
+                focusTarget.setAttribute('tabindex', '-1');
+              }
+              focusTarget.focus({ preventScroll: true });
+            }
+          }, 200);
+        }
       }
       if (this.state.size && this.ctaBtn) {
         this.ctaBtn.disabled = false;

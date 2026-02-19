@@ -30,6 +30,12 @@
             "tax_text": "Tax included. Shipping calculated at checkout."
           }
         },
+        "financing": {
+          "type": "financing",
+          "settings": {
+            "financing_text": "Starting from €49/month with financing"
+          }
+        },
         "separator-1": {
           "type": "separator",
           "settings": {}
@@ -47,6 +53,15 @@
           "settings": {
             "button_text": "Add to Cart",
             "show_dynamic_checkout": true
+          }
+        },
+        "highlights": {
+          "type": "feature_highlights",
+          "settings": {
+            "highlight_1": "No ice needed",
+            "highlight_2": "Always cold",
+            "highlight_3": "Easy maintenance",
+            "highlight_4": "Energy efficient"
           }
         },
         "separator-2": {
@@ -89,10 +104,12 @@
         "title",
         "rating",
         "price",
+        "financing",
         "separator-1",
         "variant_picker",
         "quantity",
         "buy_buttons",
+        "highlights",
         "separator-2",
         "description",
         "specs",

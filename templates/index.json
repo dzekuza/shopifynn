@@ -13,91 +13,25 @@
       "type": "hero",
       "settings": {
         "image": "shopify://shop_images/Luxury_Wellness_Estate_Isometric.png",
+        "video": "shopify://files/videos/video 4.mp4",
+        "video_url": "",
+        "video_fit": "cover",
         "overlay_opacity": 30,
         "subtitle": "Handcrafted in Scandinavia",
         "heading": "Nordic Warmth, Crafted for You",
         "text": "Premium hot and cold tubs designed with Nordic precision and built to last a lifetime.",
         "button_text": "Explore Collection",
-        "button_url": "shopify://collections"
-      }
-    },
-    "trust-badges": {
-      "type": "trust-badges",
-      "blocks": {
-        "shipping": {
-          "type": "badge",
-          "settings": {
-            "icon": "shipping",
-            "title": "Free Shipping",
-            "description": "On all orders over \u20ac500"
-          }
-        },
-        "warranty": {
-          "type": "badge",
-          "settings": {
-            "icon": "shield",
-            "title": "Up to 10-Year Warranty",
-            "description": "Guaranteed quality & durability"
-          }
-        },
-        "handcrafted": {
-          "type": "badge",
-          "settings": {
-            "icon": "heart",
-            "title": "Handcrafted in Europe",
-            "description": "Premium Nordic craftsmanship"
-          }
-        },
-        "secure": {
-          "type": "badge",
-          "settings": {
-            "icon": "lock",
-            "title": "Secure Checkout",
-            "description": "SSL encrypted payments"
-          }
-        }
-      },
-      "block_order": [
-        "shipping",
-        "warranty",
-        "handcrafted",
-        "secure"
-      ],
-      "settings": {
-        "background_color": "#EDF2F5",
-        "padding_top": 28,
-        "padding_bottom": 28
-      }
-    },
-    "featured-collections": {
-      "type": "featured-collections",
-      "blocks": {
-        "hot-tubs": {
-          "type": "collection_card",
-          "settings": {
-            "heading": "Hot Tubs",
-            "description": "Experience the warmth of Nordic craftsmanship. Relax, unwind, and reconnect.",
-            "link": "",
-            "link_text": "Shop Hot Tubs"
-          }
-        },
-        "cold-tubs": {
-          "type": "collection_card",
-          "settings": {
-            "heading": "Cold Tubs",
-            "description": "Invigorate your body and mind with cold water therapy, the Nordic way.",
-            "link": "",
-            "link_text": "Shop Cold Tubs"
-          }
-        }
-      },
-      "block_order": [
-        "hot-tubs",
-        "cold-tubs"
-      ],
-      "settings": {
-        "heading": "Our Collections",
-        "subheading": "From soothing warmth to invigorating cold \u2014 find your perfect tub."
+        "button_url": "shopify://collections",
+        "button_style": "primary",
+        "button_2_text": "Help me choose",
+        "button_2_url": "",
+        "button_2_style": "outline",
+        "heading_size": "medium",
+        "text_size": "medium",
+        "text_alignment": "center",
+        "content_width": 800,
+        "padding_top": 0,
+        "padding_bottom": 0
       }
     },
     "product-tiers": {
@@ -106,46 +40,61 @@
         "classic": {
           "type": "tier",
           "settings": {
-            "name": "Nordic Elite Classic",
-            "price": "From \u20ac6,999",
-            "description": "The perfect entry into Nordic bathing culture.",
-            "feature_1": "Seats 2\u20134 persons",
+            "product": "nordic-elite-l-classic",
+            "name_override": "",
+            "price_override": "",
+            "description_override": "",
+            "feature_1": "Seats 2–4 persons",
             "feature_2": "Thermowood exterior",
             "feature_3": "Energy-efficient heating",
             "feature_4": "5-year warranty",
+            "feature_5": "",
+            "feature_6": "",
             "featured": false,
+            "badge_text": "Most Popular",
             "button_text": "View Classic",
-            "button_url": ""
+            "button_url": "",
+            "text_alignment": "left"
           }
         },
         "premium": {
           "type": "tier",
           "settings": {
-            "name": "Nordic Elite Premium",
-            "price": "From \u20ac8,999",
-            "description": "Enhanced comfort with premium materials and features.",
-            "feature_1": "Seats 4\u20136 persons",
+            "product": "nordic-elite-l-premium",
+            "name_override": "",
+            "price_override": "",
+            "description_override": "",
+            "feature_1": "Seats 4–6 persons",
             "feature_2": "Premium thermowood finish",
             "feature_3": "Advanced jet system",
             "feature_4": "7-year warranty",
+            "feature_5": "",
+            "feature_6": "",
             "featured": true,
+            "badge_text": "Most Popular",
             "button_text": "View Premium",
-            "button_url": ""
+            "button_url": "",
+            "text_alignment": "left"
           }
         },
         "signature": {
           "type": "tier",
           "settings": {
-            "name": "Nordic Elite Signature",
-            "price": "From \u20ac10,999",
-            "description": "The ultimate Nordic bathing experience, fully customizable.",
-            "feature_1": "Seats 6\u20138 persons",
+            "product": "nordic-elite-l-signature",
+            "name_override": "",
+            "price_override": "",
+            "description_override": "",
+            "feature_1": "Seats 6–8 persons",
             "feature_2": "Custom wood & liner selection",
             "feature_3": "Smart temperature control",
             "feature_4": "10-year warranty",
+            "feature_5": "",
+            "feature_6": "",
             "featured": false,
+            "badge_text": "Most Popular",
             "button_text": "View Signature",
-            "button_url": ""
+            "button_url": "",
+            "text_alignment": "left"
           }
         }
       },
@@ -155,8 +104,15 @@
         "signature"
       ],
       "settings": {
-        "heading": "Choose Your Experience",
-        "subheading": "Three tiers of Nordic luxury, each built with the same uncompromising quality."
+        "heading": "Our Products",
+        "subheading": "Three tiers of Nordic luxury, each built with the same uncompromising quality.",
+        "heading_size": "medium",
+        "text_size": "medium",
+        "text_alignment": "center",
+        "grid_gap": 24,
+        "color_scheme": "surface",
+        "padding_top": 40,
+        "padding_bottom": 40
       }
     },
     "stats-bar": {
@@ -198,9 +154,12 @@
         "handcrafted"
       ],
       "settings": {
-        "background_color": "#1A2332",
+        "heading": "",
+        "background_color": "#262626",
         "text_color": "#ffffff",
-        "accent_color": "#5EC2AA"
+        "accent_color": "#C85E3F",
+        "padding_top": 48,
+        "padding_bottom": 48
       }
     },
     "features": {
@@ -209,33 +168,55 @@
         "handcrafted": {
           "type": "feature",
           "settings": {
-            "icon": "craft",
-            "heading": "Handcrafted in Scandinavia",
-            "text": "Each tub is meticulously built by skilled Nordic artisans using time-honored techniques."
+            "icon": "shield",
+            "heading": "Boost Immunity",
+            "text": "Regular cold exposure strengthens your immune system and increases white blood cell production.",
+            "text_alignment": "center"
           }
         },
         "sustainable": {
           "type": "feature",
           "settings": {
             "icon": "leaf",
-            "heading": "Sustainable Materials",
-            "text": "Responsibly sourced thermowood and eco-friendly finishes that stand the test of time."
+            "heading": "Reduce Inflammation",
+            "text": "Cold water therapy reduces chronic inflammation and speeds up muscle recovery.",
+            "text_alignment": "center"
           }
         },
         "warranty": {
           "type": "feature",
           "settings": {
-            "icon": "shield",
-            "heading": "Up to 10-Year Warranty",
-            "text": "We stand behind every tub with industry-leading warranty coverage."
+            "icon": "snowflake",
+            "heading": "Improve Circulation",
+            "text": "Alternating hot and cold therapy promotes blood flow and cardiovascular health.",
+            "text_alignment": "center"
           }
         },
         "custom": {
           "type": "feature",
           "settings": {
-            "icon": "palette",
-            "heading": "Fully Customizable",
-            "text": "Choose your size, wood finish, liner color, and equipment to match your vision."
+            "icon": "star",
+            "heading": "Better Sleep",
+            "text": "Evening soaks regulate your body temperature cycle for deeper, more restful sleep.",
+            "text_alignment": "center"
+          }
+        },
+        "cold-therapy": {
+          "type": "feature",
+          "settings": {
+            "icon": "craft",
+            "heading": "Mental Clarity",
+            "text": "Cold immersion triggers endorphin release, sharpening focus and reducing stress.",
+            "text_alignment": "center"
+          }
+        },
+        "recovery": {
+          "type": "feature",
+          "settings": {
+            "icon": "truck",
+            "heading": "Faster Recovery",
+            "text": "Athletes worldwide use contrast therapy to accelerate post-workout muscle repair.",
+            "text_alignment": "center"
           }
         }
       },
@@ -243,70 +224,21 @@
         "handcrafted",
         "sustainable",
         "warranty",
-        "custom"
+        "custom",
+        "cold-therapy",
+        "recovery"
       ],
       "settings": {
-        "heading": "Why Aurowe",
-        "subheading": "Built on Nordic traditions, designed for modern living."
-      }
-    },
-    "gallery": {
-      "type": "lifestyle-gallery",
-      "blocks": {
-        "img1": {
-          "type": "image",
-          "settings": {
-            "alt": "",
-            "size": "large"
-          }
-        },
-        "img2": {
-          "type": "image",
-          "settings": {
-            "alt": "",
-            "size": "small"
-          }
-        },
-        "img3": {
-          "type": "image",
-          "settings": {
-            "alt": "",
-            "size": "small"
-          }
-        },
-        "img4": {
-          "type": "image",
-          "settings": {
-            "alt": "",
-            "size": "small"
-          }
-        },
-        "img5": {
-          "type": "image",
-          "settings": {
-            "alt": "",
-            "size": "small"
-          }
-        },
-        "img6": {
-          "type": "image",
-          "settings": {
-            "alt": "",
-            "size": "large"
-          }
-        }
-      },
-      "block_order": [
-        "img1",
-        "img2",
-        "img3",
-        "img4",
-        "img5",
-        "img6"
-      ],
-      "settings": {
-        "heading": "Life with Aurowe",
-        "subheading": "See how our tubs transform outdoor living spaces."
+        "heading": "Health Benefits",
+        "subheading": "Experience the science-backed benefits of hot and cold water therapy.",
+        "heading_size": "medium",
+        "text_size": "medium",
+        "text_alignment": "center",
+        "columns": "6",
+        "grid_gap": 24,
+        "color_scheme": "default",
+        "padding_top": 40,
+        "padding_bottom": 40
       }
     },
     "testimonials": {
@@ -315,10 +247,11 @@
         "review-1": {
           "type": "testimonial",
           "settings": {
-            "quote": "The best investment we\u2019ve made for our home. The craftsmanship is simply outstanding and the whole family enjoys it year-round.",
+            "quote": "The best investment we’ve made for our home. The craftsmanship is simply outstanding and the whole family enjoys it year-round.",
             "name": "Anna S.",
             "location": "Stockholm, Sweden",
-            "rating": 5
+            "rating": 5,
+            "text_alignment": "left"
           }
         },
         "review-2": {
@@ -327,7 +260,8 @@
             "quote": "From ordering to delivery, the experience was seamless. The tub looks even better in person than on the website.",
             "name": "Marc D.",
             "location": "Munich, Germany",
-            "rating": 5
+            "rating": 5,
+            "text_alignment": "left"
           }
         },
         "review-3": {
@@ -336,7 +270,8 @@
             "quote": "We use the cold tub every morning. It has completely transformed our wellness routine. Exceptional quality.",
             "name": "Elise R.",
             "location": "Oslo, Norway",
-            "rating": 5
+            "rating": 5,
+            "text_alignment": "left"
           }
         }
       },
@@ -347,7 +282,14 @@
       ],
       "settings": {
         "heading": "What Our Customers Say",
-        "subheading": "Join thousands of happy Aurowe owners across Europe."
+        "subheading": "Join thousands of happy Aurowe owners across Europe.",
+        "layout": "expanding_cards",
+        "heading_size": "medium",
+        "text_size": "medium",
+        "text_alignment": "left",
+        "color_scheme": "default",
+        "padding_top": 40,
+        "padding_bottom": 40
       }
     },
     "faq": {
@@ -357,42 +299,48 @@
           "type": "collapsible_row",
           "settings": {
             "heading": "How long does delivery take?",
-            "content": "<p>Delivery typically takes 4\u20138 weeks depending on your location and the configuration you choose. All tubs are handcrafted to order, ensuring the highest quality. We ship across Europe with free delivery on orders over \u20ac500.</p>"
+            "content": "<p>Delivery typically takes 4–8 weeks depending on your location and the configuration you choose. All tubs are handcrafted to order, ensuring the highest quality. We ship across Europe with free delivery on orders over €500.</p>",
+            "open_by_default": false
           }
         },
         "q2": {
           "type": "collapsible_row",
           "settings": {
             "heading": "What is included in the warranty?",
-            "content": "<p>Our warranty covers structural defects, heating system components, and jet systems. Classic models come with a 5-year warranty, Premium with 7 years, and Signature with a full 10-year warranty. Normal wear and tear is not covered.</p>"
+            "content": "<p>Our warranty covers structural defects, heating system components, and jet systems. Classic models come with a 5-year warranty, Premium with 7 years, and Signature with a full 10-year warranty. Normal wear and tear is not covered.</p>",
+            "open_by_default": false
           }
         },
         "q3": {
           "type": "collapsible_row",
           "settings": {
             "heading": "Do I need professional installation?",
-            "content": "<p>Our hot tubs are designed to be placed on any level, solid surface \u2014 no special installation required. Simply connect to a standard power outlet and fill with water. We provide a detailed setup guide with every order, and our support team is available to help.</p>"
+            "content": "<p>Our hot tubs are designed to be placed on any level, solid surface — no special installation required. Simply connect to a standard power outlet and fill with water. We provide a detailed setup guide with every order, and our support team is available to help.</p>",
+            "open_by_default": false
           }
         },
         "q4": {
           "type": "collapsible_row",
           "settings": {
             "heading": "Can I customize my tub?",
-            "content": "<p>Absolutely! Use our online configurator to choose your model, size, wood finish, liner color, heating system, and extras. You can also contact us for fully bespoke requests.</p>"
+            "content": "<p>Absolutely! Use our online configurator to choose your model, size, wood finish, liner color, heating system, and extras. You can also contact us for fully bespoke requests.</p>",
+            "open_by_default": false
           }
         },
         "q5": {
           "type": "collapsible_row",
           "settings": {
             "heading": "What maintenance is required?",
-            "content": "<p>Maintenance is minimal. We recommend draining and cleaning the tub every 2\u20134 weeks depending on usage. The wood exterior benefits from an annual oil treatment. We provide a complete care guide with every purchase.</p>"
+            "content": "<p>Maintenance is minimal. We recommend draining and cleaning the tub every 2–4 weeks depending on usage. The wood exterior benefits from an annual oil treatment. We provide a complete care guide with every purchase.</p>",
+            "open_by_default": false
           }
         },
         "q6": {
           "type": "collapsible_row",
           "settings": {
             "heading": "What is your return policy?",
-            "content": "<p>Since each tub is custom-built to your specifications, we do not accept returns on delivered orders. However, if there is any manufacturing defect, we will repair or replace the tub at no cost under our warranty. Please contact us within 14 days of delivery if you notice any issues.</p>"
+            "content": "<p>Since each tub is custom-built to your specifications, we do not accept returns on delivered orders. However, if there is any manufacturing defect, we will repair or replace the tub at no cost under our warranty. Please contact us within 14 days of delivery if you notice any issues.</p>",
+            "open_by_default": false
           }
         }
       },
@@ -406,7 +354,18 @@
       ],
       "settings": {
         "heading": "Frequently Asked Questions",
-        "subheading": "Everything you need to know before purchasing your Nordic tub."
+        "subheading": "Everything you need to know before purchasing your Nordic tub.",
+        "button_text": "",
+        "button_url": "",
+        "button_style": "outline",
+        "heading_size": "medium",
+        "text_size": "medium",
+        "text_alignment": "left",
+        "layout": "stacked",
+        "content_width": 800,
+        "color_scheme": "default",
+        "padding_top": 40,
+        "padding_bottom": 40
       }
     },
     "newsletter": {
@@ -415,19 +374,23 @@
         "heading": "Stay in the Loop",
         "subheading": "Get the latest on new models, exclusive offers, and Nordic wellness tips.",
         "placeholder": "Enter your email",
-        "button_text": "Subscribe"
+        "button_text": "Subscribe",
+        "success_message": "Thank you for subscribing!",
+        "heading_size": "medium",
+        "text_alignment": "center",
+        "content_width": 600,
+        "color_scheme": "dark",
+        "padding_top": 40,
+        "padding_bottom": 40
       }
     }
   },
   "order": [
     "hero",
-    "trust-badges",
-    "featured-collections",
     "product-tiers",
-    "stats-bar",
     "features",
-    "gallery",
     "testimonials",
+    "stats-bar",
     "faq",
     "newsletter"
   ]

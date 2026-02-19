@@ -9,49 +9,74 @@
       </div>
     {% endif %}
 
-    <div class="testimonials__track" data-testimonials>
-      <div class="testimonials__slider" data-testimonials-slider>
+    {% if section.settings.layout == 'expanding_cards' %}
+      <div class="testimonials__expanding">
         {% for block in section.blocks %}
-          <div class="testimonials__card" style="text-align: {{ block.settings.text_alignment }};" {{ block.shopify_attributes }}>
-            <div class="testimonials__stars">
-              {% for i in (1..block.settings.rating) %}
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="var(--color-accent)" stroke="var(--color-accent)" stroke-width="1">
-                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-                </svg>
-              {% endfor %}
-            </div>
-            <blockquote class="testimonials__quote" style="font-size: {% if section.settings.text_size == 'small' %}0.9375rem{% elsif section.settings.text_size == 'large' %}1.1875rem{% else %}1.0625rem{% endif %};">
-              {{ block.settings.quote }}
-            </blockquote>
-            <div class="testimonials__author">
-              {% if block.settings.avatar %}
-                <img src="{{ block.settings.avatar | image_url: width: 80 }}" alt="{{ block.settings.name | escape }}" class="testimonials__avatar" width="40" height="40" loading="lazy" style="border-radius: 50%; object-fit: cover;">
-              {% endif %}
-              <div>
-                <span class="testimonials__name">{{ block.settings.name }}</span>
-                {% if block.settings.location != blank %}
-                  <span class="testimonials__location">{{ block.settings.location }}</span>
-                {% endif %}
+          <div class="testimonials__champion" {{ block.shopify_attributes }}>
+            {% if block.settings.image %}
+              <img src="{{ block.settings.image | image_url: width: 800 }}" alt="{{ block.settings.name | escape }}" class="testimonials__champion-image" loading="lazy">
+            {% else %}
+              <div class="testimonials__champion-placeholder"></div>
+            {% endif %}
+            <div class="testimonials__champion-content">
+              <div class="testimonials__stars">
+                {% for i in (1..block.settings.rating) %}
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="#fff" stroke="#fff" stroke-width="1">
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                  </svg>
+                {% endfor %}
               </div>
+              <blockquote class="testimonials__champion-quote">{{ block.settings.quote }}</blockquote>
+              <cite class="testimonials__champion-cite">{{ block.settings.name }}{% if block.settings.location != blank %}, {{ block.settings.location }}{% endif %}</cite>
             </div>
           </div>
         {% endfor %}
       </div>
-    </div>
-
-    {% if section.blocks.size > 1 %}
-      <div class="testimonials__nav{% if section.blocks.size <= 3 %} testimonials__nav--mobile-only{% endif %}">
-        <button class="testimonials__prev" data-testimonials-prev aria-label="Previous testimonial">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <polyline points="15 18 9 12 15 6"/>
-          </svg>
-        </button>
-        <button class="testimonials__next" data-testimonials-next aria-label="Next testimonial">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <polyline points="9 18 15 12 9 6"/>
-          </svg>
-        </button>
+    {% else %}
+      <div class="testimonials__track" data-testimonials>
+        <div class="testimonials__slider" data-testimonials-slider>
+          {% for block in section.blocks %}
+            <div class="testimonials__card" style="text-align: {{ block.settings.text_alignment }};" {{ block.shopify_attributes }}>
+              <div class="testimonials__stars">
+                {% for i in (1..block.settings.rating) %}
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="var(--color-accent)" stroke="var(--color-accent)" stroke-width="1">
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                  </svg>
+                {% endfor %}
+              </div>
+              <blockquote class="testimonials__quote" style="font-size: {% if section.settings.text_size == 'small' %}0.9375rem{% elsif section.settings.text_size == 'large' %}1.1875rem{% else %}1.0625rem{% endif %};">
+                {{ block.settings.quote }}
+              </blockquote>
+              <div class="testimonials__author">
+                {% if block.settings.avatar %}
+                  <img src="{{ block.settings.avatar | image_url: width: 80 }}" alt="{{ block.settings.name | escape }}" class="testimonials__avatar" width="40" height="40" loading="lazy" style="border-radius: 50%; object-fit: cover;">
+                {% endif %}
+                <div>
+                  <span class="testimonials__name">{{ block.settings.name }}</span>
+                  {% if block.settings.location != blank %}
+                    <span class="testimonials__location">{{ block.settings.location }}</span>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
       </div>
+
+      {% if section.blocks.size > 1 %}
+        <div class="testimonials__nav{% if section.blocks.size <= 3 %} testimonials__nav--mobile-only{% endif %}">
+          <button class="testimonials__prev" data-testimonials-prev aria-label="Previous testimonial">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <polyline points="15 18 9 12 15 6"/>
+            </svg>
+          </button>
+          <button class="testimonials__next" data-testimonials-next aria-label="Next testimonial">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <polyline points="9 18 15 12 9 6"/>
+            </svg>
+          </button>
+        </div>
+      {% endif %}
     {% endif %}
   </div>
 </section>
@@ -105,6 +130,16 @@
     {
       "type": "header",
       "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout style",
+      "options": [
+        { "value": "carousel", "label": "Carousel" },
+        { "value": "expanding_cards", "label": "Expanding Cards" }
+      ],
+      "default": "carousel"
     },
     {
       "type": "select",
@@ -177,6 +212,12 @@
           "id": "avatar",
           "label": "Customer photo",
           "info": "Optional avatar image"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Champion image",
+          "info": "Full background image for expanding cards layout"
         },
         {
           "type": "range",

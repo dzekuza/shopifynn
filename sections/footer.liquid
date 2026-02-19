@@ -17,6 +17,19 @@
         {% if section.settings.about_text != blank %}
           <p class="footer__about">{{ section.settings.about_text }}</p>
         {% endif %}
+        {% if section.settings.badge_1 or section.settings.badge_2 or section.settings.badge_3 %}
+          <div class="footer__badges">
+            {% if section.settings.badge_1 %}
+              <img src="{{ section.settings.badge_1 | image_url: width: 120 }}" alt="Certification badge" width="60" height="60" loading="lazy" class="footer__badge">
+            {% endif %}
+            {% if section.settings.badge_2 %}
+              <img src="{{ section.settings.badge_2 | image_url: width: 120 }}" alt="Certification badge" width="60" height="60" loading="lazy" class="footer__badge">
+            {% endif %}
+            {% if section.settings.badge_3 %}
+              <img src="{{ section.settings.badge_3 | image_url: width: 120 }}" alt="Certification badge" width="60" height="60" loading="lazy" class="footer__badge">
+            {% endif %}
+          </div>
+        {% endif %}
         <div class="footer__social">
           {% if settings.social_instagram != blank %}
             <a href="{{ settings.social_instagram }}" aria-label="Instagram" target="_blank" rel="noopener">
@@ -90,6 +103,28 @@
       "id": "about_text",
       "label": "About text",
       "default": "Premium Nordic hot and cold tubs, handcrafted with care and built to last a lifetime."
+    },
+    {
+      "type": "header",
+      "content": "Certification Badges"
+    },
+    {
+      "type": "image_picker",
+      "id": "badge_1",
+      "label": "Badge 1",
+      "info": "e.g. TUV certification"
+    },
+    {
+      "type": "image_picker",
+      "id": "badge_2",
+      "label": "Badge 2",
+      "info": "e.g. Red Dot Design Award"
+    },
+    {
+      "type": "image_picker",
+      "id": "badge_3",
+      "label": "Badge 3",
+      "info": "e.g. CE marking"
     },
     {
       "type": "header",

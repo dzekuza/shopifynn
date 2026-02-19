@@ -13,11 +13,23 @@
       "type": "main-collection",
       "settings": {
         "show_description": true,
-        "products_per_page": 12,
+        "enable_sorting": true,
+        "show_tags": false,
+        "show_options": true,
+        "show_vendor": false,
+        "show_secondary_image": true,
+        "heading_size": "small",
+        "text_alignment": "left",
+        "mobile_columns": "1",
         "columns": "3",
-        "enable_sorting": true
+        "grid_gap": 12,
+        "products_per_page": 12,
+        "padding_top": 24,
+        "padding_bottom": 24
       }
     }
   },
-  "order": ["main-collection"]
+  "order": [
+    "main-collection"
+  ]
 }

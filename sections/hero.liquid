@@ -45,10 +45,19 @@
     {% if section.settings.text != blank %}
       <p class="hero__text" style="font-size: {% if section.settings.text_size == 'small' %}0.875rem{% elsif section.settings.text_size == 'large' %}1.25rem{% else %}1.0625rem{% endif %};">{{ section.settings.text }}</p>
     {% endif %}
-    {% if section.settings.button_text != blank %}
-      <a href="{{ section.settings.button_url }}" class="hero__button button {% if section.settings.button_style == 'outline' %}button--outline{% else %}button--primary{% endif %}">
-        {{ section.settings.button_text }}
-      </a>
+    {% if section.settings.button_text != blank or section.settings.button_2_text != blank %}
+      <div class="hero__buttons">
+        {% if section.settings.button_text != blank %}
+          <a href="{{ section.settings.button_url }}" class="hero__button button {% if section.settings.button_style == 'outline' %}button--outline{% else %}button--primary{% endif %}">
+            {{ section.settings.button_text }}
+          </a>
+        {% endif %}
+        {% if section.settings.button_2_text != blank %}
+          <a href="{{ section.settings.button_2_url }}" class="hero__button button {% if section.settings.button_2_style == 'outline' %}button--outline{% else %}button--primary{% endif %}">
+            {{ section.settings.button_2_text }}
+          </a>
+        {% endif %}
+      </div>
     {% endif %}
   </div>
 </section>
@@ -148,6 +157,31 @@
         { "value": "outline", "label": "Outline" }
       ],
       "default": "primary"
+    },
+    {
+      "type": "header",
+      "content": "Second Button"
+    },
+    {
+      "type": "text",
+      "id": "button_2_text",
+      "label": "Second button text",
+      "default": "Help me choose"
+    },
+    {
+      "type": "url",
+      "id": "button_2_url",
+      "label": "Second button link"
+    },
+    {
+      "type": "select",
+      "id": "button_2_style",
+      "label": "Second button style",
+      "options": [
+        { "value": "primary", "label": "Primary (filled)" },
+        { "value": "outline", "label": "Outline" }
+      ],
+      "default": "outline"
     },
     {
       "type": "header",

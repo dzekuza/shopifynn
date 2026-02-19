@@ -48,7 +48,7 @@
         {% if show_tags and product.tags.size > 0 %}
           {% for tag in product.tags %}
             {%- assign tag_lower = tag | downcase -%}
-            {%- unless tag_lower contains '_' or tag_lower contains ':' -%}
+            {%- unless tag_lower contains '_' or tag_lower contains ':' or tag_lower contains '-' or tag_lower contains 'configurator' or tag_lower contains 'step' -%}
               <span class="product-card__badge product-card__badge--tag">{{ tag }}</span>
             {%- endunless -%}
           {% endfor %}
