@@ -42,6 +42,7 @@
 
   <link rel="stylesheet" href="{{ 'theme.css' | asset_url }}">
 
+
   {% if settings.favicon %}
     <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32 }}">
   {% endif %}
@@ -57,6 +58,10 @@
   </main>
 
   {% section 'footer' %}
+
+  <script>window.__shopCurrency = {{ shop.currency | json }};</script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script>
 
   <script src="{{ 'theme.js' | asset_url }}" defer></script>
 </body>
