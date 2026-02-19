@@ -1,0 +1,132 @@
+<section class="trust-badges section" style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px; background-color: {{ section.settings.background_color }};">
+  <div class="container">
+    {% if section.settings.heading != blank %}
+      <h2 class="trust-badges__heading" style="text-align: {{ section.settings.text_alignment }};">{{ section.settings.heading }}</h2>
+    {% endif %}
+    <div class="trust-badges__grid trust-badges__grid--{{ section.blocks.size }}">
+      {% for block in section.blocks %}
+        <div class="trust-badges__item" {{ block.shopify_attributes }}>
+          <div class="trust-badges__icon">
+            {% if block.settings.custom_image != blank %}
+              <img src="{{ block.settings.custom_image | image_url: width: 80 }}" alt="{{ block.settings.title | escape }}" width="40" height="40" loading="lazy">
+            {% else %}
+              {%- case block.settings.icon -%}
+                {%- when 'shipping' -%}
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                {%- when 'shield' -%}
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+                {%- when 'lock' -%}
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                {%- when 'star' -%}
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                {%- when 'heart' -%}
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+                {%- when 'refresh' -%}
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>
+                {%- when 'tool' -%}
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
+                {%- when 'phone' -%}
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg>
+              {%- endcase -%}
+            {% endif %}
+          </div>
+          <div class="trust-badges__text">
+            {% if block.settings.title != blank %}
+              <p class="trust-badges__title">{{ block.settings.title }}</p>
+            {% endif %}
+            {% if block.settings.description != blank %}
+              <p class="trust-badges__desc">{{ block.settings.description }}</p>
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Trust Badges",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Heading alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#EDF2F5"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 32,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 32,
+      "unit": "px"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "badge",
+      "name": "Trust badge",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "shipping", "label": "Shipping truck" },
+            { "value": "shield", "label": "Shield / Warranty" },
+            { "value": "lock", "label": "Secure lock" },
+            { "value": "star", "label": "Star / Quality" },
+            { "value": "heart", "label": "Heart / Handcrafted" },
+            { "value": "refresh", "label": "Returns / Refresh" },
+            { "value": "tool", "label": "Tool / Support" },
+            { "value": "phone", "label": "Phone / Contact" }
+          ],
+          "default": "shipping"
+        },
+        { "type": "image_picker", "id": "custom_image", "label": "Custom icon image (overrides icon)" },
+        { "type": "text", "id": "title", "label": "Title", "default": "Free Shipping" },
+        { "type": "text", "id": "description", "label": "Description", "default": "On orders over \u20ac500" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Trust Badges",
+      "blocks": [
+        { "type": "badge", "settings": { "icon": "shipping", "title": "Free Shipping", "description": "On all orders over \u20ac500" } },
+        { "type": "badge", "settings": { "icon": "shield", "title": "Up to 10-Year Warranty", "description": "Guaranteed quality & durability" } },
+        { "type": "badge", "settings": { "icon": "heart", "title": "Handcrafted in Europe", "description": "Premium Nordic craftsmanship" } },
+        { "type": "badge", "settings": { "icon": "lock", "title": "Secure Checkout", "description": "SSL encrypted payments" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
