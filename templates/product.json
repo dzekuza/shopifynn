@@ -58,11 +58,10 @@
           "settings": {}
         },
         "specs": {
-          "type": "collapsible_tab",
+          "type": "product_specs",
           "settings": {
             "heading": "Specifications",
-            "icon": "ruler",
-            "content": "<p>Detailed product specifications will appear here.</p>"
+            "icon": "ruler"
           }
         },
         "shipping": {

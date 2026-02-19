@@ -158,26 +158,135 @@
 
   /* ---- Variant Picker ---- */
 
+  const productJsonEl = document.querySelector('[data-product-json]');
   const variantSelects = document.querySelectorAll('[data-option-index]');
-  if (variantSelects.length > 0) {
-    variantSelects.forEach((select) => {
-      select.addEventListener('change', () => {
-        const productData = document.querySelector('[data-product]');
-        if (!productData) return;
+  let productVariants = [];
 
-        // Construct selected options
-        const selectedOptions = [];
-        variantSelects.forEach((s) => selectedOptions.push(s.value));
+  if (productJsonEl) {
+    try {
+      productVariants = JSON.parse(productJsonEl.textContent);
+    } catch (e) {
+      // Silent fail — variants won't update dynamically
+    }
+  }
 
-        // Find matching variant from product JSON (if available)
-        // Basic URL-based approach for simplicity
-        const params = new URLSearchParams(window.location.search);
-        variantSelects.forEach((s, i) => {
-          params.set(`option${i + 1}`, s.value);
-        });
+  function formatMoney(cents) {
+    const amount = (cents / 100).toFixed(2);
+    // Use the shop's money format from Shopify, fallback to EUR
+    const currencySymbol = document.querySelector('[data-product-price]')?.textContent.replace(/[\d.,\s]/g, '').trim() || '€';
+    return currencySymbol + amount;
+  }
+
+  function onVariantChange() {
+    // Collect selected option values from all selects
+    const selectedOptions = [];
+    variantSelects.forEach((s) => selectedOptions.push(s.value));
+
+    // Find matching variant
+    const matchedVariant = productVariants.find((variant) => {
+      return selectedOptions.every((val, i) => {
+        const optionKey = 'option' + (i + 1);
+        return variant[optionKey] === val;
       });
     });
+
+    if (!matchedVariant) return;
+
+    // Update hidden variant ID input
+    const variantInput = document.querySelector('[data-variant-id]');
+    if (variantInput) variantInput.value = matchedVariant.id;
+
+    // Update price display
+    const priceEl = document.querySelector('[data-product-price]');
+    if (priceEl) priceEl.textContent = formatMoney(matchedVariant.price);
+
+    // Update compare-at price and save badge
+    const compareEl = document.querySelector('[data-compare-price]');
+    const saveBadge = document.querySelector('.product__save-badge');
+    if (matchedVariant.compare_at_price && matchedVariant.compare_at_price > matchedVariant.price) {
+      if (compareEl) {
+        compareEl.textContent = formatMoney(matchedVariant.compare_at_price);
+        compareEl.style.display = '';
+      }
+      if (saveBadge) {
+        saveBadge.textContent = 'Save ' + formatMoney(matchedVariant.compare_at_price - matchedVariant.price);
+        saveBadge.style.display = '';
+      }
+    } else {
+      if (compareEl) compareEl.style.display = 'none';
+      if (saveBadge) saveBadge.style.display = 'none';
+    }
+
+    // Update Add to Cart button
+    const addToCartBtn = document.querySelector('.product__add-to-cart');
+    if (addToCartBtn) {
+      if (matchedVariant.available) {
+        addToCartBtn.disabled = false;
+        addToCartBtn.textContent = addToCartBtn.dataset.addText || 'Add to Cart';
+      } else {
+        addToCartBtn.disabled = true;
+        addToCartBtn.textContent = 'Sold Out';
+      }
+    }
+
+    // Update URL for shareability
+    const url = new URL(window.location.href);
+    url.searchParams.set('variant', matchedVariant.id);
+    window.history.replaceState({}, '', url.toString());
+
+    // Update main product image if variant has one
+    if (matchedVariant.featured_image) {
+      const mainImage = document.getElementById('product-main-image');
+      if (mainImage) {
+        mainImage.src = matchedVariant.featured_image.src;
+        mainImage.alt = matchedVariant.featured_image.alt || '';
+      }
+    }
   }
+
+  // Bind change events on selects
+  if (variantSelects.length > 0) {
+    variantSelects.forEach((select) => {
+      select.addEventListener('change', onVariantChange);
+    });
+  }
+
+  // Store original button text
+  const addToCartBtn = document.querySelector('.product__add-to-cart');
+  if (addToCartBtn && !addToCartBtn.dataset.addText) {
+    addToCartBtn.dataset.addText = addToCartBtn.textContent.trim();
+  }
+
+  /* ---- Color Swatches ---- */
+
+  document.querySelectorAll('.product__swatch').forEach((swatch) => {
+    swatch.addEventListener('click', () => {
+      const optionIndex = swatch.dataset.swatchOption;
+      const value = swatch.dataset.value;
+
+      // Update active swatch
+      const group = swatch.closest('.product__swatches');
+      if (group) {
+        group.querySelectorAll('.product__swatch').forEach((s) => s.classList.remove('product__swatch--active'));
+      }
+      swatch.classList.add('product__swatch--active');
+
+      // Update the hidden select
+      const hiddenSelect = swatch.closest('.product__option')?.querySelector('[data-option-index]');
+      if (hiddenSelect) {
+        hiddenSelect.value = value;
+      }
+
+      // Update the selected value label
+      const valueLabel = swatch.closest('.product__option')?.querySelector('[data-swatch-value]');
+      if (valueLabel) {
+        valueLabel.textContent = value;
+      }
+
+      // Trigger variant change
+      onVariantChange();
+    });
+  });
 
   /* ---- Collection Sort ---- */
 
