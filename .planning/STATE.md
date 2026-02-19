@@ -35,6 +35,8 @@ Progress: [░░░░░░░░░░] 0%
 
 *Updated after each plan completion*
 | Phase 03-performance-and-accessibility P01 | 8 | 2 tasks | 3 files |
+| Phase 03-performance-and-accessibility P02 | 15 | 2 tasks | 5 files |
+| Phase 02-configurator-stabilization P02 | 2 | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -50,6 +52,11 @@ Recent decisions affecting current work:
 - [Phase 04-visual-polish-and-brand-content]: Heritage stats bar uses Aurowe bronze accent (#B6754D) for brand consistency
 - [Phase 03-performance-and-accessibility]: Pin CDN versions to exact semver (gsap@3.13.0) to prevent silent breaking changes from floating tags
 - [Phase 03-performance-and-accessibility]: Darkened muted text to #6A6864 (from #7D7B78) — minimum change to achieve 4.5:1 WCAG AA contrast on #F4F1EC
+- [Phase 03-performance-and-accessibility]: Article featured image gets loading=eager as primary LCP candidate for article page
+- [Phase 03-performance-and-accessibility]: Filter order for alt text: pipe default before escape to ensure all dynamic fallbacks are XSS-escaped
+- [Phase 02-configurator-stabilization]: Metafield-based product lookups replace string matching — eliminates fragility in configurator variant resolution
+- [Phase 02-configurator-stabilization]: Empty string default for absent metafields ensures JS reads never encounter undefined
+- [Phase 02-configurator-stabilization]: connectedCallback guard added to prevent null reference when section loads in Shopify theme editor
 
 ### Pending Todos
 

@@ -18,9 +18,9 @@ Requirements for production-ready launch. Each maps to roadmap phases.
 
 ### Configurator Stability
 
-- [ ] **CONF-01**: Replace regex-based product title matching with metafield-based lookups (configurator.size, configurator.oven_type, configurator.addon_type)
-- [ ] **CONF-02**: Extend configurator-product-json.liquid to include size, oven_type, and addon_type from metafields
-- [ ] **CONF-03**: Delete all string-matching fallback methods (_getSizeFromProduct, _isInternalOvenProduct) in same commit as metafield migration
+- [x] **CONF-01**: Replace regex-based product title matching with metafield-based lookups (configurator.size, configurator.oven_type, configurator.addon_type)
+- [x] **CONF-02**: Extend configurator-product-json.liquid to include size, oven_type, and addon_type from metafields
+- [x] **CONF-03**: Delete all string-matching fallback methods (_getSizeFromProduct, _isInternalOvenProduct) in same commit as metafield migration
 - [ ] **CONF-04**: Consolidate two price calculation paths into single _calculateLineItems() function used by both display and cart
 - [ ] **CONF-05**: Add step validation before cart — user cannot add to cart with incomplete required configuration
 - [ ] **CONF-06**: Add clear error recovery on cart add failure with retry option and failure explanation
@@ -34,13 +34,13 @@ Requirements for production-ready launch. Each maps to roadmap phases.
 - [x] **PERF-02**: Pin GSAP to version 3.13.0 with explicit CDN URL
 - [x] **PERF-03**: Add GSAP existence check before initializing scroll animations in theme.js
 - [ ] **PERF-04**: Cache frequently-accessed DOM nodes in _cacheEls() method
-- [ ] **PERF-05**: Add loading="lazy" to non-critical images (thumbnails, below-fold content)
+- [x] **PERF-05**: Add loading="lazy" to non-critical images (thumbnails, below-fold content)
 
 ### Accessibility
 
 - [ ] **A11Y-01**: Add ARIA labels and roles to configurator custom element (step navigation, option selection)
 - [ ] **A11Y-02**: Implement keyboard navigation for all configurator steps and options
-- [ ] **A11Y-03**: Audit and add alt text to all img tags across sections and snippets
+- [x] **A11Y-03**: Audit and add alt text to all img tags across sections and snippets
 - [ ] **A11Y-04**: Ensure all interactive touch targets are minimum 44x44px on mobile
 - [x] **A11Y-05**: Audit color contrast ratios for WCAG 2.1 AA compliance (4.5:1 minimum)
 
@@ -116,9 +116,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | SEC-04 | Phase 1 | Pending |
 | SEC-05 | Phase 1 | Pending |
 | SEC-06 | Phase 1 | Pending |
-| CONF-01 | Phase 2 | Pending |
-| CONF-02 | Phase 2 | Pending |
-| CONF-03 | Phase 2 | Pending |
+| CONF-01 | Phase 2 | Complete |
+| CONF-02 | Phase 2 | Complete |
+| CONF-03 | Phase 2 | Complete |
 | CONF-04 | Phase 2 | Pending |
 | CONF-05 | Phase 2 | Pending |
 | CONF-06 | Phase 2 | Pending |
@@ -129,10 +129,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | PERF-02 | Phase 3 | Complete |
 | PERF-03 | Phase 3 | Complete |
 | PERF-04 | Phase 3 | Pending |
-| PERF-05 | Phase 3 | Pending |
+| PERF-05 | Phase 3 | Complete |
 | A11Y-01 | Phase 3 | Pending |
 | A11Y-02 | Phase 3 | Pending |
-| A11Y-03 | Phase 3 | Pending |
+| A11Y-03 | Phase 3 | Complete |
 | A11Y-04 | Phase 3 | Pending |
 | A11Y-05 | Phase 3 | Complete |
 | VIS-01 | Phase 4 | Complete |
