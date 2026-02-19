@@ -12,9 +12,9 @@ Requirements for production-ready launch. Each maps to roadmap phases.
 - [ ] **SEC-01**: Rotate all exposed Shopify API credentials (CLIENT_ID, CLIENT_SECRET, API key) in Shopify Admin
 - [ ] **SEC-02**: Purge credentials from git history using git-filter-repo
 - [ ] **SEC-03**: Add .env to .gitignore and remove hardcoded credentials from setup scripts
-- [ ] **SEC-04**: Sanitize all 15+ innerHTML call sites in configurator.js using textContent, DOM APIs, or DOMPurify
-- [ ] **SEC-05**: Load DOMPurify 3.2.7 from CDN on configurator template for necessary markup sanitization
-- [ ] **SEC-06**: Remove insecure custom _escAttr() method and replace with proper sanitization
+- [x] **SEC-04**: Sanitize all 15+ innerHTML call sites in configurator.js using textContent, DOM APIs, or DOMPurify
+- [x] **SEC-05**: Load DOMPurify 3.2.7 from CDN on configurator template for necessary markup sanitization
+- [x] **SEC-06**: Remove insecure custom _escAttr() method and replace with proper sanitization
 
 ### Configurator Stability
 
@@ -113,9 +113,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | SEC-01 | Phase 1 | Pending |
 | SEC-02 | Phase 1 | Pending |
 | SEC-03 | Phase 1 | Pending |
-| SEC-04 | Phase 1 | Pending |
-| SEC-05 | Phase 1 | Pending |
-| SEC-06 | Phase 1 | Pending |
+| SEC-04 | Phase 1 | Complete |
+| SEC-05 | Phase 1 | Complete |
+| SEC-06 | Phase 1 | Complete |
 | CONF-01 | Phase 2 | Complete |
 | CONF-02 | Phase 2 | Complete |
 | CONF-03 | Phase 2 | Complete |
