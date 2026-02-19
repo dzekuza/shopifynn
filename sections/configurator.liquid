@@ -60,13 +60,13 @@
           {%- when 15 -%}{%- assign s_title = 'Heater Connection Type' -%}{%- assign s_sub = 'Connection angle.' -%}
         {%- endcase -%}
 
-        <div class="cfg-step{{ locked }}" data-step="{{ i }}">
+        <div class="cfg-step{{ locked }}" data-step="{{ i }}" role="group" aria-labelledby="cfg-step-title-{{ i }}" {% if i > 1 %}aria-disabled="true"{% else %}aria-disabled="false"{% endif %}>
           <div class="cfg-step__header">
             <span class="cfg-step__badge" aria-hidden="true">{{ i }}</span>
-            <h3 class="cfg-step__title">{{ s_title }}</h3>
+            <h3 class="cfg-step__title" id="cfg-step-title-{{ i }}">{{ s_title }}</h3>
           </div>
           <p class="cfg-step__subtitle">{{ s_sub }}</p>
-          <div class="cfg-step__body">
+          <div class="cfg-step__body" {% if i > 1 %}inert{% endif %}>
             {%- comment -%} Content rendered by JS from JSON data {%- endcomment -%}
           </div>
         </div>
