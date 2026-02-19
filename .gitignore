@@ -2,6 +2,11 @@
 node_modules/
 *.log
 
+# Environment secrets
+.env
+.env.local
+.env.*.local
+
 # Agent/skill configs (installed by npx skills)
 .agent/
 .agents/
