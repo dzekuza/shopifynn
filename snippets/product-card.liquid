@@ -14,6 +14,20 @@
           loading="lazy"
           class="product-card__image"
         >
+        {% if show_secondary_image and product.images.size > 1 %}
+          <img
+            src="{{ product.images[1] | image_url: width: 480 }}"
+            srcset="
+              {{ product.images[1] | image_url: width: 240 }} 240w,
+              {{ product.images[1] | image_url: width: 360 }} 360w,
+              {{ product.images[1] | image_url: width: 480 }} 480w
+            "
+            sizes="(max-width: 768px) 50vw, 25vw"
+            alt="{{ product.title | escape }}"
+            loading="lazy"
+            class="product-card__image product-card__image--secondary"
+          >
+        {% endif %}
       {% else %}
         <div class="product-card__placeholder">
           <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--color-text-muted)" stroke-width="1">
@@ -22,19 +36,85 @@
         </div>
       {% endif %}
 
-      {% if product.compare_at_price > product.price %}
-        <span class="product-card__badge">Sale</span>
-      {% endif %}
+      {%- comment -%} Badges overlay {%- endcomment -%}
+      <div class="product-card__badges">
+        {% if product.compare_at_price > product.price %}
+          {%- assign save_percent = product.compare_at_price | minus: product.price | times: 100.0 | divided_by: product.compare_at_price | round -%}
+          <span class="product-card__badge product-card__badge--sale">-{{ save_percent }}%</span>
+        {% endif %}
+        {% unless product.available %}
+          <span class="product-card__badge product-card__badge--soldout">Sold out</span>
+        {% endunless %}
+        {% if show_tags and product.tags.size > 0 %}
+          {% for tag in product.tags %}
+            {%- assign tag_lower = tag | downcase -%}
+            {%- unless tag_lower contains '_' or tag_lower contains ':' -%}
+              <span class="product-card__badge product-card__badge--tag">{{ tag }}</span>
+            {%- endunless -%}
+          {% endfor %}
+        {% endif %}
+      </div>
     </div>
 
     <div class="product-card__info">
+      {% if show_vendor and product.vendor != blank %}
+        <p class="product-card__vendor">{{ product.vendor }}</p>
+      {% endif %}
+
       <h3 class="product-card__title">{{ product.title }}</h3>
+
       <div class="product-card__price">
-        <span class="product-card__current-price">{{ product.price | money }}</span>
+        {% if product.price_varies %}
+          <span class="product-card__current-price">From {{ product.price_min | money }}</span>
+        {% else %}
+          <span class="product-card__current-price">{{ product.price | money }}</span>
+        {% endif %}
         {% if product.compare_at_price > product.price %}
           <span class="product-card__compare-price">{{ product.compare_at_price | money }}</span>
         {% endif %}
       </div>
+
+      {%- comment -%} Product options / attributes {%- endcomment -%}
+      {% if show_options and product.has_only_default_variant == false %}
+        <div class="product-card__options">
+          {% for option in product.options_with_values %}
+            <div class="product-card__option-group">
+              <span class="product-card__option-label">{{ option.name }}:</span>
+              <div class="product-card__option-values">
+                {% for value in option.values %}
+                  {%- assign value_lower = value | downcase -%}
+                  {%- assign is_color = false -%}
+                  {%- if option.name == 'Color' or option.name == 'Colour' or option.name == 'color' or option.name == 'colour' -%}
+                    {%- assign is_color = true -%}
+                  {%- endif -%}
+
+                  {% if is_color %}
+                    <span class="product-card__color-dot" style="background-color: {{ value_lower }};" title="{{ value }}"></span>
+                  {% else %}
+                    <span class="product-card__option-pill">{{ value }}</span>
+                  {% endif %}
+                {% endfor %}
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      {%- comment -%} Metafield: dimensions {%- endcomment -%}
+      {% if product.metafields.custom.dimensions != blank %}
+        <p class="product-card__meta">
+          <svg class="product-card__meta-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+          {{ product.metafields.custom.dimensions }}
+        </p>
+      {% endif %}
+
+      {%- comment -%} Metafield: capacity / persons {%- endcomment -%}
+      {% if product.metafields.custom.capacity != blank %}
+        <p class="product-card__meta">
+          <svg class="product-card__meta-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          {{ product.metafields.custom.capacity }}
+        </p>
+      {% endif %}
     </div>
   </a>
 </div>

@@ -33,7 +33,7 @@
       <div class="collection-page__grid collection-page__grid--{{ section.settings.columns }}" style="gap: {{ section.settings.grid_gap }}px;">
         {% for product in collection.products %}
           <div class="collection-page__item">
-            {% render 'product-card', product: product %}
+            {% render 'product-card', product: product, show_tags: section.settings.show_tags, show_options: section.settings.show_options, show_vendor: section.settings.show_vendor, show_secondary_image: section.settings.show_secondary_image %}
           </div>
         {% endfor %}
       </div>
@@ -95,6 +95,34 @@
       "type": "checkbox",
       "id": "enable_sorting",
       "label": "Enable sorting",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Product card"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_tags",
+      "label": "Show product tags as badges",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_options",
+      "label": "Show available options (size, color, etc.)",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": "Show vendor",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_secondary_image",
+      "label": "Show second image on hover",
       "default": true
     },
     {
