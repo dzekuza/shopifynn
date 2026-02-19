@@ -161,11 +161,11 @@
 
       slider.addEventListener('touchmove', function (e) {
         touchDeltaX = e.touches[0].clientX - touchStartX;
-        var card = cards[0];
+        const card = cards[0];
         if (!card) return;
-        var gap = 24;
-        var cardWidth = card.offsetWidth + gap;
-        var offset = currentIndex * cardWidth - touchDeltaX;
+        const gap = 24;
+        const cardWidth = card.offsetWidth + gap;
+        const offset = currentIndex * cardWidth - touchDeltaX;
         slider.style.transform = 'translateX(-' + offset + 'px)';
       }, { passive: true });
 
@@ -210,14 +210,14 @@
 
   /* ---- Product Gallery (vanilla) ---- */
 
-  var gallery = document.querySelector('[data-product-gallery]');
+  const gallery = document.querySelector('[data-product-gallery]');
 
   if (gallery) {
-    var slides = gallery.querySelectorAll('.product__gallery-slide');
-    var thumbs = gallery.querySelectorAll('.product__gallery-thumb');
-    var prevBtn = gallery.querySelector('[data-gallery-prev]');
-    var nextBtn = gallery.querySelector('[data-gallery-next]');
-    var currentIndex = 0;
+    const slides = gallery.querySelectorAll('.product__gallery-slide');
+    const thumbs = gallery.querySelectorAll('.product__gallery-thumb');
+    const prevBtn = gallery.querySelector('[data-gallery-prev]');
+    const nextBtn = gallery.querySelector('[data-gallery-next]');
+    let currentIndex = 0;
 
     function goToSlide(index) {
       if (index < 0) index = slides.length - 1;
@@ -244,11 +244,11 @@
     });
 
     // Touch swipe support
-    var touchStartX = 0;
-    var track = gallery.querySelector('[data-gallery-track]');
+    let touchStartX = 0;
+    const track = gallery.querySelector('[data-gallery-track]');
     track.addEventListener('touchstart', function (e) { touchStartX = e.touches[0].clientX; }, { passive: true });
     track.addEventListener('touchend', function (e) {
-      var diff = touchStartX - e.changedTouches[0].clientX;
+      const diff = touchStartX - e.changedTouches[0].clientX;
       if (Math.abs(diff) > 40) {
         goToSlide(diff > 0 ? currentIndex + 1 : currentIndex - 1);
       }
@@ -284,8 +284,8 @@
 
   /* ---- Variant Picker ---- */
 
-  var productVariants = [];
-  var productJsonEl = document.querySelector('[data-product-json]');
+  let productVariants = [];
+  const productJsonEl = document.querySelector('[data-product-json]');
 
   if (productJsonEl) {
     try {
@@ -296,13 +296,13 @@
   }
 
   // Store original button text early
-  var addToCartBtn = document.querySelector('.product__add-to-cart');
+  const addToCartBtn = document.querySelector('.product__add-to-cart');
   if (addToCartBtn && !addToCartBtn.dataset.addText) {
     addToCartBtn.dataset.addText = addToCartBtn.textContent.trim();
   }
 
   function getSelectedOptions() {
-    var options = [];
+    const options = [];
     document.querySelectorAll('[data-option-index]').forEach(function (s) {
       options.push(s.value);
     });
@@ -318,31 +318,31 @@
   }
 
   function onVariantChange() {
-    var selectedOptions = getSelectedOptions();
-    var matchedVariant = findVariant(selectedOptions);
+    const selectedOptions = getSelectedOptions();
+    const matchedVariant = findVariant(selectedOptions);
 
     if (!matchedVariant) return;
 
     // Update hidden variant ID input
-    var variantInput = document.querySelector('[data-variant-id]');
+    const variantInput = document.querySelector('[data-variant-id]');
     if (variantInput) variantInput.value = matchedVariant.id;
 
     // Update price display
-    var priceEl = document.querySelector('[data-product-price]');
+    const priceEl = document.querySelector('[data-product-price]');
     if (priceEl) {
       priceEl.textContent = Shopify.formatMoney ? Shopify.formatMoney(matchedVariant.price) : (matchedVariant.price / 100).toLocaleString(undefined, { style: 'currency', currency: window.__shopCurrency || 'EUR' });
     }
 
     // Update compare-at price and save badge
-    var compareEl = document.querySelector('[data-compare-price]');
-    var saveBadge = document.querySelector('.product__save-badge');
+    const compareEl = document.querySelector('[data-compare-price]');
+    const saveBadge = document.querySelector('.product__save-badge');
     if (matchedVariant.compare_at_price && matchedVariant.compare_at_price > matchedVariant.price) {
       if (compareEl) {
         compareEl.textContent = (matchedVariant.compare_at_price / 100).toLocaleString(undefined, { style: 'currency', currency: window.__shopCurrency || 'EUR' });
         compareEl.style.display = '';
       }
       if (saveBadge) {
-        var saved = ((matchedVariant.compare_at_price - matchedVariant.price) / 100).toLocaleString(undefined, { style: 'currency', currency: window.__shopCurrency || 'EUR' });
+        const saved = ((matchedVariant.compare_at_price - matchedVariant.price) / 100).toLocaleString(undefined, { style: 'currency', currency: window.__shopCurrency || 'EUR' });
         saveBadge.textContent = 'Save ' + saved;
         saveBadge.style.display = '';
       }
@@ -352,7 +352,7 @@
     }
 
     // Update Add to Cart button
-    var btn = document.querySelector('.product__add-to-cart');
+    const btn = document.querySelector('.product__add-to-cart');
     if (btn) {
       if (matchedVariant.available) {
         btn.disabled = false;
@@ -364,15 +364,15 @@
     }
 
     // Update URL for shareability
-    var url = new URL(window.location.href);
+    const url = new URL(window.location.href);
     url.searchParams.set('variant', matchedVariant.id);
     window.history.replaceState({}, '', url.toString());
 
     // Update gallery image if variant has a featured image
     if (matchedVariant.featured_image && window.__productGallery) {
-      var galleryImages = document.querySelectorAll('.product__gallery-slide img');
-      var filename = matchedVariant.featured_image.src.split('?')[0].split('/').pop();
-      for (var i = 0; i < galleryImages.length; i++) {
+      const galleryImages = document.querySelectorAll('.product__gallery-slide img');
+      const filename = matchedVariant.featured_image.src.split('?')[0].split('/').pop();
+      for (let i = 0; i < galleryImages.length; i++) {
         if (galleryImages[i].src.indexOf(filename) !== -1) {
           window.__productGallery.goToSlide(i);
           break;
@@ -390,17 +390,17 @@
 
   document.querySelectorAll('.product__swatch').forEach(function (swatch) {
     swatch.addEventListener('click', function () {
-      var value = swatch.dataset.value;
+      const value = swatch.dataset.value;
 
       // Update active swatch visually
-      var group = swatch.closest('.product__swatches');
+      const group = swatch.closest('.product__swatches');
       if (group) {
         group.querySelectorAll('.product__swatch').forEach(function (s) { s.classList.remove('product__swatch--active'); });
       }
       swatch.classList.add('product__swatch--active');
 
       // Update the hidden select and dispatch change event
-      var hiddenSelect = swatch.closest('.product__option');
+      let hiddenSelect = swatch.closest('.product__option');
       if (hiddenSelect) hiddenSelect = hiddenSelect.querySelector('[data-option-index]');
       if (hiddenSelect) {
         hiddenSelect.value = value;
@@ -408,9 +408,9 @@
       }
 
       // Update the selected value label
-      var optionWrap = swatch.closest('.product__option');
+      const optionWrap = swatch.closest('.product__option');
       if (optionWrap) {
-        var valueLabel = optionWrap.querySelector('[data-swatch-value]');
+        const valueLabel = optionWrap.querySelector('[data-swatch-value]');
         if (valueLabel) valueLabel.textContent = value;
       }
     });
@@ -521,7 +521,7 @@
     });
 
     // Cards — stagger fade up within each section
-    var cardGroups = [
+    const cardGroups = [
       '.features__grid',
       '.product-tiers__grid',
       '.testimonials__slider',
@@ -531,9 +531,9 @@
     ];
 
     cardGroups.forEach(function (selector) {
-      var parent = document.querySelector(selector);
+      const parent = document.querySelector(selector);
       if (!parent) return;
-      var children = parent.children;
+      const children = parent.children;
       if (!children.length) return;
 
       gsap.from(children, {
@@ -547,7 +547,7 @@
     });
 
     // FAQ items — stagger
-    var faqItems = document.querySelectorAll('.faq__item');
+    const faqItems = document.querySelectorAll('.faq__item');
     if (faqItems.length) {
       gsap.from(faqItems, {
         y: 32,
@@ -592,7 +592,7 @@
     });
 
     // Hero content — initial load animation (no scroll trigger)
-    var heroContent = document.querySelector('.hero__content');
+    const heroContent = document.querySelector('.hero__content');
     if (heroContent) {
       gsap.from(heroContent.children, {
         y: 30,
@@ -605,7 +605,7 @@
     }
 
     // Product page — info slide in (skip gallery to avoid Swiper conflicts)
-    var productInfo = document.querySelector('.product__info');
+    const productInfo = document.querySelector('.product__info');
     if (productInfo) {
       gsap.from(productInfo, {
         x: 30,
