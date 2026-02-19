@@ -76,8 +76,8 @@ completed: 2026-02-20
 
 Each task was committed atomically:
 
-1. **Task 1: Unify price calculation into _calculateLineItems()** — `ebe52cb` (feat)
-2. **Task 2: Fix event delegation and locale formatting** — `5858356` (feat)
+1. **Task 1: Unify price calculation into _calculateLineItems()** — `4e020e8` (feat)
+2. **Task 2: Fix event delegation and locale formatting** — `2125f08` (feat)
 
 ## Files Created/Modified
 
