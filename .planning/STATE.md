@@ -45,6 +45,8 @@ Recent decisions affecting current work:
 - [Init]: Fix foundation before visual updates — fragile code and security issues make feature work risky
 - [Init]: Metafield-based product lookups over string matching — eliminates fragility in configurator variant resolution
 - [Init]: Extract configurator CSS to asset file — enables caching, reduces section complexity
+- [Phase 04-visual-polish-and-brand-content]: About page uses section composition only (no main-page) — all content editable via theme editor per BRAND-03
+- [Phase 04-visual-polish-and-brand-content]: Heritage stats bar uses Aurowe bronze accent (#B6754D) for brand consistency
 
 ### Pending Todos
 

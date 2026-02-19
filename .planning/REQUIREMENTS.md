@@ -53,9 +53,9 @@ Requirements for production-ready launch. Each maps to roadmap phases.
 
 ### Brand Content
 
-- [ ] **BRAND-01**: Create About/Story page with editorial craftsmanship narrative
-- [ ] **BRAND-02**: Include artisan profiles and Nordic manufacturing story on About page
-- [ ] **BRAND-03**: Design About page with luxury editorial layout (not plain text)
+- [x] **BRAND-01**: Create About/Story page with editorial craftsmanship narrative
+- [x] **BRAND-02**: Include artisan profiles and Nordic manufacturing story on About page
+- [x] **BRAND-03**: Design About page with luxury editorial layout (not plain text)
 
 ### Architecture
 
@@ -139,9 +139,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | VIS-02 | Phase 4 | Pending |
 | VIS-03 | Phase 4 | Pending |
 | VIS-04 | Phase 4 | Pending |
-| BRAND-01 | Phase 4 | Pending |
-| BRAND-02 | Phase 4 | Pending |
-| BRAND-03 | Phase 4 | Pending |
+| BRAND-01 | Phase 4 | Complete |
+| BRAND-02 | Phase 4 | Complete |
+| BRAND-03 | Phase 4 | Complete |
 | ARCH-01 | Phase 2 | Pending |
 | ARCH-02 | Phase 2 | Pending |
 | ARCH-03 | Phase 2 | Pending |
