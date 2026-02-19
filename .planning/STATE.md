@@ -5,14 +5,14 @@
 See: .planning/PROJECT.md (updated 2026-02-20)
 
 **Core value:** The hot tub configurator must work flawlessly — it's the primary revenue driver where customers build and price their custom configuration across 15 steps.
-**Current focus:** Phase 3 — Performance and Accessibility (Complete — all 3 plans done)
+**Current focus:** Phase 2 — Configurator Stabilization (Complete — all 4 plans done) / Phase 3 complete
 
 ## Current Position
 
 Phase: 3 of 4 (Performance and Accessibility)
-Plan: 3 of 3 in current phase
-Status: Phase complete
-Last activity: 2026-02-20 — Completed 03-03: Configurator image preloading, DOM caching, ARIA, keyboard nav, touch targets
+Plan: 4 of 4 in phase 02-configurator-stabilization
+Status: Phase 02 complete
+Last activity: 2026-02-20 — Completed 02-04: Cart validation, error recovery with retry, grouped configuration summary card
 
 Progress: [███████░░░] 75%
 
@@ -38,6 +38,7 @@ Progress: [███████░░░] 75%
 | Phase 03-performance-and-accessibility P01 | 8 | 2 tasks | 3 files |
 | Phase 03-performance-and-accessibility P02 | 15 | 2 tasks | 5 files |
 | Phase 02-configurator-stabilization P02 | 2 | 2 tasks | 2 files |
+| Phase 02-configurator-stabilization P04 | 4 | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -70,6 +71,10 @@ Recent decisions affecting current work:
 - [02-01]: Retain {% style %} block in configurator.liquid for dynamic per-section Liquid variable styles
 - [Phase 02-configurator-stabilization]: _calculateLineItems() returns full line item array enabling display and cart from one source
 - [Phase 02-configurator-stabilization]: money() uses Intl.NumberFormat with window.__shopLocale — de-DE/EUR fallbacks for backward compatibility
+- [02-04]: Required steps for cart validation: model/size, liner, baseVariantId (oven), exterior — all others optional
+- [02-04]: Summary card uses DOM builder (not innerHTML) for XSS safety with product title data
+- [02-04]: _buildConfigSummary() measures TextEncoder byte length and falls back to compact pipe format if >200 bytes
+- [02-04]: CSS for new UI components added to configurator.liquid stylesheet block (separate CSS file was deleted by prior tooling)
 
 ### Pending Todos
 
@@ -84,5 +89,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-20
-Stopped at: Completed 02-03-PLAN.md — unified pricing via _calculateLineItems(), event delegation fix, locale-aware currency formatting
+Stopped at: Completed 02-04-PLAN.md — cart validation with toast, error recovery retry button, grouped config summary card persisted as Shopify cart line item property
 Resume file: None
