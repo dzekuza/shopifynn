@@ -575,6 +575,24 @@
     background-color: {{ section.settings.background_color }};
     font-family: var(--font-body);
   }
+  .ne-configurator-{{ cfg_id }} .ne-configurator__container {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+  @media screen and (min-width: 990px) {
+    .ne-configurator-{{ cfg_id }} .ne-configurator__container {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+  .ne-configurator-{{ cfg_id }} .ne-configurator__section-title {
+    font-size: {% if section.settings.heading_size == 'small' %}20px{% elsif section.settings.heading_size == 'large' %}28px{% else %}24px{% endif %};
+  }
+  @media screen and (min-width: 990px) {
+    .ne-configurator-{{ cfg_id }} .ne-configurator__section-title {
+      font-size: {% if section.settings.heading_size == 'small' %}24px{% elsif section.settings.heading_size == 'large' %}32px{% else %}28px{% endif %};
+    }
+  }
 {% endstyle %}
 
 <nordic-elite-configurator-{{ cfg_id }}
@@ -1318,7 +1336,42 @@
       "content": "Design"
     },
     { "type": "image_picker", "id": "default_image", "label": "Default thumbnail (shown before selection)" },
-    { "type": "color", "id": "background_color", "label": "Background", "default": "#ffffff" }
+    { "type": "color", "id": "background_color", "label": "Background", "default": "#ffffff" },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Step heading size",
+      "options": [
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 40,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 40,
+      "unit": "px"
+    }
   ],
   "presets": [
     {

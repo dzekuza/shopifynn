@@ -1,19 +1,19 @@
-<section class="video-section section {% if section.settings.color_scheme == 'surface' %}section--surface{% elsif section.settings.color_scheme == 'dark' %}section--dark{% endif %}">
+<section class="video-section section {% if section.settings.color_scheme == 'surface' %}section--surface{% elsif section.settings.color_scheme == 'dark' %}section--dark{% endif %}" style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;">
   <div class="container">
     {% if section.settings.heading != blank or section.settings.subheading != blank %}
-      <div class="section__header">
+      <div class="section__header" style="text-align: {{ section.settings.text_alignment }};">
         {% if section.settings.heading != blank %}
-          <h2 class="section__heading">{{ section.settings.heading }}</h2>
+          <h2 class="section__heading" style="font-size: {% if section.settings.heading_size == 'small' %}1.5rem{% elsif section.settings.heading_size == 'large' %}2.75rem{% else %}2rem{% endif %};">{{ section.settings.heading }}</h2>
         {% endif %}
         {% if section.settings.subheading != blank %}
-          <p class="section__subheading">{{ section.settings.subheading }}</p>
+          <p class="section__subheading" style="font-size: {% if section.settings.text_size == 'small' %}0.875rem{% elsif section.settings.text_size == 'large' %}1.25rem{% else %}1rem{% endif %};">{{ section.settings.subheading }}</p>
         {% endif %}
       </div>
     {% endif %}
 
     <div class="video-section__wrapper" style="max-width: {{ section.settings.video_width }}px; margin: 0 auto;">
-      {% if section.settings.video_url != blank %}
-        {% if section.settings.cover_image and section.settings.video_url contains 'youtube' or section.settings.video_url contains 'vimeo' %}
+      {% if section.settings.video != blank %}
+        {% if section.settings.cover_image %}
           <div class="video-section__cover" data-video-cover>
             <img
               src="{{ section.settings.cover_image | image_url: width: 1200 }}"
@@ -28,25 +28,42 @@
             </button>
           </div>
         {% endif %}
-
         <div class="video-section__embed {% if section.settings.cover_image %}video-section__embed--hidden{% endif %}" data-video-embed>
-          {% if section.settings.video_url contains 'youtube' %}
-            {% assign video_id = section.settings.video_url | split: 'v=' | last | split: '&' | first %}
-            {% if video_id == section.settings.video_url %}
-              {% assign video_id = section.settings.video_url | split: 'youtu.be/' | last | split: '?' | first %}
-            {% endif %}
+          <video width="100%" controls {% unless section.settings.cover_image %}autoplay muted{% endunless %} playsinline style="object-fit: {{ section.settings.video_fit }};">
+            {% for source in section.settings.video.sources %}
+              <source src="{{ source.url }}" type="{{ source.mime_type }}">
+            {% endfor %}
+          </video>
+        </div>
+      {% elsif section.settings.video_url != blank %}
+        {% if section.settings.cover_image %}
+          <div class="video-section__cover" data-video-cover>
+            <img
+              src="{{ section.settings.cover_image | image_url: width: 1200 }}"
+              alt="{{ section.settings.heading | escape | default: 'Video cover' }}"
+              loading="lazy"
+              class="video-section__cover-image"
+            >
+            <button class="video-section__play-btn" data-video-play aria-label="Play video">
+              <svg width="64" height="64" viewBox="0 0 24 24" fill="white">
+                <polygon points="5 3 19 12 5 21 5 3"/>
+              </svg>
+            </button>
+          </div>
+        {% endif %}
+        <div class="video-section__embed {% if section.settings.cover_image %}video-section__embed--hidden{% endif %}" data-video-embed>
+          {% if section.settings.video_url.type == 'youtube' %}
             <iframe
-              src="https://www.youtube.com/embed/{{ video_id }}?rel=0"
+              src="https://www.youtube.com/embed/{{ section.settings.video_url.id }}?rel=0"
               frameborder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowfullscreen
               loading="lazy"
               title="{{ section.settings.heading | escape | default: 'Video' }}"
             ></iframe>
-          {% elsif section.settings.video_url contains 'vimeo' %}
-            {% assign video_id = section.settings.video_url | split: 'vimeo.com/' | last | split: '?' | first %}
+          {% elsif section.settings.video_url.type == 'vimeo' %}
             <iframe
-              src="https://player.vimeo.com/video/{{ video_id }}"
+              src="https://player.vimeo.com/video/{{ section.settings.video_url.id }}"
               frameborder="0"
               allow="autoplay; fullscreen; picture-in-picture"
               allowfullscreen
@@ -60,7 +77,7 @@
           <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--color-text-muted)" stroke-width="1">
             <polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
           </svg>
-          <p>Add a YouTube or Vimeo URL to display a video.</p>
+          <p>Select a video from Files or add a YouTube/Vimeo URL.</p>
         </div>
       {% endif %}
     </div>
@@ -71,6 +88,10 @@
 {
   "name": "Video",
   "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
     {
       "type": "text",
       "id": "heading",
@@ -84,16 +105,75 @@
       "default": "Watch how our hot tubs transform outdoor living."
     },
     {
-      "type": "text",
+      "type": "video",
+      "id": "video",
+      "label": "Video",
+      "info": "Select a hosted video from Files"
+    },
+    {
+      "type": "video_url",
       "id": "video_url",
-      "label": "Video URL",
-      "info": "Paste a YouTube or Vimeo URL"
+      "label": "Video URL (optional)",
+      "accept": ["youtube", "vimeo"],
+      "info": "YouTube or Vimeo URL. Used if no hosted video is selected."
+    },
+    {
+      "type": "select",
+      "id": "video_fit",
+      "label": "Video fit",
+      "options": [
+        { "value": "cover", "label": "Cover" },
+        { "value": "contain", "label": "Contain" },
+        { "value": "fill", "label": "Fill" }
+      ],
+      "default": "cover",
+      "info": "How the video fills its container"
     },
     {
       "type": "image_picker",
       "id": "cover_image",
       "label": "Cover image",
       "info": "Shows before the video plays"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "text_size",
+      "label": "Text size",
+      "options": [
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" }
+      ],
+      "default": "center"
     },
     {
       "type": "range",
@@ -115,6 +195,26 @@
         { "value": "dark", "label": "Dark" }
       ],
       "default": "default"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 40,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 40,
+      "unit": "px"
     }
   ],
   "presets": [

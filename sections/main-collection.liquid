@@ -1,8 +1,8 @@
-<section class="collection-page section">
+<section class="collection-page section" style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;">
   <div class="container">
     <!-- Collection Header -->
-    <div class="collection-page__header">
-      <h1 class="collection-page__title">{{ collection.title }}</h1>
+    <div class="collection-page__header" style="text-align: {{ section.settings.text_alignment }};">
+      <h1 class="collection-page__title" style="font-size: {% if section.settings.heading_size == 'small' %}1.75rem{% elsif section.settings.heading_size == 'large' %}3rem{% else %}2.25rem{% endif %};">{{ collection.title }}</h1>
       {% if collection.description != blank and section.settings.show_description %}
         <div class="collection-page__description rte">
           {{ collection.description }}
@@ -30,7 +30,7 @@
       </div>
 
       <!-- Product Grid -->
-      <div class="collection-page__grid collection-page__grid--{{ section.settings.columns }}">
+      <div class="collection-page__grid collection-page__grid--{{ section.settings.columns }}" style="gap: {{ section.settings.grid_gap }}px;">
         {% for product in collection.products %}
           <div class="collection-page__item">
             {% render 'product-card', product: product %}
@@ -82,19 +82,49 @@
   "name": "Collection Page",
   "settings": [
     {
+      "type": "header",
+      "content": "Content"
+    },
+    {
       "type": "checkbox",
       "id": "show_description",
       "label": "Show collection description",
       "default": true
     },
     {
-      "type": "range",
-      "id": "products_per_page",
-      "label": "Products per page",
-      "min": 4,
-      "max": 24,
-      "step": 4,
-      "default": 12
+      "type": "checkbox",
+      "id": "enable_sorting",
+      "label": "Enable sorting",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Header alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" }
+      ],
+      "default": "left"
     },
     {
       "type": "select",
@@ -108,10 +138,43 @@
       "default": "3"
     },
     {
-      "type": "checkbox",
-      "id": "enable_sorting",
-      "label": "Enable sorting",
-      "default": true
+      "type": "range",
+      "id": "grid_gap",
+      "label": "Grid gap",
+      "min": 8,
+      "max": 40,
+      "step": 4,
+      "default": 24,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "label": "Products per page",
+      "min": 4,
+      "max": 24,
+      "step": 4,
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 40,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 40,
+      "unit": "px"
     }
   ]
 }

@@ -3,9 +3,9 @@
   assign logo_width = settings.logo_width
 -%}
 
-<header class="header" data-header>
+<header class="header {% if section.settings.sticky_header %}header--sticky{% endif %}" data-header>
   {% if section.settings.announcement_text != blank %}
-    <div class="announcement-bar">
+    <div class="announcement-bar" style="background-color: {{ section.settings.announcement_bg_color }}; color: {{ section.settings.announcement_text_color }};">
       <p>{{ section.settings.announcement_text }}</p>
     </div>
   {% endif %}
@@ -67,16 +67,42 @@
   "name": "Header",
   "settings": [
     {
-      "type": "text",
-      "id": "announcement_text",
-      "label": "Announcement text",
-      "default": "Free shipping on orders over €500"
+      "type": "header",
+      "content": "Navigation"
     },
     {
       "type": "link_list",
       "id": "menu",
       "label": "Navigation menu",
       "default": "main-menu"
+    },
+    {
+      "type": "checkbox",
+      "id": "sticky_header",
+      "label": "Sticky header",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Announcement Bar"
+    },
+    {
+      "type": "text",
+      "id": "announcement_text",
+      "label": "Announcement text",
+      "default": "Free shipping on orders over €500"
+    },
+    {
+      "type": "color",
+      "id": "announcement_bg_color",
+      "label": "Background color",
+      "default": "#2a3b4c"
+    },
+    {
+      "type": "color",
+      "id": "announcement_text_color",
+      "label": "Text color",
+      "default": "#ffffff"
     }
   ]
 }

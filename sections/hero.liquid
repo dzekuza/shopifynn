@@ -1,35 +1,52 @@
-<section class="hero">
+<section class="hero" style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;">
   <div class="hero__media">
-    {% if section.settings.image %}
-      <img
-        src="{{ section.settings.image | image_url: width: 1920 }}"
-        srcset="
-          {{ section.settings.image | image_url: width: 750 }} 750w,
-          {{ section.settings.image | image_url: width: 1100 }} 1100w,
-          {{ section.settings.image | image_url: width: 1500 }} 1500w,
-          {{ section.settings.image | image_url: width: 1920 }} 1920w
-        "
-        sizes="100vw"
-        alt="{{ section.settings.heading | escape }}"
-        loading="eager"
-        class="hero__image"
-      >
+    {% if section.settings.video != blank %}
+      <video class="hero__video" autoplay muted loop playsinline style="object-fit: {{ section.settings.video_fit }};">
+        {% for source in section.settings.video.sources %}
+          <source src="{{ source.url }}" type="{{ source.mime_type }}">
+        {% endfor %}
+      </video>
+    {% elsif section.settings.video_url != blank %}
+      {% if section.settings.video_url.type == 'youtube' %}
+        <iframe class="hero__video" src="https://www.youtube.com/embed/{{ section.settings.video_url.id }}?autoplay=1&mute=1&loop=1&playlist={{ section.settings.video_url.id }}&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1" frameborder="0" allow="autoplay; fullscreen" allowfullscreen loading="eager" title="Hero video"></iframe>
+      {% elsif section.settings.video_url.type == 'vimeo' %}
+        <iframe class="hero__video" src="https://player.vimeo.com/video/{{ section.settings.video_url.id }}?autoplay=1&loop=1&muted=1&background=1" frameborder="0" allow="autoplay; fullscreen" allowfullscreen loading="eager" title="Hero video"></iframe>
+      {% endif %}
+    {% elsif section.settings.image %}
+      <picture>
+        {% if section.settings.mobile_image %}
+          <source media="(max-width: 749px)" srcset="{{ section.settings.mobile_image | image_url: width: 750 }}">
+        {% endif %}
+        <img
+          src="{{ section.settings.image | image_url: width: 1920 }}"
+          srcset="
+            {{ section.settings.image | image_url: width: 750 }} 750w,
+            {{ section.settings.image | image_url: width: 1100 }} 1100w,
+            {{ section.settings.image | image_url: width: 1500 }} 1500w,
+            {{ section.settings.image | image_url: width: 1920 }} 1920w
+          "
+          sizes="100vw"
+          alt="{{ section.settings.heading | escape }}"
+          loading="eager"
+          class="hero__image"
+        >
+      </picture>
     {% else %}
       <div class="hero__placeholder"></div>
     {% endif %}
     <div class="hero__overlay" style="opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }}"></div>
   </div>
 
-  <div class="hero__content container">
+  <div class="hero__content container" style="text-align: {{ section.settings.text_alignment }}; max-width: {{ section.settings.content_width }}px; margin: 0 auto;">
     {% if section.settings.subtitle != blank %}
       <p class="hero__subtitle">{{ section.settings.subtitle }}</p>
     {% endif %}
-    <h1 class="hero__heading">{{ section.settings.heading }}</h1>
+    <h1 class="hero__heading" style="font-size: {% if section.settings.heading_size == 'small' %}2rem{% elsif section.settings.heading_size == 'large' %}3.5rem{% elsif section.settings.heading_size == 'extra_large' %}4.5rem{% else %}2.75rem{% endif %};">{{ section.settings.heading }}</h1>
     {% if section.settings.text != blank %}
-      <p class="hero__text">{{ section.settings.text }}</p>
+      <p class="hero__text" style="font-size: {% if section.settings.text_size == 'small' %}0.875rem{% elsif section.settings.text_size == 'large' %}1.25rem{% else %}1.0625rem{% endif %};">{{ section.settings.text }}</p>
     {% endif %}
     {% if section.settings.button_text != blank %}
-      <a href="{{ section.settings.button_url }}" class="hero__button button button--primary">
+      <a href="{{ section.settings.button_url }}" class="hero__button button {% if section.settings.button_style == 'outline' %}button--outline{% else %}button--primary{% endif %}">
         {{ section.settings.button_text }}
       </a>
     {% endif %}
@@ -41,9 +58,44 @@
   "name": "Hero Banner",
   "settings": [
     {
+      "type": "header",
+      "content": "Media"
+    },
+    {
       "type": "image_picker",
       "id": "image",
       "label": "Background image"
+    },
+    {
+      "type": "image_picker",
+      "id": "mobile_image",
+      "label": "Mobile image",
+      "info": "Optional image for mobile screens"
+    },
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Video",
+      "info": "Select a hosted video from Files. Replaces background image."
+    },
+    {
+      "type": "video_url",
+      "id": "video_url",
+      "label": "Video URL (optional)",
+      "accept": ["youtube", "vimeo"],
+      "info": "YouTube or Vimeo URL. Used if no hosted video is selected."
+    },
+    {
+      "type": "select",
+      "id": "video_fit",
+      "label": "Video fit",
+      "options": [
+        { "value": "cover", "label": "Cover" },
+        { "value": "contain", "label": "Contain" },
+        { "value": "fill", "label": "Fill" }
+      ],
+      "default": "cover",
+      "info": "How the video fills its container"
     },
     {
       "type": "range",
@@ -53,6 +105,10 @@
       "step": 5,
       "default": 30,
       "label": "Overlay opacity (%)"
+    },
+    {
+      "type": "header",
+      "content": "Content"
     },
     {
       "type": "text",
@@ -82,6 +138,88 @@
       "type": "url",
       "id": "button_url",
       "label": "Button link"
+    },
+    {
+      "type": "select",
+      "id": "button_style",
+      "label": "Button style",
+      "options": [
+        { "value": "primary", "label": "Primary (filled)" },
+        { "value": "outline", "label": "Outline" }
+      ],
+      "default": "primary"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" },
+        { "value": "extra_large", "label": "Extra large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "text_size",
+      "label": "Text size",
+      "options": [
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "content_width",
+      "label": "Content width",
+      "min": 400,
+      "max": 1200,
+      "step": 50,
+      "default": 800,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 0,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 0,
+      "unit": "px"
     }
   ],
   "presets": [

@@ -1,4 +1,4 @@
-<section class="rich-text section {% if section.settings.color_scheme == 'surface' %}section--surface{% elsif section.settings.color_scheme == 'dark' %}section--dark{% endif %}">
+<section class="rich-text section {% if section.settings.color_scheme == 'surface' %}section--surface{% elsif section.settings.color_scheme == 'dark' %}section--dark{% endif %}" style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;">
   <div class="container">
     <div class="rich-text__inner" style="text-align: {{ section.settings.text_alignment }}; max-width: {{ section.settings.content_width }}px; margin: 0 auto;">
       {% for block in section.blocks %}
@@ -6,9 +6,27 @@
           {% when 'subtitle' %}
             <p class="rich-text__subtitle" {{ block.shopify_attributes }}>{{ block.settings.subtitle }}</p>
           {% when 'heading' %}
-            <h2 class="rich-text__heading" {{ block.shopify_attributes }}>{{ block.settings.heading }}</h2>
+            <h2 class="rich-text__heading" style="font-size: {% if block.settings.heading_size == 'small' %}1.5rem{% elsif block.settings.heading_size == 'large' %}2.75rem{% elsif block.settings.heading_size == 'extra_large' %}3.5rem{% else %}2rem{% endif %};" {{ block.shopify_attributes }}>{{ block.settings.heading }}</h2>
           {% when 'text' %}
-            <div class="rich-text__text rte" {{ block.shopify_attributes }}>{{ block.settings.text }}</div>
+            <div class="rich-text__text rte" style="font-size: {% if block.settings.text_size == 'small' %}0.875rem{% elsif block.settings.text_size == 'large' %}1.25rem{% else %}1rem{% endif %};" {{ block.shopify_attributes }}>{{ block.settings.text }}</div>
+          {% when 'image' %}
+            <div class="rich-text__image-wrap" {{ block.shopify_attributes }}>
+              {% if block.settings.image %}
+                <img
+                  src="{{ block.settings.image | image_url: width: 1000 }}"
+                  srcset="
+                    {{ block.settings.image | image_url: width: 500 }} 500w,
+                    {{ block.settings.image | image_url: width: 750 }} 750w,
+                    {{ block.settings.image | image_url: width: 1000 }} 1000w
+                  "
+                  sizes="(max-width: 768px) 100vw, {{ section.settings.content_width }}px"
+                  alt="{{ block.settings.image_alt | escape | default: 'Section image' }}"
+                  loading="lazy"
+                  class="rich-text__image"
+                  style="max-width: 100%; border-radius: 8px;"
+                >
+              {% endif %}
+            </div>
           {% when 'button' %}
             <div class="rich-text__button-wrap" {{ block.shopify_attributes }}>
               <a href="{{ block.settings.button_url }}" class="button {% if block.settings.button_style == 'primary' %}button--primary{% else %}button--outline{% endif %}">
@@ -25,6 +43,10 @@
 {
   "name": "Rich Text",
   "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
     {
       "type": "select",
       "id": "text_alignment",
@@ -56,6 +78,26 @@
         { "value": "dark", "label": "Dark" }
       ],
       "default": "default"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 40,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 40,
+      "unit": "px"
     }
   ],
   "blocks": [
@@ -82,6 +124,18 @@
           "id": "heading",
           "label": "Heading",
           "default": "Our Nordic Heritage"
+        },
+        {
+          "type": "select",
+          "id": "heading_size",
+          "label": "Heading size",
+          "options": [
+            { "value": "small", "label": "Small" },
+            { "value": "medium", "label": "Medium" },
+            { "value": "large", "label": "Large" },
+            { "value": "extra_large", "label": "Extra Large" }
+          ],
+          "default": "medium"
         }
       ]
     },
@@ -95,6 +149,34 @@
           "id": "text",
           "label": "Text",
           "default": "<p>Founded in the heart of Scandinavia, Aurowe brings the centuries-old Nordic bathing tradition into the modern world. Each tub is crafted with care, precision, and a deep respect for nature.</p>"
+        },
+        {
+          "type": "select",
+          "id": "text_size",
+          "label": "Text size",
+          "options": [
+            { "value": "small", "label": "Small" },
+            { "value": "medium", "label": "Medium" },
+            { "value": "large", "label": "Large" }
+          ],
+          "default": "medium"
+        }
+      ]
+    },
+    {
+      "type": "image",
+      "name": "Image",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "image_alt",
+          "label": "Image alt text"
         }
       ]
     },

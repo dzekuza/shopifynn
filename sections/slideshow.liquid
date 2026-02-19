@@ -1,5 +1,5 @@
-<section class="slideshow" data-slideshow>
-  <div class="slideshow__wrapper">
+<section class="slideshow" data-slideshow style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;">
+  <div class="slideshow__wrapper" style="min-height: {{ section.settings.slide_height }}px;">
     {% for block in section.blocks %}
       <div class="slideshow__slide {% if forloop.first %}slideshow__slide--active{% endif %}" data-slide="{{ forloop.index0 }}" {{ block.shopify_attributes }}>
         <div class="slideshow__media">
@@ -22,19 +22,19 @@
           <div class="slideshow__overlay" style="opacity: {{ block.settings.overlay_opacity | divided_by: 100.0 }};"></div>
         </div>
 
-        <div class="slideshow__content">
-          <div class="container">
+        <div class="slideshow__content slideshow__content--{{ block.settings.text_position }}">
+          <div class="container" style="max-width: {{ block.settings.content_width }}px;">
             {% if block.settings.subtitle != blank %}
               <p class="slideshow__subtitle">{{ block.settings.subtitle }}</p>
             {% endif %}
             {% if block.settings.heading != blank %}
-              <h2 class="slideshow__heading">{{ block.settings.heading }}</h2>
+              <h2 class="slideshow__heading" style="font-size: {% if block.settings.heading_size == 'small' %}1.75rem{% elsif block.settings.heading_size == 'large' %}3rem{% elsif block.settings.heading_size == 'extra_large' %}4rem{% else %}2.25rem{% endif %};">{{ block.settings.heading }}</h2>
             {% endif %}
             {% if block.settings.text != blank %}
               <p class="slideshow__text">{{ block.settings.text }}</p>
             {% endif %}
             {% if block.settings.button_text != blank %}
-              <a href="{{ block.settings.button_url }}" class="button button--primary slideshow__button">
+              <a href="{{ block.settings.button_url }}" class="button {% if block.settings.button_style == 'outline' %}button--outline{% else %}button--primary{% endif %} slideshow__button">
                 {{ block.settings.button_text }}
               </a>
             {% endif %}
@@ -66,6 +66,10 @@
   "name": "Slideshow",
   "settings": [
     {
+      "type": "header",
+      "content": "Slideshow"
+    },
+    {
       "type": "checkbox",
       "id": "autoplay",
       "label": "Auto-rotate slides",
@@ -80,6 +84,40 @@
       "step": 1,
       "default": 5,
       "unit": "sec"
+    },
+    {
+      "type": "range",
+      "id": "slide_height",
+      "label": "Slide height",
+      "min": 300,
+      "max": 800,
+      "step": 50,
+      "default": 500,
+      "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 0,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 0,
+      "unit": "px"
     }
   ],
   "blocks": [
@@ -88,6 +126,10 @@
       "name": "Slide",
       "limit": 6,
       "settings": [
+        {
+          "type": "header",
+          "content": "Media"
+        },
         {
           "type": "image_picker",
           "id": "image",
@@ -102,6 +144,10 @@
           "step": 5,
           "default": 30,
           "unit": "%"
+        },
+        {
+          "type": "header",
+          "content": "Content"
         },
         {
           "type": "text",
@@ -129,6 +175,53 @@
           "type": "url",
           "id": "button_url",
           "label": "Button link"
+        },
+        {
+          "type": "select",
+          "id": "button_style",
+          "label": "Button style",
+          "options": [
+            { "value": "primary", "label": "Primary (filled)" },
+            { "value": "outline", "label": "Outline" }
+          ],
+          "default": "primary"
+        },
+        {
+          "type": "header",
+          "content": "Typography & Layout"
+        },
+        {
+          "type": "select",
+          "id": "heading_size",
+          "label": "Heading size",
+          "options": [
+            { "value": "small", "label": "Small" },
+            { "value": "medium", "label": "Medium" },
+            { "value": "large", "label": "Large" },
+            { "value": "extra_large", "label": "Extra large" }
+          ],
+          "default": "medium"
+        },
+        {
+          "type": "select",
+          "id": "text_position",
+          "label": "Text position",
+          "options": [
+            { "value": "left", "label": "Left" },
+            { "value": "center", "label": "Center" },
+            { "value": "right", "label": "Right" }
+          ],
+          "default": "center"
+        },
+        {
+          "type": "range",
+          "id": "content_width",
+          "label": "Content width",
+          "min": 400,
+          "max": 1200,
+          "step": 50,
+          "default": 800,
+          "unit": "px"
         }
       ]
     }

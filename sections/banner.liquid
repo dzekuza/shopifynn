@@ -1,20 +1,37 @@
-<section class="banner {% if section.settings.full_width %}banner--full{% endif %}">
+<section class="banner {% if section.settings.full_width %}banner--full{% endif %}" style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;">
   {% unless section.settings.full_width %}<div class="container">{% endunless %}
     <div class="banner__inner" style="min-height: {{ section.settings.height }}px;">
       <div class="banner__media">
-        {% if section.settings.image %}
-          <img
-            src="{{ section.settings.image | image_url: width: 1920 }}"
-            srcset="
-              {{ section.settings.image | image_url: width: 768 }} 768w,
-              {{ section.settings.image | image_url: width: 1200 }} 1200w,
-              {{ section.settings.image | image_url: width: 1920 }} 1920w
-            "
-            sizes="100vw"
-            alt="{{ section.settings.heading | escape | default: 'Banner image' }}"
-            loading="lazy"
-            class="banner__image"
-          >
+        {% if section.settings.video != blank %}
+          <video class="banner__video" autoplay muted loop playsinline style="object-fit: {{ section.settings.video_fit }};">
+            {% for source in section.settings.video.sources %}
+              <source src="{{ source.url }}" type="{{ source.mime_type }}">
+            {% endfor %}
+          </video>
+        {% elsif section.settings.video_url != blank %}
+          {% if section.settings.video_url.type == 'youtube' %}
+            <iframe class="banner__video" src="https://www.youtube.com/embed/{{ section.settings.video_url.id }}?autoplay=1&mute=1&loop=1&playlist={{ section.settings.video_url.id }}&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1" frameborder="0" allow="autoplay; fullscreen" allowfullscreen loading="lazy" title="Banner video"></iframe>
+          {% elsif section.settings.video_url.type == 'vimeo' %}
+            <iframe class="banner__video" src="https://player.vimeo.com/video/{{ section.settings.video_url.id }}?autoplay=1&loop=1&muted=1&background=1" frameborder="0" allow="autoplay; fullscreen" allowfullscreen loading="lazy" title="Banner video"></iframe>
+          {% endif %}
+        {% elsif section.settings.image %}
+          <picture>
+            {% if section.settings.mobile_image %}
+              <source media="(max-width: 749px)" srcset="{{ section.settings.mobile_image | image_url: width: 750 }}">
+            {% endif %}
+            <img
+              src="{{ section.settings.image | image_url: width: 1920 }}"
+              srcset="
+                {{ section.settings.image | image_url: width: 768 }} 768w,
+                {{ section.settings.image | image_url: width: 1200 }} 1200w,
+                {{ section.settings.image | image_url: width: 1920 }} 1920w
+              "
+              sizes="100vw"
+              alt="{{ section.settings.heading | escape | default: 'Banner image' }}"
+              loading="lazy"
+              class="banner__image"
+            >
+          </picture>
         {% else %}
           <div class="banner__placeholder"></div>
         {% endif %}
@@ -22,15 +39,15 @@
       </div>
 
       <div class="banner__content banner__content--{{ section.settings.text_position }}">
-        <div class="container">
+        <div class="container" style="max-width: {{ section.settings.content_width }}px;">
           {% if section.settings.subtitle != blank %}
             <p class="banner__subtitle">{{ section.settings.subtitle }}</p>
           {% endif %}
           {% if section.settings.heading != blank %}
-            <h2 class="banner__heading">{{ section.settings.heading }}</h2>
+            <h2 class="banner__heading" style="font-size: {% if section.settings.heading_size == 'small' %}1.5rem{% elsif section.settings.heading_size == 'large' %}2.75rem{% elsif section.settings.heading_size == 'extra_large' %}3.5rem{% else %}2rem{% endif %};">{{ section.settings.heading }}</h2>
           {% endif %}
           {% if section.settings.text != blank %}
-            <p class="banner__text">{{ section.settings.text }}</p>
+            <p class="banner__text" style="font-size: {% if section.settings.text_size == 'small' %}0.875rem{% elsif section.settings.text_size == 'large' %}1.25rem{% else %}1rem{% endif %};">{{ section.settings.text }}</p>
           {% endif %}
 
           {% if section.settings.button_text_1 != blank or section.settings.button_text_2 != blank %}
@@ -58,16 +75,51 @@
   "name": "Banner",
   "settings": [
     {
+      "type": "header",
+      "content": "Media"
+    },
+    {
       "type": "image_picker",
       "id": "image",
       "label": "Background image"
+    },
+    {
+      "type": "image_picker",
+      "id": "mobile_image",
+      "label": "Mobile image",
+      "info": "Optional image for mobile screens"
+    },
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Video",
+      "info": "Select a hosted video from Files. Replaces background image."
+    },
+    {
+      "type": "video_url",
+      "id": "video_url",
+      "label": "Video URL (optional)",
+      "accept": ["youtube", "vimeo"],
+      "info": "YouTube or Vimeo URL. Used if no hosted video is selected."
+    },
+    {
+      "type": "select",
+      "id": "video_fit",
+      "label": "Video fit",
+      "options": [
+        { "value": "cover", "label": "Cover" },
+        { "value": "contain", "label": "Contain" },
+        { "value": "fill", "label": "Fill" }
+      ],
+      "default": "cover",
+      "info": "How the video fills its container"
     },
     {
       "type": "range",
       "id": "height",
       "label": "Section height",
       "min": 200,
-      "max": 600,
+      "max": 800,
       "step": 50,
       "default": 400,
       "unit": "px"
@@ -83,21 +135,8 @@
       "unit": "%"
     },
     {
-      "type": "checkbox",
-      "id": "full_width",
-      "label": "Full width",
-      "default": true
-    },
-    {
-      "type": "select",
-      "id": "text_position",
-      "label": "Text position",
-      "options": [
-        { "value": "left", "label": "Left" },
-        { "value": "center", "label": "Center" },
-        { "value": "right", "label": "Right" }
-      ],
-      "default": "center"
+      "type": "header",
+      "content": "Content"
     },
     {
       "type": "text",
@@ -135,6 +174,84 @@
       "type": "url",
       "id": "button_url_2",
       "label": "Button 2 link"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" },
+        { "value": "extra_large", "label": "Extra large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "text_size",
+      "label": "Text size",
+      "options": [
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full width",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "text_position",
+      "label": "Text position",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "content_width",
+      "label": "Content width",
+      "min": 400,
+      "max": 1200,
+      "step": 50,
+      "default": 800,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 0,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 0,
+      "unit": "px"
     }
   ],
   "presets": [

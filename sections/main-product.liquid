@@ -1,4 +1,4 @@
-<section class="product section" data-product>
+<section class="product section" data-product style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;">
   <div class="container">
     <div class="product__grid">
       <!-- Product Gallery -->
@@ -59,7 +59,7 @@
                 {% if section.settings.show_vendor and product.vendor != blank %}
                   <p class="product__vendor">{{ product.vendor }}</p>
                 {% endif %}
-                <h1 class="product__title">{{ product.title }}</h1>
+                <h1 class="product__title" style="font-size: {% if section.settings.heading_size == 'small' %}1.5rem{% elsif section.settings.heading_size == 'large' %}2.5rem{% else %}2rem{% endif %};">{{ product.title }}</h1>
               </div>
 
             {% when 'price' %}
@@ -253,10 +253,63 @@
   "class": "section-product",
   "settings": [
     {
+      "type": "header",
+      "content": "Content"
+    },
+    {
       "type": "checkbox",
       "id": "show_vendor",
       "label": "Show vendor",
       "default": true
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Title size",
+      "options": [
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "gallery_layout",
+      "label": "Gallery layout",
+      "options": [
+        { "value": "thumbnails_bottom", "label": "Thumbnails below" },
+        { "value": "thumbnails_left", "label": "Thumbnails left" }
+      ],
+      "default": "thumbnails_bottom"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 40,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 40,
+      "unit": "px"
     }
   ],
   "blocks": [

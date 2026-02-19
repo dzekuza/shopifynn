@@ -1,12 +1,12 @@
-<section class="contact-form section {% if section.settings.color_scheme == 'surface' %}section--surface{% elsif section.settings.color_scheme == 'dark' %}section--dark{% endif %}">
+<section class="contact-form section {% if section.settings.color_scheme == 'surface' %}section--surface{% elsif section.settings.color_scheme == 'dark' %}section--dark{% endif %}" style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;">
   <div class="container">
     <div class="contact-form__layout">
-      <div class="contact-form__info">
+      <div class="contact-form__info" style="text-align: {{ section.settings.text_alignment }};">
         {% if section.settings.heading != blank %}
-          <h2 class="contact-form__heading">{{ section.settings.heading }}</h2>
+          <h2 class="contact-form__heading" style="font-size: {% if section.settings.heading_size == 'small' %}1.5rem{% elsif section.settings.heading_size == 'large' %}2.75rem{% else %}2rem{% endif %};">{{ section.settings.heading }}</h2>
         {% endif %}
         {% if section.settings.text != blank %}
-          <div class="contact-form__text rte">{{ section.settings.text }}</div>
+          <div class="contact-form__text rte" style="font-size: {% if section.settings.text_size == 'small' %}0.875rem{% elsif section.settings.text_size == 'large' %}1.25rem{% else %}1rem{% endif %};">{{ section.settings.text }}</div>
         {% endif %}
 
         {% for block in section.blocks %}
@@ -37,7 +37,7 @@
         {% form 'contact', class: 'contact-form__form' %}
           {% if form.posted_successfully? %}
             <div class="contact-form__success">
-              <p>Thank you for your message. We'll get back to you shortly.</p>
+              <p>{{ section.settings.success_message | default: 'Thank you for your message. We will get back to you shortly.' }}</p>
             </div>
           {% endif %}
 
@@ -85,6 +85,10 @@
   "name": "Contact Form",
   "settings": [
     {
+      "type": "header",
+      "content": "Content"
+    },
+    {
       "type": "text",
       "id": "heading",
       "label": "Heading",
@@ -109,14 +113,81 @@
       "default": "Send Message"
     },
     {
+      "type": "text",
+      "id": "success_message",
+      "label": "Success message",
+      "default": "Thank you for your message. We will get back to you shortly."
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "text_size",
+      "label": "Text size",
+      "options": [
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" }
+      ],
+      "default": "left"
+    },
+    {
       "type": "select",
       "id": "color_scheme",
       "label": "Color scheme",
       "options": [
         { "value": "default", "label": "Default" },
-        { "value": "surface", "label": "Surface" }
+        { "value": "surface", "label": "Surface" },
+        { "value": "dark", "label": "Dark" }
       ],
       "default": "default"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 40,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 40,
+      "unit": "px"
     }
   ],
   "blocks": [

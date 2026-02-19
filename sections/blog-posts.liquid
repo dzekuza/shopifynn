@@ -1,12 +1,12 @@
-<section class="blog-posts section {% if section.settings.color_scheme == 'surface' %}section--surface{% endif %}">
+<section class="blog-posts section {% if section.settings.color_scheme == 'surface' %}section--surface{% elsif section.settings.color_scheme == 'dark' %}section--dark{% endif %}" style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;">
   <div class="container">
     {% if section.settings.heading != blank or section.settings.subheading != blank %}
-      <div class="section__header">
+      <div class="section__header" style="text-align: {{ section.settings.text_alignment }};">
         {% if section.settings.heading != blank %}
-          <h2 class="section__heading">{{ section.settings.heading }}</h2>
+          <h2 class="section__heading" style="font-size: {% if section.settings.heading_size == 'small' %}1.5rem{% elsif section.settings.heading_size == 'large' %}2.75rem{% else %}2rem{% endif %};">{{ section.settings.heading }}</h2>
         {% endif %}
         {% if section.settings.subheading != blank %}
-          <p class="section__subheading">{{ section.settings.subheading }}</p>
+          <p class="section__subheading" style="font-size: {% if section.settings.text_size == 'small' %}0.875rem{% elsif section.settings.text_size == 'large' %}1.25rem{% else %}1rem{% endif %};">{{ section.settings.subheading }}</p>
         {% endif %}
       </div>
     {% endif %}
@@ -60,7 +60,7 @@
       </div>
 
       {% if section.settings.show_view_all %}
-        <div class="blog-posts__view-all">
+        <div class="blog-posts__view-all" style="text-align: center;">
           <a href="{{ blog.url }}" class="button button--outline">View All Articles</a>
         </div>
       {% endif %}
@@ -76,6 +76,10 @@
 {
   "name": "Blog Posts",
   "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
     {
       "type": "text",
       "id": "heading",
@@ -103,16 +107,6 @@
       "default": 3
     },
     {
-      "type": "select",
-      "id": "columns",
-      "label": "Columns",
-      "options": [
-        { "value": "2", "label": "2" },
-        { "value": "3", "label": "3" }
-      ],
-      "default": "3"
-    },
-    {
       "type": "checkbox",
       "id": "show_date",
       "label": "Show date",
@@ -137,14 +131,85 @@
       "default": true
     },
     {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "text_size",
+      "label": "Text size",
+      "options": [
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "columns",
+      "label": "Columns",
+      "options": [
+        { "value": "2", "label": "2" },
+        { "value": "3", "label": "3" }
+      ],
+      "default": "3"
+    },
+    {
       "type": "select",
       "id": "color_scheme",
       "label": "Color scheme",
       "options": [
         { "value": "default", "label": "Default" },
-        { "value": "surface", "label": "Surface" }
+        { "value": "surface", "label": "Surface" },
+        { "value": "dark", "label": "Dark" }
       ],
       "default": "default"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 40,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 40,
+      "unit": "px"
     }
   ],
   "presets": [
