@@ -11,14 +11,8 @@
 
   /* ── Price formatting ─────────────────────────────────── */
   function money(cents) {
-    const locale = window.__shopLocale || 'de-DE';
-    const currency = window.__shopCurrency || 'EUR';
-    return new Intl.NumberFormat(locale, {
-      style: 'currency',
-      currency: currency,
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    }).format(cents / 100);
+    const val = (cents / 100).toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    return '€' + val;
   }
 
   /* ── Step definitions (order + labels) ────────────────── */
@@ -43,9 +37,7 @@
   /* ── Main configurator class ──────────────────────────── */
   class HotTubConfigurator extends HTMLElement {
     connectedCallback() {
-      const dataEl = this.querySelector('[data-configurator-products]');
-      if (!dataEl) return; // Not in configurator context (e.g., theme editor)
-      this.data = JSON.parse(dataEl.textContent);
+      this.data = JSON.parse(this.querySelector('[data-configurator-products]').textContent);
       this.state = {
         model: null,               // 'classic', 'premium', 'signature'
         selectedTier: null,        // tier object { key, title, products[] }
@@ -97,31 +89,6 @@
       this.ctaBtn = this.querySelector('[data-add-to-cart]');
       this.cartError = this.querySelector('[data-cart-error]');
       this.summaryList = this.querySelector('[data-summary-list]');
-
-      // Cache step elements by number for _unlockThrough hot path
-      this._stepEls = {};
-      for (let i = 1; i <= 15; i++) {
-        const el = this.querySelector(`[data-step="${i}"]`);
-        if (el) this._stepEls[i] = el;
-      }
-
-      // Cache the oven note element for _updateOvenAvailability
-      this._ovenNote = this.querySelector('[data-oven-note]');
-      // Cache the size section
-      this._sizeSection = this.querySelector('[data-size-section]');
-      // Cache the size cards container
-      this._sizeCardsContainer = this.querySelector('[data-size-cards]');
-    }
-
-    /* ── Image preloading ──────────────────────────────── */
-    _preloadImage(url) {
-      return new Promise((resolve) => {
-        if (!url) { resolve(); return; }
-        const img = new Image();
-        img.onload = resolve;
-        img.onerror = resolve; // resolve on error too — don't block UI
-        img.src = url;
-      });
     }
 
     /* ── Render all step content ───────────────────────── */
@@ -180,7 +147,7 @@
           <div class="cfg-cards" data-size-cards></div>
         </div>`;
 
-      container.innerHTML = DOMPurify.sanitize(html);
+      container.innerHTML = html;
     }
 
     /* ── Step: Collection dropdown (liners, exteriors, covers, etc.) ── */
@@ -207,7 +174,7 @@
                 ${p.body ? `<span class="cfg-radio-card__desc">${p.body}</span>` : ''}
               </span>
               ${p.price > 0 ? `<span class="cfg-radio-card__price">+${money(p.price)}</span>` : ''}
-              ${tooltip ? `<button type="button" class="cfg-tooltip-btn" data-tooltip="${tooltip}" aria-label="More info">?</button>` : ''}
+              ${tooltip ? `<button type="button" class="cfg-tooltip-btn" data-tooltip="${this._escAttr(tooltip)}" aria-label="More info">?</button>` : ''}
             </span>
           </label>`;
       }
@@ -226,14 +193,14 @@
         html += `<div class="cfg-qty-area" data-qty-area="${dataKey}" style="display:none;">
           <label class="cfg-label">Number of nozzles:</label>
           <div class="cfg-qty-selector" data-qty-selector="${dataKey}">
-            <button type="button" class="cfg-qty-btn" data-action="qty-minus" data-group="${dataKey}" aria-label="Decrease quantity">−</button>
-            <span class="cfg-qty-value" data-qty-value="${dataKey}" aria-live="polite">0</span>
-            <button type="button" class="cfg-qty-btn" data-action="qty-plus" data-group="${dataKey}" aria-label="Increase quantity">+</button>
+            <button type="button" class="cfg-qty-btn" data-action="qty-minus" data-group="${dataKey}">−</button>
+            <span class="cfg-qty-value" data-qty-value="${dataKey}">0</span>
+            <button type="button" class="cfg-qty-btn" data-action="qty-plus" data-group="${dataKey}">+</button>
           </div>
         </div>`;
       }
 
-      container.innerHTML = DOMPurify.sanitize(html);
+      container.innerHTML = html;
     }
 
     /* ── Step: Checkbox (insulation, stairs) ────────────── */
@@ -246,7 +213,7 @@
       }
 
       const tooltip = product.meta?.info_tooltip;
-      container.innerHTML = DOMPurify.sanitize(`
+      container.innerHTML = `
         <label class="cfg-checkbox-card" data-action="toggle-checkbox" data-key="${stateKey}" data-product-id="${product.id}" data-variant-id="${product.variants?.[0]?.id || ''}" data-price="${product.price}">
           <input type="checkbox" class="cfg-checkbox-card__input">
           <span class="cfg-checkbox-card__body">
@@ -255,15 +222,15 @@
               <span class="cfg-checkbox-card__title">${product.title}</span>
               ${product.price > 0 ? `<span class="cfg-checkbox-card__price">+${money(product.price)}</span>` : '<span class="cfg-checkbox-card__price">Included</span>'}
             </span>
-            ${tooltip ? `<button type="button" class="cfg-tooltip-btn" data-tooltip="${tooltip}" aria-label="More info">?</button>` : ''}
+            ${tooltip ? `<button type="button" class="cfg-tooltip-btn" data-tooltip="${this._escAttr(tooltip)}" aria-label="More info">?</button>` : ''}
           </span>
-        </label>`);
+        </label>`;
     }
 
     /* ── Step: Checkbox + dropdown (filter) ─────────────── */
     _renderCheckboxDropdownStep(container, stateKey, dataKey) {
       const products = this.data[dataKey] || [];
-      container.innerHTML = DOMPurify.sanitize(`
+      container.innerHTML = `
         <label class="cfg-checkbox-card" data-action="toggle-checkbox" data-key="${stateKey}" data-reveals="cfg-filter-options">
           <input type="checkbox" class="cfg-checkbox-card__input">
           <span class="cfg-checkbox-card__body">
@@ -288,7 +255,7 @@
               </label>
             `).join('')}
           </div>
-        </div>`);
+        </div>`;
     }
 
     /* ── Step: Checkbox + quantity (pillows) ────────────── */
@@ -301,7 +268,7 @@
       const max = product.meta?.max_qty || 8;
       const def = product.meta?.default_qty || min;
 
-      container.innerHTML = DOMPurify.sanitize(`
+      container.innerHTML = `
         <label class="cfg-checkbox-card" data-action="toggle-checkbox" data-key="${stateKey}" data-product-id="${product.id}" data-variant-id="${product.variants?.[0]?.id || ''}" data-price="${product.price}" data-reveals="cfg-${stateKey}-qty">
           <input type="checkbox" class="cfg-checkbox-card__input">
           <span class="cfg-checkbox-card__body">
@@ -315,11 +282,11 @@
         <div class="cfg-conditional" id="cfg-${stateKey}-qty" style="display:none;">
           <label class="cfg-label">Quantity:</label>
           <div class="cfg-qty-selector" data-qty-selector="${stateKey}" data-min="${min}" data-max="${max}">
-            <button type="button" class="cfg-qty-btn" data-action="qty-minus" data-group="${stateKey}" aria-label="Decrease quantity">−</button>
-            <span class="cfg-qty-value" data-qty-value="${stateKey}" aria-live="polite">${def}</span>
-            <button type="button" class="cfg-qty-btn" data-action="qty-plus" data-group="${stateKey}" aria-label="Increase quantity">+</button>
+            <button type="button" class="cfg-qty-btn" data-action="qty-minus" data-group="${stateKey}">−</button>
+            <span class="cfg-qty-value" data-qty-value="${stateKey}">${def}</span>
+            <button type="button" class="cfg-qty-btn" data-action="qty-plus" data-group="${stateKey}">+</button>
           </div>
-        </div>`);
+        </div>`;
       this.state.pillowQty = def;
     }
 
@@ -333,8 +300,8 @@
       html += `
         <p class="cfg-label">Select your heating system:</p>
         <div class="cfg-toggle-group" data-oven-type-toggle>
-          <button type="button" class="cfg-toggle-btn cfg-toggle-btn--active" data-action="oven-type" data-value="external" aria-pressed="true">External oven</button>
-          <button type="button" class="cfg-toggle-btn" data-action="oven-type" data-value="internal" aria-pressed="false">Internal oven</button>
+          <button type="button" class="cfg-toggle-btn cfg-toggle-btn--active" data-action="oven-type" data-value="external">External oven</button>
+          <button type="button" class="cfg-toggle-btn" data-action="oven-type" data-value="internal">Internal oven</button>
         </div>
         <p class="cfg-note" data-oven-note></p>`;
 
@@ -352,26 +319,26 @@
                   <span class="cfg-checkbox-card__title">${addon.title}</span>
                   ${addon.price > 0 ? `<span class="cfg-checkbox-card__price">+${money(addon.price)}</span>` : ''}
                 </span>
-                ${tooltip ? `<button type="button" class="cfg-tooltip-btn" data-tooltip="${tooltip}" aria-label="More info">?</button>` : ''}
+                ${tooltip ? `<button type="button" class="cfg-tooltip-btn" data-tooltip="${this._escAttr(tooltip)}" aria-label="More info">?</button>` : ''}
               </span>
             </label>`;
         }
         html += '</div>';
       }
 
-      container.innerHTML = DOMPurify.sanitize(html);
+      container.innerHTML = html;
     }
 
     /* ── Step: Diagram (controls, heater connection) ───── */
     _renderDiagramStep(container, key) {
       const imgData = this.data.diagrams?.[key] || {};
       if (key === 'controls') {
-        container.innerHTML = DOMPurify.sanitize(`
+        container.innerHTML = `
           <p class="cfg-desc">Mark the installation locations for controls and systems on the diagram below.</p>
           ${imgData.image ? `<img src="${imgData.image}" alt="Control installation diagram" class="cfg-diagram-img" loading="lazy">` : '<div class="cfg-diagram-placeholder">Diagram images will be uploaded by admin</div>'}
-          <p class="cfg-note">Default positions are pre-selected. Modify if needed during order review.</p>`);
+          <p class="cfg-note">Default positions are pre-selected. Modify if needed during order review.</p>`;
       } else {
-        container.innerHTML = DOMPurify.sanitize(`
+        container.innerHTML = `
           <div class="cfg-card-options" data-heater-options>
             <div class="cfg-card cfg-card--option cfg-card--selected" data-action="heater-conn" data-value="straight" tabindex="0" role="button">
               ${imgData.straight ? `<img src="${imgData.straight}" alt="Straight connection" class="cfg-card__img" loading="lazy">` : ''}
@@ -383,7 +350,7 @@
               <span class="cfg-card__label">90° Angle connection</span>
               <span class="cfg-card__sublabel">+${money(this.data.heater_90?.price || 0)}</span>
             </div>
-          </div>`);
+          </div>`;
       }
     }
 
@@ -426,13 +393,6 @@
           case 'heater-conn':
             this._handleHeaterConnection(target.dataset.value);
             break;
-          case 'select-variant':
-            this._handleVariantSelect(
-              target.dataset.group,
-              parseInt(target.dataset.variantId),
-              parseInt(target.dataset.price)
-            );
-            break;
         }
 
         // Tooltip
@@ -445,27 +405,11 @@
 
       // Keyboard support
       this.addEventListener('keydown', (e) => {
+        if (e.key !== 'Enter' && e.key !== ' ') return;
         const target = e.target.closest('[data-action]');
-
-        // Enter/Space activates buttons and cards
-        if ((e.key === 'Enter' || e.key === ' ') && target) {
-          e.preventDefault();
-          target.click();
-          return;
-        }
-
-        // Arrow key navigation for option groups (cards, swatches, pills)
-        if (e.key === 'ArrowLeft' || e.key === 'ArrowRight' || e.key === 'ArrowUp' || e.key === 'ArrowDown') {
-          const group = e.target.closest('[data-model-cards], [data-size-cards], [data-product-group], [data-variant-swatches], [data-heater-options], .cfg-swatches, .cfg-variant-pills');
-          if (!group) return;
-          const focusable = Array.from(group.querySelectorAll('[tabindex="0"], button:not([disabled]), [data-action]'));
-          const idx = focusable.indexOf(e.target);
-          if (idx === -1) return;
-          e.preventDefault();
-          const delta = (e.key === 'ArrowRight' || e.key === 'ArrowDown') ? 1 : -1;
-          const nextIdx = (idx + delta + focusable.length) % focusable.length;
-          focusable[nextIdx]?.focus();
-        }
+        if (!target) return;
+        e.preventDefault();
+        target.click();
       });
 
       // CTA
@@ -495,12 +439,12 @@
       const sizes = this._extractSizes(tier.products || []);
       this._renderSizeCards(sizes);
 
-      // Show size section (use cached ref)
-      if (this._sizeSection) this._sizeSection.style.display = 'block';
+      // Show size section
+      const sizeSection = this.querySelector('[data-size-section]');
+      if (sizeSection) sizeSection.style.display = 'block';
 
-      // Preload and show tier image
+      // Show tier image
       if (tier.image) {
-        this._preloadImage(tier.image);
         this._setMainImage(tier.image);
       }
 
@@ -511,15 +455,12 @@
     _handleSizeSelect(size) {
       this.state.size = size;
 
-      // Update size cards UI (use cached container for scoped query)
-      const sizeCardsEl = this._sizeCardsContainer || this.querySelector('[data-size-cards]');
-      if (sizeCardsEl) {
-        sizeCardsEl.querySelectorAll('[data-action="select-size"]').forEach(el => {
-          const selected = el.dataset.size === size;
-          el.classList.toggle('cfg-card--selected', selected);
-          el.setAttribute('aria-pressed', String(selected));
-        });
-      }
+      // Update size cards UI
+      this.querySelectorAll('[data-action="select-size"]').forEach(el => {
+        const selected = el.dataset.size === size;
+        el.classList.toggle('cfg-card--selected', selected);
+        el.setAttribute('aria-pressed', String(selected));
+      });
 
       // Resolve base product with current oven type
       this._resolveBaseProduct();
@@ -604,9 +545,7 @@
 
       // Toggle buttons
       this.querySelectorAll('[data-action="oven-type"]').forEach(btn => {
-        const active = btn.dataset.value === type;
-        btn.classList.toggle('cfg-toggle-btn--active', active);
-        btn.setAttribute('aria-pressed', String(active));
+        btn.classList.toggle('cfg-toggle-btn--active', btn.dataset.value === type);
       });
 
       // Resolve base product with new oven type
@@ -702,15 +641,20 @@
     }
 
     _getSizeFromProduct(product) {
-      return product.meta?.size || null;
+      const text = product.title || '';
+      if (/\bXL\b/i.test(text)) return 'XL';
+      if (/\bM\b/i.test(text) && !/\bXL\b/i.test(text)) return 'M';
+      if (/\bL\b/i.test(text) && !/\bXL\b/i.test(text)) return 'L';
+      return null;
     }
 
     _isInternalOvenProduct(product) {
-      return product.meta?.oven_type === 'internal';
+      const title = (product.title || '').trim();
+      return /\bI\s*$/.test(title) || /internal|integr/i.test(title);
     }
 
     _renderSizeCards(sizes) {
-      const container = this._sizeCardsContainer || this.querySelector('[data-size-cards]');
+      const container = this.querySelector('[data-size-cards]');
       if (!container) return;
 
       const dims = {
@@ -720,7 +664,7 @@
       };
       const persons = { XL: '6–8 persons', L: '6–8 persons', M: '2 persons' };
 
-      container.innerHTML = DOMPurify.sanitize(sizes.map(s => `
+      container.innerHTML = sizes.map(s => `
         <div class="cfg-card cfg-card--size" data-action="select-size" data-size="${s.label}" tabindex="0" role="button" aria-pressed="false">
           <div class="cfg-card__info">
             <h4 class="cfg-card__name">${s.label}</h4>
@@ -729,7 +673,7 @@
           </div>
           <div class="cfg-card__price">From ${money(s.minPrice)}</div>
         </div>
-      `).join(''));
+      `).join('');
     }
 
     /* ── Base product resolution (finds product matching size + oven) ── */
@@ -763,10 +707,7 @@
         this.state.selectedBaseProduct = product;
         this.state.baseVariantId = product.variants?.[0]?.id || null;
         this.state.basePrice = product.variants?.[0]?.price || product.price || 0;
-        if (product.image) {
-          this._preloadImage(product.image);
-          this._setMainImage(product.image);
-        }
+        if (product.image) this._setMainImage(product.image);
       } else {
         this.state.selectedBaseProduct = null;
         this.state.baseVariantId = null;
@@ -799,7 +740,7 @@
         }
       }
 
-      const note = this._ovenNote || this.querySelector('[data-oven-note]');
+      const note = this.querySelector('[data-oven-note]');
       if (note) {
         note.textContent = !hasInternal && size
           ? 'Internal oven is not available for size ' + size + '.'
@@ -821,39 +762,34 @@
       const isColor = variants.some(v => v.option1 && /pearl|granite|grey|black|brown|white|blue|green|azure|ivory|silver|midnight|crystal|glacier|arctic|anthracite|chocolate|fir|cedar|thermal|ral/i.test(v.option1));
 
       if (isColor && swatchContainer) {
-        swatchContainer.innerHTML = DOMPurify.sanitize(variants.map((v, i) => `
+        swatchContainer.innerHTML = variants.map((v, i) => `
           <div class="cfg-swatch ${i === 0 ? 'cfg-swatch--selected' : ''}" data-action="select-variant" data-group="${group}" data-variant-id="${v.id}" data-price="${v.price}" title="${v.option1}" tabindex="0" role="button" aria-pressed="${i === 0}" aria-label="${v.option1}">
             <span class="cfg-swatch__label">${v.option1}</span>
           </div>
-        `).join(''));
+        `).join('');
       } else if (pillsContainer) {
-        pillsContainer.innerHTML = DOMPurify.sanitize(variants.map((v, i) => `
+        pillsContainer.innerHTML = variants.map((v, i) => `
           <button type="button" class="cfg-pill ${i === 0 ? 'cfg-pill--selected' : ''}" data-action="select-variant" data-group="${group}" data-variant-id="${v.id}" data-price="${v.price}">
             ${v.option1}${v.option2 ? ' / ' + v.option2 : ''}
             ${v.price > product.variants[0].price ? ` <span class="cfg-pill__extra">+${money(v.price - product.variants[0].price)}</span>` : ''}
           </button>
-        `).join(''));
+        `).join('');
       }
 
       area.style.display = 'block';
       this._selectVariant(group, variants[0]?.id, variants[0]?.price);
-    }
 
-    _handleVariantSelect(group, variantId, price) {
-      // Update visual selection state for swatches and pills
-      const area = this.querySelector(`[data-variant-area="${group}"]`);
-      if (area) {
-        const el = area.querySelector(`[data-action="select-variant"][data-variant-id="${variantId}"]`);
-        if (el) {
-          area.querySelectorAll('.cfg-swatch--selected, .cfg-pill--selected').forEach(s => {
-            s.classList.remove('cfg-swatch--selected', 'cfg-pill--selected');
-            s.setAttribute('aria-pressed', 'false');
-          });
-          el.classList.add(el.classList.contains('cfg-swatch') ? 'cfg-swatch--selected' : 'cfg-pill--selected');
-          el.setAttribute('aria-pressed', 'true');
-        }
-      }
-      this._selectVariant(group, variantId, price);
+      target.addEventListener('click', (e) => {
+        const el = e.target.closest('[data-action="select-variant"]');
+        if (!el) return;
+        target.querySelectorAll('.cfg-swatch--selected, .cfg-pill--selected').forEach(s => {
+          s.classList.remove('cfg-swatch--selected', 'cfg-pill--selected');
+          s.setAttribute('aria-pressed', 'false');
+        });
+        el.classList.add(el.classList.contains('cfg-swatch') ? 'cfg-swatch--selected' : 'cfg-pill--selected');
+        el.setAttribute('aria-pressed', 'true');
+        this._selectVariant(group, parseInt(el.dataset.variantId), parseInt(el.dataset.price));
+      });
     }
 
     _selectVariant(group, variantId, price) {
@@ -889,42 +825,11 @@
     /* ── Step progression ──────────────────────────────── */
     _unlockThrough(stepNum) {
       if (stepNum <= this.maxUnlocked) return;
-      const prevUnlocked = this.maxUnlocked;
       this.maxUnlocked = stepNum;
       for (let i = 1; i <= STEPS.length; i++) {
-        const el = this._stepEls[i];
+        const el = this.querySelector(`[data-step="${i}"]`);
         if (!el) continue;
-        const locked = i > this.maxUnlocked;
-        el.classList.toggle('cfg-step--locked', locked);
-        el.setAttribute('aria-disabled', String(locked));
-        const body = el.querySelector('.cfg-step__body');
-        if (body) {
-          if (locked) {
-            body.setAttribute('inert', '');
-          } else {
-            body.removeAttribute('inert');
-          }
-        }
-      }
-      // Move focus to the first newly unlocked step
-      const newlyUnlocked = prevUnlocked + 1;
-      if (newlyUnlocked <= this.maxUnlocked && newlyUnlocked <= STEPS.length) {
-        const newStepEl = this._stepEls[newlyUnlocked];
-        if (newStepEl) {
-          setTimeout(() => {
-            // Focus the step title, or first focusable element in body
-            const title = newStepEl.querySelector('.cfg-step__title');
-            const body = newStepEl.querySelector('.cfg-step__body');
-            const focusable = body && body.querySelector('button, [tabindex="0"], input, select, a[href]');
-            const focusTarget = focusable || title;
-            if (focusTarget) {
-              if (!focusTarget.hasAttribute('tabindex') && focusTarget.tagName !== 'BUTTON' && focusTarget.tagName !== 'INPUT') {
-                focusTarget.setAttribute('tabindex', '-1');
-              }
-              focusTarget.focus({ preventScroll: true });
-            }
-          }, 200);
-        }
+        el.classList.toggle('cfg-step--locked', i > this.maxUnlocked);
       }
       if (this.state.size && this.ctaBtn) {
         this.ctaBtn.disabled = false;
@@ -939,239 +844,95 @@
     }
 
     /* ── Price calculation ─────────────────────────────── */
-
-    /**
-     * Single source of truth for all line items.
-     * Both _updatePrice() and _buildCartItems() consume this.
-     * Returns an array of { variantId, quantity, priceInCents, label, properties }.
-     */
-    _calculateLineItems() {
-      const items = [];
-
-      // 1. Base product (resolved variant — includes model + size + oven)
-      if (this.state.baseVariantId) {
-        items.push({
-          variantId: this.state.baseVariantId,
-          quantity: 1,
-          priceInCents: this.state.basePrice || 0,
-          label: this.state.selectedTier?.title || 'Base',
-          properties: { '_config': 'base', 'Configuration': this._buildConfigSummary() },
-        });
-      }
-
-      // 2. Liner (use selected variant price if available, otherwise product price)
-      if (this.state.liner) {
-        const products = this.data.liners || [];
-        const product = products.find(p => p.id === this.state.liner);
-        if (product) {
-          const variantId = this.state.linerVariant;
-          const variant = variantId ? product.variants?.find(v => v.id === variantId) : null;
-          items.push({
-            variantId: variantId || product.variants?.[0]?.id || null,
-            quantity: 1,
-            priceInCents: variant ? variant.price : product.price,
-            label: 'Liner: ' + product.title,
-            properties: { '_config': 'liner' },
-          });
-        }
-      }
-
-      // 3. Insulation
-      if (this.state.insulation) {
-        const p = (this.data.insulations || [])[0];
-        if (p) {
-          items.push({
-            variantId: p.variants?.[0]?.id || null,
-            quantity: 1,
-            priceInCents: p.price || 0,
-            label: 'Insulation',
-            properties: { '_config': 'insulation' },
-          });
-        }
-      }
-
-      // 4. Oven add-ons (glass door, chimney)
-      if (this.state.glassDoor) {
-        const addon = (this.data.oven_addons || []).find(a => a.title.toLowerCase().includes('glass'));
-        if (addon) {
-          items.push({
-            variantId: addon.variants?.[0]?.id || null,
-            quantity: 1,
-            priceInCents: addon.price || 0,
-            label: addon.title,
-            properties: { '_config': 'oven-addon' },
-          });
-        }
-      }
-      if (this.state.chimney) {
-        const addon = (this.data.oven_addons || []).find(a => a.title.toLowerCase().includes('chimney'));
-        if (addon) {
-          items.push({
-            variantId: addon.variants?.[0]?.id || null,
-            quantity: 1,
-            priceInCents: addon.price || 0,
-            label: addon.title,
-            properties: { '_config': 'oven-addon' },
-          });
-        }
-      }
-
-      // 5. Exterior (use selected variant price if available)
-      if (this.state.exterior) {
-        const products = this.data.exteriors || [];
-        const product = products.find(p => p.id === this.state.exterior);
-        if (product) {
-          const variantId = this.state.exteriorVariant;
-          const variant = variantId ? product.variants?.find(v => v.id === variantId) : null;
-          items.push({
-            variantId: variantId || product.variants?.[0]?.id || null,
-            quantity: 1,
-            priceInCents: variant ? variant.price : product.price,
-            label: 'Exterior: ' + product.title,
-            properties: { '_config': 'exterior' },
-          });
-        }
-      }
-
-      // 6. Hydro massage
-      if (this.state.hydro) {
-        const p = (this.data.hydro || []).find(pr => pr.id === this.state.hydro);
-        if (p) {
-          items.push({
-            variantId: p.variants?.[0]?.id || null,
-            quantity: 1,
-            priceInCents: p.price || 0,
-            label: 'Hydro: ' + p.title,
-            properties: { '_config': 'hydro', 'Nozzles': String(this.state.hydroNozzles) },
-          });
-        }
-      }
-
-      // 7. Air system
-      if (this.state.air) {
-        const p = (this.data.air || []).find(pr => pr.id === this.state.air);
-        if (p) {
-          items.push({
-            variantId: p.variants?.[0]?.id || null,
-            quantity: 1,
-            priceInCents: p.price || 0,
-            label: 'Air: ' + p.title,
-            properties: { '_config': 'air', 'Nozzles': String(this.state.airNozzles) },
-          });
-        }
-      }
-
-      // 8. Filter
-      if (this.state.filterEnabled && this.state.filterProduct) {
-        const p = (this.data.filters || []).find(pr => pr.id === this.state.filterProduct);
-        if (p) {
-          items.push({
-            variantId: p.variants?.[0]?.id || null,
-            quantity: 1,
-            priceInCents: p.price || 0,
-            label: 'Filter: ' + p.title,
-            properties: { '_config': 'filter' },
-          });
-        }
-      }
-
-      // 9. LED lighting (quantity-based)
-      if (this.state.led) {
-        const p = (this.data.leds || []).find(pr => pr.id === this.state.led);
-        if (p) {
-          items.push({
-            variantId: p.variants?.[0]?.id || null,
-            quantity: this.state.ledQty || 1,
-            priceInCents: p.price || 0,
-            label: 'LED: ' + p.title,
-            properties: { '_config': 'led' },
-          });
-        }
-      }
-
-      // 10. Thermometer
-      if (this.state.thermometer) {
-        const p = (this.data.thermometers || []).find(pr => pr.id === this.state.thermometer);
-        if (p) {
-          items.push({
-            variantId: p.variants?.[0]?.id || null,
-            quantity: 1,
-            priceInCents: p.price || 0,
-            label: 'Thermometer: ' + p.title,
-            properties: { '_config': 'thermometer' },
-          });
-        }
-      }
-
-      // 11. Stairs
-      if (this.state.stairs) {
-        const p = (this.data.stairs || [])[0];
-        if (p) {
-          items.push({
-            variantId: p.variants?.[0]?.id || null,
-            quantity: 1,
-            priceInCents: p.price || 0,
-            label: 'Stairs',
-            properties: { '_config': 'stairs' },
-          });
-        }
-      }
-
-      // 12. Pillows (quantity-based)
-      if (this.state.pillows) {
-        const p = (this.data.pillows || [])[0];
-        if (p) {
-          items.push({
-            variantId: p.variants?.[0]?.id || null,
-            quantity: this.state.pillowQty || 2,
-            priceInCents: p.price || 0,
-            label: 'Pillows x' + (this.state.pillowQty || 2),
-            properties: { '_config': 'pillows' },
-          });
-        }
-      }
-
-      // 13. Cover (use selected variant price if available)
-      if (this.state.cover) {
-        const products = this.data.covers || [];
-        const product = products.find(p => p.id === this.state.cover);
-        if (product) {
-          const variantId = this.state.coverVariant;
-          const variant = variantId ? product.variants?.find(v => v.id === variantId) : null;
-          items.push({
-            variantId: variantId || product.variants?.[0]?.id || null,
-            quantity: 1,
-            priceInCents: variant ? variant.price : product.price,
-            label: 'Cover: ' + product.title,
-            properties: { '_config': 'cover' },
-          });
-        }
-      }
-
-      // 15. Heater connection 90 degrees
-      if (this.state.heaterConnection === '90-degree' && this.data.heater_90) {
-        items.push({
-          variantId: this.data.heater_90.variants?.[0]?.id || null,
-          quantity: 1,
-          priceInCents: this.data.heater_90.price || 0,
-          label: 'Heater: 90 degree connection',
-          properties: { '_config': 'heater-connection' },
-        });
-      }
-
-      return items;
-    }
-
     _updatePrice() {
-      const items = this._calculateLineItems();
-      const total = items.reduce((sum, i) => sum + i.priceInCents * i.quantity, 0);
+      let total = 0;
 
+      // Base product (resolved variant price includes size + oven)
+      total += this.state.basePrice || 0;
+
+      // Liner
+      total += this._getSelectedVariantPrice('liners', 'liner', 'linerVariant');
+
+      // Insulation
+      if (this.state.insulation) total += this._getProductPrice('insulations');
+
+      // Oven add-ons (glass door, chimney)
+      if (this.state.glassDoor) total += this._getAddonPrice('glass');
+      if (this.state.chimney) total += this._getAddonPrice('chimney');
+
+      // Exterior
+      total += this._getSelectedVariantPrice('exteriors', 'exterior', 'exteriorVariant');
+
+      // Hydro massage
+      total += this._getSelectedProductPrice('hydro', 'hydro');
+
+      // Air system
+      total += this._getSelectedProductPrice('air', 'air');
+
+      // Filter
+      if (this.state.filterEnabled) total += this._getSelectedProductPrice('filters', 'filterProduct');
+
+      // LED
+      total += this._getSelectedProductPrice('leds', 'led') * (this.state.ledQty || 1);
+
+      // Thermometer
+      total += this._getSelectedProductPrice('thermometers', 'thermometer');
+
+      // Stairs
+      if (this.state.stairs) total += this._getProductPrice('stairs');
+
+      // Pillows
+      if (this.state.pillows) total += this._getProductPrice('pillows') * (this.state.pillowQty || 2);
+
+      // Cover
+      total += this._getSelectedVariantPrice('covers', 'cover', 'coverVariant');
+
+      // Heater connection 90°
+      if (this.state.heaterConnection === '90-degree') {
+        total += this.data.heater_90?.price || 0;
+      }
+
+      // Update display
       if (this.totalPriceEl) {
         this.totalPriceEl.textContent = money(total);
         this.totalPriceEl.style.visibility = this.state.size ? 'visible' : 'hidden';
       }
 
       this._updateSummary();
+    }
+
+    _getSelectedVariantPrice(dataKey, stateProductKey, stateVariantKey) {
+      const productId = this.state[stateProductKey];
+      if (!productId) return 0;
+      const products = this.data[dataKey] || [];
+      const product = products.find(p => p.id === productId);
+      if (!product) return 0;
+      const variantId = this.state[stateVariantKey];
+      if (variantId) {
+        const variant = product.variants?.find(v => v.id === variantId);
+        if (variant) return variant.price;
+      }
+      return product.price;
+    }
+
+    _getSelectedProductPrice(dataKey, stateKey) {
+      const productId = this.state[stateKey];
+      if (!productId) return 0;
+      const products = this.data[dataKey] || [];
+      const product = products.find(p => p.id === productId);
+      return product?.price || 0;
+    }
+
+    _getProductPrice(dataKey) {
+      const products = this.data[dataKey] || [];
+      const product = Array.isArray(products) ? products[0] : products;
+      return product?.price || 0;
+    }
+
+    _getAddonPrice(keyword) {
+      const addons = this.data.oven_addons || [];
+      const addon = addons.find(a => a.title.toLowerCase().includes(keyword));
+      return addon?.price || 0;
     }
 
     /* ── Summary ───────────────────────────────────────── */
@@ -1195,14 +956,7 @@
       if (this.state.pillows) items.push(`Pillows: ${this.state.pillowQty} pcs`);
       if (this.state.cover) items.push(`Cover: ${this._getProductTitle('covers', this.state.cover)}`);
 
-      this.summaryList.replaceChildren(
-        ...items.map(text => {
-          const li = document.createElement('li');
-          li.className = 'cfg-summary-item';
-          li.textContent = text;
-          return li;
-        })
-      );
+      this.summaryList.innerHTML = items.map(i => `<li class="cfg-summary-item">${i}</li>`).join('');
     }
 
     _getProductTitle(dataKey, productId) {
@@ -1226,11 +980,11 @@
 
     _updateGallery(images) {
       if (!this.gallery || !images?.length) return;
-      this.gallery.innerHTML = DOMPurify.sanitize(images.map((img, i) => `
+      this.gallery.innerHTML = images.map((img, i) => `
         <div class="cfg-thumb ${i === 0 ? 'cfg-thumb--active' : ''}" data-thumb-idx="${i}" tabindex="0" role="button" aria-label="View image ${i + 1}">
           <img src="${img.thumb || img.src}" alt="${img.alt || 'Hot tub view'}" loading="lazy">
         </div>
-      `).join(''));
+      `).join('');
       if (images[0]) this._setMainImage(images[0].src);
 
       this.gallery.addEventListener('click', (e) => {
@@ -1238,10 +992,7 @@
         if (!thumb) return;
         const idx = parseInt(thumb.dataset.thumbIdx);
         this.gallery.querySelectorAll('.cfg-thumb').forEach((t, i) => t.classList.toggle('cfg-thumb--active', i === idx));
-        if (images[idx]) {
-          this._preloadImage(images[idx].src);
-          this._setMainImage(images[idx].src);
-        }
+        if (images[idx]) this._setMainImage(images[idx].src);
       });
     }
 
@@ -1284,13 +1035,95 @@
     }
 
     _buildCartItems() {
-      return this._calculateLineItems()
-        .filter(i => i.variantId)
-        .map(i => ({
-          id: i.variantId,
-          quantity: i.quantity,
-          properties: i.properties || {},
-        }));
+      const items = [];
+      const configSummary = this._buildConfigSummary();
+
+      // 1. Base product (resolved variant — includes model + size + oven)
+      if (this.state.baseVariantId) {
+        items.push({
+          id: this.state.baseVariantId,
+          quantity: 1,
+          properties: { '_config': 'base', 'Configuration': configSummary },
+        });
+      }
+
+      // 2. Liner
+      if (this.state.linerVariant) {
+        items.push({ id: this.state.linerVariant, quantity: 1, properties: { '_config': 'liner' } });
+      }
+
+      // 3. Insulation
+      if (this.state.insulation) {
+        const p = (this.data.insulations || [])[0];
+        if (p?.variants?.[0]?.id) items.push({ id: p.variants[0].id, quantity: 1, properties: { '_config': 'insulation' } });
+      }
+
+      // 4. Oven add-ons (glass door, chimney — no separate oven product)
+      if (this.state.glassDoor) {
+        const addon = (this.data.oven_addons || []).find(a => a.title.toLowerCase().includes('glass'));
+        if (addon?.variants?.[0]?.id) items.push({ id: addon.variants[0].id, quantity: 1, properties: { '_config': 'oven-addon' } });
+      }
+      if (this.state.chimney) {
+        const addon = (this.data.oven_addons || []).find(a => a.title.toLowerCase().includes('chimney'));
+        if (addon?.variants?.[0]?.id) items.push({ id: addon.variants[0].id, quantity: 1, properties: { '_config': 'oven-addon' } });
+      }
+
+      // 5. Exterior
+      if (this.state.exteriorVariant) {
+        items.push({ id: this.state.exteriorVariant, quantity: 1, properties: { '_config': 'exterior' } });
+      }
+
+      // 6-7. Hydro & Air
+      for (const [key, qtyKey] of [['hydro', 'hydroNozzles'], ['air', 'airNozzles']]) {
+        if (this.state[key]) {
+          const p = (this.data[key] || []).find(pr => pr.id === this.state[key]);
+          if (p?.variants?.[0]?.id) {
+            items.push({ id: p.variants[0].id, quantity: 1, properties: { '_config': key, 'Nozzles': String(this.state[qtyKey]) } });
+          }
+        }
+      }
+
+      // 8. Filter
+      if (this.state.filterEnabled && this.state.filterProduct) {
+        const p = (this.data.filters || []).find(pr => pr.id === this.state.filterProduct);
+        if (p?.variants?.[0]?.id) items.push({ id: p.variants[0].id, quantity: 1, properties: { '_config': 'filter' } });
+      }
+
+      // 9. LED
+      if (this.state.led) {
+        const p = (this.data.leds || []).find(pr => pr.id === this.state.led);
+        if (p?.variants?.[0]?.id) items.push({ id: p.variants[0].id, quantity: this.state.ledQty || 1, properties: { '_config': 'led' } });
+      }
+
+      // 10. Thermometer
+      if (this.state.thermometer) {
+        const p = (this.data.thermometers || []).find(pr => pr.id === this.state.thermometer);
+        if (p?.variants?.[0]?.id) items.push({ id: p.variants[0].id, quantity: 1, properties: { '_config': 'thermometer' } });
+      }
+
+      // 11. Stairs
+      if (this.state.stairs) {
+        const p = (this.data.stairs || [])[0];
+        if (p?.variants?.[0]?.id) items.push({ id: p.variants[0].id, quantity: 1, properties: { '_config': 'stairs' } });
+      }
+
+      // 12. Pillows
+      if (this.state.pillows) {
+        const p = (this.data.pillows || [])[0];
+        if (p?.variants?.[0]?.id) items.push({ id: p.variants[0].id, quantity: this.state.pillowQty || 2, properties: { '_config': 'pillows' } });
+      }
+
+      // 13. Cover
+      if (this.state.coverVariant) {
+        items.push({ id: this.state.coverVariant, quantity: 1, properties: { '_config': 'cover' } });
+      }
+
+      // 15. Heater 90°
+      if (this.state.heaterConnection === '90-degree' && this.data.heater_90?.variants?.[0]?.id) {
+        items.push({ id: this.data.heater_90.variants[0].id, quantity: 1, properties: { '_config': 'heater-connection' } });
+      }
+
+      return items;
     }
 
     _buildConfigSummary() {
@@ -1326,6 +1159,10 @@
       if (this.cartError) { this.cartError.textContent = ''; this.cartError.style.display = 'none'; }
     }
 
+    /* ── Utility ───────────────────────────────────────── */
+    _escAttr(str) {
+      return str.replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;');
+    }
   }
 
   // Register custom elements — discover tag names from DOM
