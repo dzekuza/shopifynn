@@ -342,7 +342,7 @@
         <div data-summary-card style="display:none;"></div>
         <div class="cfg__total" data-total-price aria-live="polite" style="visibility:hidden;">—</div>
         <p class="cfg__error" data-cart-error></p>
-        <button class="cfg__cta" data-add-to-cart disabled>Select a model to start</button>
+        <button class="cfg__cta" data-add-to-cart data-action="add-to-cart" disabled>Select a model to start</button>
         {%- if section.settings.specs_page != blank -%}
           <a href="{{ section.settings.specs_page }}" class="cfg__specs-link">View full specifications</a>
         {%- endif -%}

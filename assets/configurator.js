@@ -459,18 +459,6 @@
 
       area.style.display = 'block';
       this._selectVariant(group, variants[0]?.id, variants[0]?.price);
-
-      target.addEventListener('click', (e) => {
-        const el = e.target.closest('[data-action="select-variant"]');
-        if (!el) return;
-        target.querySelectorAll('.cfg-swatch--selected, .cfg-pill--selected').forEach(s => {
-          s.classList.remove('cfg-swatch--selected', 'cfg-pill--selected');
-          s.setAttribute('aria-pressed', 'false');
-        });
-        el.classList.add(el.classList.contains('cfg-swatch') ? 'cfg-swatch--selected' : 'cfg-pill--selected');
-        el.setAttribute('aria-pressed', 'true');
-        this._selectVariant(group, parseInt(el.dataset.variantId), parseInt(el.dataset.price));
-      });
     }
 
     _showQtySelector(group, product) {
@@ -568,8 +556,41 @@
             this._handleAddToCart();
             break;
           case 'sticky-add-to-cart':
+          case 'add-to-cart':
             this._handleAddToCart();
             break;
+          case 'select-variant': {
+            const group = target.dataset.group;
+            const variantArea = target.closest('[data-variant-area]');
+            if (variantArea) {
+              variantArea.querySelectorAll('.cfg-swatch--selected, .cfg-pill--selected').forEach(s => {
+                s.classList.remove('cfg-swatch--selected', 'cfg-pill--selected');
+                s.setAttribute('aria-pressed', 'false');
+              });
+            }
+            const selectedClass = target.classList.contains('cfg-swatch') ? 'cfg-swatch--selected' : 'cfg-pill--selected';
+            target.classList.add(selectedClass);
+            target.setAttribute('aria-pressed', 'true');
+            this._selectVariant(group, parseInt(target.dataset.variantId), parseInt(target.dataset.price));
+            break;
+          }
+          case 'select-thumb': {
+            const idx = parseInt(target.dataset.thumbIdx);
+            this.gallery.querySelectorAll('.cfg-thumb').forEach((t, i) =>
+              t.classList.toggle('cfg-thumb--active', i === idx)
+            );
+            const img = this._galleryImages?.[idx];
+            if (img) {
+              this._preloadImage(img.src);
+              this._setMainImage(img.src);
+            }
+            break;
+          }
+          case 'edit-summary-step': {
+            const stepNum = parseInt(target.dataset.editStep, 10);
+            this._scrollToStep(stepNum);
+            break;
+          }
         }
 
         // Tooltip
@@ -603,9 +624,6 @@
         e.preventDefault();
         target.click();
       });
-
-      // CTA
-      this.ctaBtn?.addEventListener('click', () => this._handleAddToCart());
     }
 
     _handleModelSelect(modelKey) {
@@ -1218,6 +1236,7 @@
           editBtn.type = 'button';
           editBtn.className = 'cfg-summary__edit';
           editBtn.textContent = 'Edit';
+          editBtn.dataset.action = 'edit-summary-step';
           editBtn.dataset.editStep = String(group.stepNum);
           headerEl.appendChild(editBtn);
 
@@ -1272,14 +1291,6 @@
           totalEl.textContent = `Total: ${money(total)}`;
           card.appendChild(totalEl);
         }
-
-        // Event delegation for Edit buttons
-        card.addEventListener('click', (e) => {
-          const btn = e.target.closest('[data-edit-step]');
-          if (!btn) return;
-          const stepNum = parseInt(btn.dataset.editStep, 10);
-          this._scrollToStep(stepNum);
-        });
 
         return card;
       };
@@ -1631,22 +1642,14 @@
 
     _updateGallery(images) {
       if (!this.gallery || !images?.length) return;
+      this._galleryImages = images;
       this.gallery.innerHTML = images.map((img, i) => `
-        <div class="cfg-thumb ${i === 0 ? 'cfg-thumb--active' : ''}" data-thumb-idx="${i}" tabindex="0" role="button" aria-label="View image ${i + 1}">
+        <div class="cfg-thumb ${i === 0 ? 'cfg-thumb--active' : ''}" data-action="select-thumb" data-thumb-idx="${i}" tabindex="0" role="button" aria-label="View image ${i + 1}">
           <img src="${img.thumb || img.src}" alt="${img.alt || 'Hot tub view'}" loading="lazy">
         </div>
       `).join('');
       if (images[0]) this._preloadImage(images[0].src);
       if (images[0]) this._setMainImage(images[0].src);
-
-      this.gallery.addEventListener('click', (e) => {
-        const thumb = e.target.closest('[data-thumb-idx]');
-        if (!thumb) return;
-        const idx = parseInt(thumb.dataset.thumbIdx);
-        this.gallery.querySelectorAll('.cfg-thumb').forEach((t, i) => t.classList.toggle('cfg-thumb--active', i === idx));
-        if (images[idx]) this._preloadImage(images[idx].src);
-        if (images[idx]) this._setMainImage(images[idx].src);
-      });
     }
 
     _scrollToStep(num) {
