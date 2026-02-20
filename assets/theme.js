@@ -635,4 +635,17 @@
   } else {
     window.addEventListener('load', initGSAPAnimations);
   }
+
+  /* ---- Cart Count Update ---- */
+
+  window.addEventListener('cart:refresh', () => {
+    fetch('/cart.js')
+      .then(r => r.json())
+      .then(cart => {
+        const el = document.querySelector('[data-cart-count]');
+        if (el) el.textContent = cart.item_count;
+      })
+      .catch(() => {});
+  });
+
 })();

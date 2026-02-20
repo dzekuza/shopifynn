@@ -36,8 +36,8 @@ Decimal phases appear between their surrounding integers in numeric order.
   5. theme.js uses const/let exclusively — no var declarations remain
 **Plans:** 2/2 plans complete
 Plans:
-- [ ] 01-01-PLAN.md — Credential management (.gitignore, .env.example, script refactoring) and theme.js var→const/let migration
-- [ ] 01-02-PLAN.md — DOMPurify integration and innerHTML XSS sanitization in configurator.js
+- [x] 01-01-PLAN.md — Credential management (.gitignore, .env.example, script refactoring) and theme.js var→const/let migration
+- [x] 01-02-PLAN.md — DOMPurify integration and innerHTML XSS sanitization in configurator.js
 
 ### Phase 2: Configurator Stabilization
 **Goal**: The configurator resolves products reliably via metafields, calculates price from a single source of truth, validates steps before cart add, and is architecturally clean enough to support visual polish
@@ -51,11 +51,11 @@ Plans:
   5. Configurator CSS loads from assets/configurator.css (not embedded in the section file) and only on the configurator template
 **Plans:** 5/5 plans complete
 Plans:
-- [ ] 02-01-PLAN.md — Extract configurator CSS to asset file and add conditional loading
-- [ ] 02-02-PLAN.md — Replace string-matching with metafield-based product resolution
-- [ ] 02-03-PLAN.md — Unify price calculation, fix event delegation, locale-aware formatting
-- [ ] 02-04-PLAN.md — Step validation, error recovery with retry, grouped configuration summary
-- [ ] 02-05-PLAN.md — Reorganize configurator.js into 8 responsibility groups + human verification
+- [x] 02-01-PLAN.md — Extract configurator CSS to asset file and add conditional loading
+- [x] 02-02-PLAN.md — Replace string-matching with metafield-based product resolution
+- [x] 02-03-PLAN.md — Unify price calculation, fix event delegation, locale-aware formatting
+- [x] 02-04-PLAN.md — Step validation, error recovery with retry, grouped configuration summary
+- [x] 02-05-PLAN.md — Reorganize configurator.js into 8 responsibility groups + human verification
 
 ### Phase 3: Performance and Accessibility
 **Goal**: The configurator and storefront perform well on real devices and meet WCAG 2.1 AA accessibility requirements
@@ -69,11 +69,11 @@ Plans:
   5. GSAP loads from a pinned CDN URL and theme.js guards against GSAP being undefined before initializing scroll animations
 **Plans:** 5/5 plans complete
 Plans:
-- [ ] 03-01-PLAN.md — Pin GSAP CDN version, verify existence guard, fix muted text color contrast
-- [ ] 03-02-PLAN.md — Lazy loading sweep and alt text audit across all sections and snippets
-- [ ] 03-03-PLAN.md — Configurator image preloading, DOM caching, ARIA semantics, keyboard nav, touch targets
-- [ ] 03-04-PLAN.md — [Gap closure] Image preloading, DOM caching expansion, keyboard nav + ARIA management in configurator.js
-- [ ] 03-05-PLAN.md — [Gap closure] ARIA group structure on step markup + touch target CSS fixes in configurator.liquid
+- [x] 03-01-PLAN.md — Pin GSAP CDN version, verify existence guard, fix muted text color contrast
+- [x] 03-02-PLAN.md — Lazy loading sweep and alt text audit across all sections and snippets
+- [x] 03-03-PLAN.md — Configurator image preloading, DOM caching, ARIA semantics, keyboard nav, touch targets
+- [x] 03-04-PLAN.md — [Gap closure] Image preloading, DOM caching expansion, keyboard nav + ARIA management in configurator.js
+- [x] 03-05-PLAN.md — [Gap closure] ARIA group structure on step markup + touch target CSS fixes in configurator.liquid
 
 ### Phase 4: Visual Polish and Brand Content
 **Goal**: The storefront presents the Aurowe brand at luxury tier — elevated hero, features, and testimonials sections, plus a new About/Story page
@@ -86,8 +86,8 @@ Plans:
   4. Typography, spacing, and animation timing are consistent across all sections with no visual inconsistencies between pages
 **Plans:** 2/2 plans complete
 Plans:
-- [ ] 04-01-PLAN.md — CSS polish for hero, features, testimonials sections + GSAP animation consistency
-- [ ] 04-02-PLAN.md — Create About/Story page JSON template with editorial section composition
+- [x] 04-01-PLAN.md — CSS polish for hero, features, testimonials sections + GSAP animation consistency
+- [x] 04-02-PLAN.md — Create About/Story page JSON template with editorial section composition
 
 ### Phase 5: XSS Sanitization Recovery
 **Goal**: All XSS vectors in configurator.js are eliminated — DOMPurify loads on the configurator template, all innerHTML call sites use sanitization or DOM builder APIs, and _escAttr() is deleted
@@ -100,7 +100,7 @@ Plans:
   3. _escAttr() method is deleted from configurator.js — zero references remain
 **Plans:** 1/1 plans complete
 Plans:
-- [ ] 05-01-PLAN.md — Load DOMPurify CDN, sanitize all dynamic innerHTML sites, delete _escAttr()
+- [x] 05-01-PLAN.md — Load DOMPurify CDN, sanitize all dynamic innerHTML sites, delete _escAttr()
 
 ### Phase 6: Metafield Resolution & Event Delegation Recovery
 **Goal**: The configurator resolves products via metafield data instead of regex title matching, and event listeners use delegation instead of per-element binding
@@ -114,8 +114,8 @@ Plans:
   4. _showVariants() uses event delegation via _bindEvents instead of direct addEventListener — no listener accumulation on step re-visits
 **Plans:** 2/2 plans complete
 Plans:
-- [ ] 06-01-PLAN.md — Metafield resolution, connectedCallback guard, event delegation
-- [ ] 06-02-PLAN.md — Unified _calculateLineItems() for price display and cart payload
+- [x] 06-01-PLAN.md — Metafield resolution, connectedCallback guard, event delegation
+- [x] 06-02-PLAN.md — Unified _calculateLineItems() for price display and cart payload
 
 ### Phase 7: Price Unification & Locale Formatting
 **Goal**: A single _calculateLineItems() function drives both display price and cart payload, and currency formatting respects the shop locale
@@ -127,7 +127,7 @@ Plans:
   2. money() reads window.__shopLocale for locale and window.__shopCurrency for currency code — no hardcoded de-DE or EUR
 **Plans:** 1/1 plans complete
 Plans:
-- [ ] 07-01-PLAN.md — Locale-aware money() rewrite, _calculateLineItems() unification, and event delegation cleanup
+- [x] 07-01-PLAN.md — Locale-aware money() rewrite, _calculateLineItems() unification, and event delegation cleanup
 
 ### Phase 8: CSS Architecture & theme.js Cleanup
 **Goal**: Configurator CSS lives in a dedicated cacheable asset file, and theme.js uses modern variable declarations exclusively
@@ -140,7 +140,7 @@ Plans:
   3. theme.js uses const/let exclusively — zero var declarations remain
 **Plans:** 1/1 plans complete
 Plans:
-- [ ] 08-01-PLAN.md — Extract configurator CSS to asset file and replace all var declarations in theme.js
+- [x] 08-01-PLAN.md — Extract configurator CSS to asset file and replace all var declarations in theme.js
 
 ### Phase 9: Cart Count Integration & Milestone Cleanup
 **Goal**: The header cart count updates immediately after add-to-cart, all phases have VERIFICATION.md files, and all ROADMAP/REQUIREMENTS bookkeeping is accurate
