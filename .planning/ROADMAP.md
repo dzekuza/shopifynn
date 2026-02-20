@@ -16,7 +16,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 2: Configurator Stabilization** - Replace fragile string-matching with metafield lookups, consolidate pricing, add validation, and clean up architecture (completed 2026-02-20)
 - [x] **Phase 3: Performance and Accessibility** - Eliminate DOM performance problems and meet WCAG 2.1 AA baseline (completed 2026-02-20)
 - [x] **Phase 4: Visual Polish and Brand Content** - Elevate section designs to luxury tier and create About/Story page (completed 2026-02-19)
-- [ ] **Phase 5: XSS Sanitization Recovery** - [Gap closure] Re-add DOMPurify CDN, sanitize all innerHTML call sites, delete _escAttr()
+- [x] **Phase 5: XSS Sanitization Recovery** - [Gap closure] Re-add DOMPurify CDN, sanitize all innerHTML call sites, delete _escAttr() (completed 2026-02-20)
 - [x] **Phase 6: Metafield Resolution & Event Delegation Recovery** - [Gap closure] Replace regex product matching with metafield lookups, add connectedCallback guard, fix event delegation (completed 2026-02-20)
 - [ ] **Phase 7: Price Unification & Locale Formatting** - [Gap closure] Implement _calculateLineItems() single source of truth, wire money() to __shopLocale
 - [ ] **Phase 8: CSS Architecture & theme.js Cleanup** - [Gap closure] Extract configurator CSS to asset file, fix conditional loading, var→const/let in theme.js
@@ -97,7 +97,7 @@ Plans:
   1. DOMPurify 3.2.7 loads via CDN `<script>` tag on the configurator template before configurator.js
   2. All innerHTML call sites in configurator.js use DOMPurify.sanitize() or DOM builder APIs — no raw string interpolation
   3. _escAttr() method is deleted from configurator.js — zero references remain
-**Plans:** 1 plan
+**Plans:** 1/1 plans complete
 Plans:
 - [ ] 05-01-PLAN.md — Load DOMPurify CDN, sanitize all dynamic innerHTML sites, delete _escAttr()
 
@@ -149,7 +149,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 | 2. Configurator Stabilization | 5/5 | Complete | 2026-02-20 |
 | 3. Performance and Accessibility | 5/5 | Complete | 2026-02-20 |
 | 4. Visual Polish and Brand Content | 2/2 | Complete | 2026-02-19 |
-| 5. XSS Sanitization Recovery | 0/1 | Pending |  |
+| 5. XSS Sanitization Recovery | 1/1 | Complete   | 2026-02-20 |
 | 6. Metafield Resolution & Event Delegation | 2/2 | Complete   | 2026-02-20 |
 | 7. Price Unification & Locale Formatting | 0/1 | Pending |  |
 | 8. CSS Architecture & theme.js Cleanup | 0/0 | Pending |  |

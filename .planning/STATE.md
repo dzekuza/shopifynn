@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-02-20)
 
 **Core value:** The hot tub configurator must work flawlessly — it's the primary revenue driver where customers build and price their custom configuration across 15 steps.
-**Current focus:** Phase 6 — Metafield Resolution & Event Delegation (Plan 01 of 01 complete)
+**Current focus:** Phase 5 — XSS Sanitization Recovery (Plan 01 of 01 complete)
 
 ## Current Position
 
-Phase: 6 of 7 (Metafield Resolution & Event Delegation)
-Plan: 1 of 1 in phase 06-metafield-resolution-event-delegation
-Status: Phase 06 plan 01 complete — metafield resolution, connectedCallback guard, event delegation
-Last activity: 2026-02-20 - Completed 06-01-PLAN.md: metafield-based product resolution, connectedCallback null guard, event delegation
+Phase: 5 of 7 (XSS Sanitization Recovery)
+Plan: 1 of 1 in phase 05-xss-sanitization-recovery
+Status: Phase 05 plan 01 complete — DOMPurify loaded, all 12 dynamic innerHTML sites sanitized, _escAttr() deleted
+Last activity: 2026-02-20 - Completed 05-01-PLAN.md: DOMPurify XSS sanitization — 12 dynamic innerHTML sites wrapped, _escAttr() deleted
 
-Progress: [█████████░] 90%
+Progress: [██████████] 100%
 
 ## Performance Metrics
 
@@ -47,6 +47,7 @@ Progress: [█████████░] 90%
 | Phase 06-metafield-resolution-event-delegation P01 | 7 | 2 tasks | 1 files |
 | Phase 07-price-unification-locale-formatting P01 | 9 | 3 tasks | 2 files |
 | Phase 06-metafield-resolution-event-delegation P02 | 1 | 1 tasks | 0 files |
+| Phase 05-xss-sanitization-recovery P01 | 3 | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -101,6 +102,8 @@ Recent decisions affecting current work:
 - [Phase 07-price-unification-locale-formatting]: _calculateLineItems() returns full line item array enabling display and cart from one source
 - [Phase 07-price-unification-locale-formatting]: Delegation pattern: NEVER add addEventListener inside render methods — only _bindEvents() (called once in connectedCallback) may wire events
 - [Phase 06-metafield-resolution-event-delegation]: _calculateLineItems() was pre-implemented in 48cca5a (feat(07-01)) — plan 06-02 verified all success criteria without code changes
+- [Phase 05-xss-sanitization-recovery]: DOMPurify loaded via jsDelivr CDN with defer before configurator.js — mixed strategy: sanitize() for product data, DOM builder for summary list, static strings left as-is
+- [Phase 05-xss-sanitization-recovery]: _escAttr() deleted — tooltip interpolation relies on outer DOMPurify.sanitize() call wrapping the full HTML block
 
 ### Pending Todos
 
