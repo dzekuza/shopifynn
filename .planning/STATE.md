@@ -5,14 +5,14 @@
 See: .planning/PROJECT.md (updated 2026-02-20)
 
 **Core value:** The hot tub configurator must work flawlessly — it's the primary revenue driver where customers build and price their custom configuration across 15 steps.
-**Current focus:** Phase 8 — CSS Architecture & theme.js Cleanup (Plan 01 of 01 complete)
+**Current focus:** Phase 9 — Cart Count Integration & Milestone Cleanup (Plan 01 of 01 complete)
 
 ## Current Position
 
-Phase: 8 of 8 (CSS Architecture & theme.js Cleanup)
-Plan: 1 of 1 in phase 08-css-architecture-themejs-cleanup
-Status: Phase 08 plan 01 complete — configurator CSS extracted to assets/configurator.css, all 24 var declarations replaced with const/let in theme.js
-Last activity: 2026-02-20 - Completed 08-01-PLAN.md: extracted 18 KB configurator CSS to cacheable asset file, replaced var with const/let in theme.js
+Phase: 9 of 9 (Cart Count Integration & Milestone Cleanup)
+Plan: 1 of 1 in phase 09-cart-integration-milestone-cleanup
+Status: Phase 09 plan 01 complete — cart:refresh listener wired in theme.js, VERIFICATION.md created for Phases 1/2/4, all ROADMAP plan checkboxes corrected
+Last activity: 2026-02-20 - Completed 09-01-PLAN.md: wired cart:refresh listener, created 3 VERIFICATION.md files, fixed 19 ROADMAP plan checkboxes
 
 Progress: [██████████] 100%
 
@@ -50,6 +50,7 @@ Progress: [██████████] 100%
 | Phase 05-xss-sanitization-recovery P01 | 3 | 2 tasks | 2 files |
 | Phase 08-css-architecture-themejs-cleanup P01 | 4 | 2 tasks | 3 files |
 | Phase 08-css-architecture-themejs-cleanup P01 | 5 | 2 tasks | 3 files |
+| Phase 09-cart-integration-milestone-cleanup P01 | 6 | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -110,6 +111,8 @@ Recent decisions affecting current work:
 - [Phase 08-css-architecture-themejs-cleanup]: Retained {% style %} block in configurator.liquid for dynamic Liquid variables (background_color, padding) — only static {% stylesheet %} block extracted
 - [Phase 08-css-architecture-themejs-cleanup]: Configurator CSS extracted to assets/configurator.css — cacheable static file, stylesheet block removed from section
 - [Phase 08-css-architecture-themejs-cleanup]: theme.js var→const/let migration: 19 const bindings (never reassigned), 4 let bindings (touchStartX, productVariants, loop i, hiddenSelect)
+- [Phase 09-cart-integration-milestone-cleanup]: Listen on window for cart:refresh (not document) — matches window.dispatchEvent() in configurator.js
+- [Phase 09-cart-integration-milestone-cleanup]: Phase 4 VERIFICATION scores 7/7 with human-verification section for visual quality — automated checks confirm CSS values and file existence only
 
 ### Pending Todos
 
@@ -130,5 +133,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-20
-Stopped at: Completed 08-01-PLAN.md — configurator CSS extracted to assets/configurator.css, 24 var declarations replaced with const/let in theme.js
+Stopped at: Completed 09-01-PLAN.md — cart:refresh listener wired in theme.js, VERIFICATION.md created for Phases 1/2/4, all ROADMAP plan checkboxes corrected for Phases 1-8
 Resume file: None

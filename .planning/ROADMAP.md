@@ -20,7 +20,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 6: Metafield Resolution & Event Delegation Recovery** - [Gap closure] Replace regex product matching with metafield lookups, add connectedCallback guard, fix event delegation (completed 2026-02-20)
 - [x] **Phase 7: Price Unification & Locale Formatting** - [Gap closure] Implement _calculateLineItems() single source of truth, wire money() to __shopLocale (completed 2026-02-20)
 - [x] **Phase 8: CSS Architecture & theme.js Cleanup** - [Gap closure] Extract configurator CSS to asset file, fix conditional loading, var→const/let in theme.js (completed 2026-02-20)
-- [ ] **Phase 9: Cart Count Integration & Milestone Cleanup** - [Gap closure] Wire cart:refresh listener in theme.js, create missing VERIFICATION.md for Phases 1/2/4, fix ROADMAP/REQUIREMENTS bookkeeping
+- [x] **Phase 9: Cart Count Integration & Milestone Cleanup** - [Gap closure] Wire cart:refresh listener in theme.js, create missing VERIFICATION.md for Phases 1/2/4, fix ROADMAP/REQUIREMENTS bookkeeping (completed 2026-02-20)
 
 ## Phase Details
 
@@ -153,7 +153,7 @@ Plans:
   3. REQUIREMENTS.md checkboxes for SEC-01, SEC-02, SEC-03 are `[x]` Complete
   4. CONF-04 traceability correctly reflects Phase 7 (not Phase 6)
   5. ROADMAP progress table is accurate for all phases
-**Plans:** 1 plan
+**Plans:** 1/1 plans complete
 Plans:
 - [ ] 09-01-PLAN.md — Wire cart:refresh listener, create VERIFICATION.md for Phases 1/2/4, fix ROADMAP checkboxes
 
@@ -172,4 +172,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 →
 | 6. Metafield Resolution & Event Delegation | 2/2 | Complete | 2026-02-20 |
 | 7. Price Unification & Locale Formatting | 1/1 | Complete | 2026-02-20 |
 | 8. CSS Architecture & theme.js Cleanup | 1/1 | Complete | 2026-02-20 |
-| 9. Cart Count Integration & Milestone Cleanup | 0/1 | Pending |  |
+| 9. Cart Count Integration & Milestone Cleanup | 1/1 | Complete   | 2026-02-20 |
