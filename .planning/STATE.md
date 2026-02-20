@@ -45,6 +45,7 @@ Progress: [█████████░] 90%
 | Phase 03-performance-and-accessibility P05 | 2 | 2 tasks | 1 files |
 | Phase 03-performance-and-accessibility P04 | 2 | 2 tasks | 1 files |
 | Phase 06-metafield-resolution-event-delegation P01 | 7 | 2 tasks | 1 files |
+| Phase 07-price-unification-locale-formatting P01 | 9 | 3 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -95,6 +96,9 @@ Recent decisions affecting current work:
 - [Phase 06-metafield-resolution-event-delegation]: Metafield reads use p.meta?.size and p.meta?.oven_type — no regex fallback, products missing metafields are skipped with console.warn
 - [Phase 06-metafield-resolution-event-delegation]: connectedCallback null guard shows branded Aurowe placeholder when data element absent — theme editor safe
 - [Phase 06-metafield-resolution-event-delegation]: Deleted _getSizeFromProduct() and _isInternalOvenProduct() in same commit as metafield migration per CONF-03
+- [Phase 07-price-unification-locale-formatting]: money() uses Intl.NumberFormat with window.__shopLocale/window.__shopCurrency — de-DE/EUR fallbacks for backward compatibility
+- [Phase 07-price-unification-locale-formatting]: _calculateLineItems() returns full line item array enabling display and cart from one source
+- [Phase 07-price-unification-locale-formatting]: Delegation pattern: NEVER add addEventListener inside render methods — only _bindEvents() (called once in connectedCallback) may wire events
 
 ### Pending Todos
 

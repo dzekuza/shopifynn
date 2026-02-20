@@ -21,11 +21,11 @@ Requirements for production-ready launch. Each maps to roadmap phases.
 - [x] **CONF-01**: Replace regex-based product title matching with metafield-based lookups (configurator.size, configurator.oven_type, configurator.addon_type)
 - [x] **CONF-02**: Extend configurator-product-json.liquid to include size, oven_type, and addon_type from metafields
 - [x] **CONF-03**: Delete all string-matching fallback methods (_getSizeFromProduct, _isInternalOvenProduct) in same commit as metafield migration
-- [ ] **CONF-04**: Consolidate two price calculation paths into single _calculateLineItems() function used by both display and cart
+- [x] **CONF-04**: Consolidate two price calculation paths into single _calculateLineItems() function used by both display and cart
 - [x] **CONF-05**: Add step validation before cart — user cannot add to cart with incomplete required configuration
 - [x] **CONF-06**: Add clear error recovery on cart add failure with retry option and failure explanation
-- [ ] **CONF-07**: Replace per-element event listeners with event delegation on parent containers
-- [ ] **CONF-08**: Fix locale-aware currency formatting using window.Shopify.locale instead of hardcoded de-DE
+- [x] **CONF-07**: Replace per-element event listeners with event delegation on parent containers
+- [x] **CONF-08**: Fix locale-aware currency formatting using window.Shopify.locale instead of hardcoded de-DE
 - [x] **CONF-09**: Format configuration summary for order confirmation email display
 
 ### Performance
@@ -119,11 +119,11 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CONF-01 | Phase 6 | Complete |
 | CONF-02 | Phase 6 | Complete |
 | CONF-03 | Phase 6 | Complete |
-| CONF-04 | Phase 6 | Pending |
+| CONF-04 | Phase 6 | Complete |
 | CONF-05 | Phase 2 | Complete |
 | CONF-06 | Phase 2 | Complete |
-| CONF-07 | Phase 7 | Pending |
-| CONF-08 | Phase 7 | Pending |
+| CONF-07 | Phase 7 | Complete |
+| CONF-08 | Phase 7 | Complete |
 | CONF-09 | Phase 2 | Complete |
 | PERF-01 | Phase 3 | Complete |
 | PERF-02 | Phase 3 | Complete |
