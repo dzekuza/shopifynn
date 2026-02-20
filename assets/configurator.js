@@ -9,7 +9,7 @@
 (function () {
   'use strict';
 
-  /* ══ 1. CONFIG & CONSTANTS ══════════════════════════════════════ */
+  /* ══ 1. CONFIG & CONSTANTS ══════════════════════════════════════════ */
 
   function money(cents) {
     const val = (cents / 100).toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -34,9 +34,11 @@
     { num: 15, key: 'heater_conn', title: 'Heater Connection Type',     subtitle: 'Connection angle.' },
   ];
 
-  /* ══ 2. LIFECYCLE & INITIALIZATION ══════════════════════════════ */
-
+  /* ══ Main configurator class ════════════════════════════════════════ */
   class HotTubConfigurator extends HTMLElement {
+
+    /* ══ 2. LIFECYCLE & INITIALIZATION ══════════════════════════════════ */
+
     connectedCallback() {
       this.data = JSON.parse(this.querySelector('[data-configurator-products]').textContent);
       this.state = {
@@ -92,7 +94,7 @@
       this.summaryCard = this.querySelector('[data-summary-card]');
     }
 
-    /* ══ 3. STEP RENDERING ══════════════════════════════════════════ */
+    /* ══ 3. STEP RENDERING ══════════════════════════════════════════════ */
 
     _renderSteps() {
       for (const step of STEPS) {
@@ -433,7 +435,21 @@
       if (qtyMap[group]) this.state[qtyMap[group]] = product.meta?.default_qty || 1;
     }
 
-    /* ══ 4. EVENT HANDLING ══════════════════════════════════════════ */
+    _unlockThrough(stepNum) {
+      if (stepNum <= this.maxUnlocked) return;
+      this.maxUnlocked = stepNum;
+      for (let i = 1; i <= STEPS.length; i++) {
+        const el = this.querySelector(`[data-step="${i}"]`);
+        if (!el) continue;
+        el.classList.toggle('cfg-step--locked', i > this.maxUnlocked);
+      }
+      if (this.state.size && this.ctaBtn) {
+        this.ctaBtn.disabled = false;
+        this.ctaBtn.textContent = 'Add to Cart';
+      }
+    }
+
+    /* ══ 4. EVENT HANDLING ══════════════════════════════════════════════ */
 
     _bindEvents() {
       this.addEventListener('click', (e) => {
@@ -700,7 +716,19 @@
       this._updatePrice();
     }
 
-    /* ══ 5. PRODUCT RESOLUTION ══════════════════════════════════════ */
+    _selectVariant(group, variantId, price) {
+      const variantMap = {
+        'liners': 'linerVariant',
+        'exteriors': 'exteriorVariant',
+        'covers': 'coverVariant',
+      };
+      if (variantMap[group]) {
+        this.state[variantMap[group]] = variantId;
+      }
+      this._updatePrice();
+    }
+
+    /* ══ 5. PRODUCT RESOLUTION ══════════════════════════════════════════ */
 
     _getSizeFromProduct(product) {
       const text = product.title || '';
@@ -805,7 +833,7 @@
       }
     }
 
-    /* ══ 6. PRICE CALCULATION ═══════════════════════════════════════ */
+    /* ══ 6. PRICE CALCULATION ════════════════════════════════════════════ */
 
     _updatePrice() {
       let total = 0;
@@ -996,11 +1024,6 @@
       }
     }
 
-    _getProductTitle(dataKey, productId) {
-      const products = this.data[dataKey] || [];
-      return products.find(p => p.id === productId)?.title || '—';
-    }
-
     _buildConfigSummary() {
       // Helper: truncate title to max chars
       const trunc = (str, max = 20) => str && str.length > max ? str.slice(0, max - 1) + '…' : (str || '');
@@ -1066,7 +1089,12 @@
       return summary;
     }
 
-    /* ══ 7. CART & VALIDATION ═══════════════════════════════════════ */
+    _getProductTitle(dataKey, productId) {
+      const products = this.data[dataKey] || [];
+      return products.find(p => p.id === productId)?.title || '—';
+    }
+
+    /* ══ 7. CART & VALIDATION ════════════════════════════════════════════ */
 
     /**
      * Validates that all required steps have a selection.
@@ -1245,7 +1273,7 @@
       if (this.cartError) { this.cartError.innerHTML = ''; this.cartError.style.display = 'none'; }
     }
 
-    /* ══ 8. UI UTILITIES ════════════════════════════════════════════ */
+    /* ══ 8. UI UTILITIES ════════════════════════════════════════════════ */
 
     _showToast(message, duration = 3000) {
       const existing = this.querySelector('.cfg-toast');
@@ -1261,21 +1289,6 @@
         toast.classList.remove('cfg-toast--visible');
         toast.addEventListener('transitionend', () => toast.remove(), { once: true });
       }, duration);
-    }
-
-    _showTooltip(btn) {
-      this._closeTooltips();
-      const text = btn.dataset.tooltip;
-      if (!text) return;
-      const tip = document.createElement('div');
-      tip.className = 'cfg-tooltip';
-      tip.textContent = text;
-      btn.style.position = 'relative';
-      btn.appendChild(tip);
-    }
-
-    _closeTooltips() {
-      this.querySelectorAll('.cfg-tooltip').forEach(t => t.remove());
     }
 
     _setMainImage(url) {
@@ -1309,24 +1322,25 @@
       });
     }
 
-    _unlockThrough(stepNum) {
-      if (stepNum <= this.maxUnlocked) return;
-      this.maxUnlocked = stepNum;
-      for (let i = 1; i <= STEPS.length; i++) {
-        const el = this.querySelector(`[data-step="${i}"]`);
-        if (!el) continue;
-        el.classList.toggle('cfg-step--locked', i > this.maxUnlocked);
-      }
-      if (this.state.size && this.ctaBtn) {
-        this.ctaBtn.disabled = false;
-        this.ctaBtn.textContent = 'Add to Cart';
-      }
-    }
-
     _scrollToStep(num) {
       const el = this.querySelector(`[data-step="${num}"]`);
       if (!el) return;
       setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 150);
+    }
+
+    _showTooltip(btn) {
+      this._closeTooltips();
+      const text = btn.dataset.tooltip;
+      if (!text) return;
+      const tip = document.createElement('div');
+      tip.className = 'cfg-tooltip';
+      tip.textContent = text;
+      btn.style.position = 'relative';
+      btn.appendChild(tip);
+    }
+
+    _closeTooltips() {
+      this.querySelectorAll('.cfg-tooltip').forEach(t => t.remove());
     }
 
     _escAttr(str) {
