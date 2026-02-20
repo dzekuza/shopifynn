@@ -18,9 +18,9 @@ Requirements for production-ready launch. Each maps to roadmap phases.
 
 ### Configurator Stability
 
-- [ ] **CONF-01**: Replace regex-based product title matching with metafield-based lookups (configurator.size, configurator.oven_type, configurator.addon_type)
-- [ ] **CONF-02**: Extend configurator-product-json.liquid to include size, oven_type, and addon_type from metafields
-- [ ] **CONF-03**: Delete all string-matching fallback methods (_getSizeFromProduct, _isInternalOvenProduct) in same commit as metafield migration
+- [x] **CONF-01**: Replace regex-based product title matching with metafield-based lookups (configurator.size, configurator.oven_type, configurator.addon_type)
+- [x] **CONF-02**: Extend configurator-product-json.liquid to include size, oven_type, and addon_type from metafields
+- [x] **CONF-03**: Delete all string-matching fallback methods (_getSizeFromProduct, _isInternalOvenProduct) in same commit as metafield migration
 - [ ] **CONF-04**: Consolidate two price calculation paths into single _calculateLineItems() function used by both display and cart
 - [x] **CONF-05**: Add step validation before cart — user cannot add to cart with incomplete required configuration
 - [x] **CONF-06**: Add clear error recovery on cart add failure with retry option and failure explanation
@@ -116,9 +116,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | SEC-04 | Phase 5 | Pending |
 | SEC-05 | Phase 5 | Pending |
 | SEC-06 | Phase 5 | Pending |
-| CONF-01 | Phase 6 | Pending |
-| CONF-02 | Phase 6 | Pending |
-| CONF-03 | Phase 6 | Pending |
+| CONF-01 | Phase 6 | Complete |
+| CONF-02 | Phase 6 | Complete |
+| CONF-03 | Phase 6 | Complete |
 | CONF-04 | Phase 6 | Pending |
 | CONF-05 | Phase 2 | Complete |
 | CONF-06 | Phase 2 | Complete |

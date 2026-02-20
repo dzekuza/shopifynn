@@ -111,7 +111,7 @@ Plans:
   2. _isInternalOvenProduct() reads meta.oven_type instead of regex on product.title — no regex title matching for oven type
   3. connectedCallback has a null guard preventing querySelector throws in Shopify theme editor
   4. _showVariants() uses event delegation via _bindEvents instead of direct addEventListener — no listener accumulation on step re-visits
-**Plans:** 2 plans
+**Plans:** 1/2 plans executed
 Plans:
 - [ ] 06-01-PLAN.md — Metafield resolution, connectedCallback guard, event delegation
 - [ ] 06-02-PLAN.md — Unified _calculateLineItems() for price display and cart payload
@@ -150,6 +150,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 | 3. Performance and Accessibility | 5/5 | Complete | 2026-02-20 |
 | 4. Visual Polish and Brand Content | 2/2 | Complete | 2026-02-19 |
 | 5. XSS Sanitization Recovery | 0/1 | Pending |  |
-| 6. Metafield Resolution & Event Delegation | 0/2 | Pending |  |
+| 6. Metafield Resolution & Event Delegation | 1/2 | In Progress|  |
 | 7. Price Unification & Locale Formatting | 0/1 | Pending |  |
 | 8. CSS Architecture & theme.js Cleanup | 0/0 | Pending |  |

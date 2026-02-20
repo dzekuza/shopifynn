@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-02-20)
 
 **Core value:** The hot tub configurator must work flawlessly — it's the primary revenue driver where customers build and price their custom configuration across 15 steps.
-**Current focus:** Phase 3 — Performance and Accessibility (Plan 04 of 05 complete)
+**Current focus:** Phase 6 — Metafield Resolution & Event Delegation (Plan 01 of 01 complete)
 
 ## Current Position
 
-Phase: 3 of 4 (Performance and Accessibility)
-Plan: 5 of 5 in phase 03-performance-and-accessibility
-Status: Phase 03 plan 04 complete — ready for plan 05 (final verification)
-Last activity: 2026-02-20 - Completed quick task 1: Update configurator summary card UI with option images, prices, and edit buttons
+Phase: 6 of 7 (Metafield Resolution & Event Delegation)
+Plan: 1 of 1 in phase 06-metafield-resolution-event-delegation
+Status: Phase 06 plan 01 complete — metafield resolution, connectedCallback guard, event delegation
+Last activity: 2026-02-20 - Completed 06-01-PLAN.md: metafield-based product resolution, connectedCallback null guard, event delegation
 
-Progress: [████████░░] 80%
+Progress: [█████████░] 90%
 
 ## Performance Metrics
 
@@ -44,6 +44,7 @@ Progress: [████████░░] 80%
 | Phase 02-configurator-stabilization P05 | 8 | 1 tasks | 1 files |
 | Phase 03-performance-and-accessibility P05 | 2 | 2 tasks | 1 files |
 | Phase 03-performance-and-accessibility P04 | 2 | 2 tasks | 1 files |
+| Phase 06-metafield-resolution-event-delegation P01 | 7 | 2 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -91,6 +92,9 @@ Recent decisions affecting current work:
 - [Phase 03-performance-and-accessibility]: min-width/min-height on .cfg-tooltip-btn expands touch target to 44px WCAG 2.5.5 minimum without changing 20px visual circle appearance
 - [Phase 03-performance-and-accessibility]: Arrow key group containers: .cfg-cards, .cfg-product-list, .cfg-swatches, .cfg-toggle-group, .cfg-card-options — matches actual rendered wrapper classes
 - [Phase 03-performance-and-accessibility]: _stepEls built during _cacheEls before _renderSteps — step shell elements exist in Liquid template, body content added by _renderSteps
+- [Phase 06-metafield-resolution-event-delegation]: Metafield reads use p.meta?.size and p.meta?.oven_type — no regex fallback, products missing metafields are skipped with console.warn
+- [Phase 06-metafield-resolution-event-delegation]: connectedCallback null guard shows branded Aurowe placeholder when data element absent — theme editor safe
+- [Phase 06-metafield-resolution-event-delegation]: Deleted _getSizeFromProduct() and _isInternalOvenProduct() in same commit as metafield migration per CONF-03
 
 ### Pending Todos
 
