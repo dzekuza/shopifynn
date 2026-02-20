@@ -46,6 +46,7 @@ Progress: [█████████░] 90%
 | Phase 03-performance-and-accessibility P04 | 2 | 2 tasks | 1 files |
 | Phase 06-metafield-resolution-event-delegation P01 | 7 | 2 tasks | 1 files |
 | Phase 07-price-unification-locale-formatting P01 | 9 | 3 tasks | 2 files |
+| Phase 06-metafield-resolution-event-delegation P02 | 1 | 1 tasks | 0 files |
 
 ## Accumulated Context
 
@@ -99,6 +100,7 @@ Recent decisions affecting current work:
 - [Phase 07-price-unification-locale-formatting]: money() uses Intl.NumberFormat with window.__shopLocale/window.__shopCurrency — de-DE/EUR fallbacks for backward compatibility
 - [Phase 07-price-unification-locale-formatting]: _calculateLineItems() returns full line item array enabling display and cart from one source
 - [Phase 07-price-unification-locale-formatting]: Delegation pattern: NEVER add addEventListener inside render methods — only _bindEvents() (called once in connectedCallback) may wire events
+- [Phase 06-metafield-resolution-event-delegation]: _calculateLineItems() was pre-implemented in 48cca5a (feat(07-01)) — plan 06-02 verified all success criteria without code changes
 
 ### Pending Todos
 
