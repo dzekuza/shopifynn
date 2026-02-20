@@ -5,14 +5,14 @@
 See: .planning/PROJECT.md (updated 2026-02-20)
 
 **Core value:** The hot tub configurator must work flawlessly — it's the primary revenue driver where customers build and price their custom configuration across 15 steps.
-**Current focus:** Phase 5 — XSS Sanitization Recovery (Plan 01 of 01 complete)
+**Current focus:** Phase 8 — CSS Architecture & theme.js Cleanup (Plan 01 of 01 complete)
 
 ## Current Position
 
-Phase: 5 of 7 (XSS Sanitization Recovery)
-Plan: 1 of 1 in phase 05-xss-sanitization-recovery
-Status: Phase 05 plan 01 complete — DOMPurify loaded, all 12 dynamic innerHTML sites sanitized, _escAttr() deleted
-Last activity: 2026-02-20 - Completed 05-01-PLAN.md: DOMPurify XSS sanitization — 12 dynamic innerHTML sites wrapped, _escAttr() deleted
+Phase: 8 of 8 (CSS Architecture & theme.js Cleanup)
+Plan: 1 of 1 in phase 08-css-architecture-themejs-cleanup
+Status: Phase 08 plan 01 complete — configurator CSS extracted to assets/configurator.css, all 24 var declarations replaced with const/let in theme.js
+Last activity: 2026-02-20 - Completed 08-01-PLAN.md: extracted 18 KB configurator CSS to cacheable asset file, replaced var with const/let in theme.js
 
 Progress: [██████████] 100%
 
@@ -48,6 +48,7 @@ Progress: [██████████] 100%
 | Phase 07-price-unification-locale-formatting P01 | 9 | 3 tasks | 2 files |
 | Phase 06-metafield-resolution-event-delegation P02 | 1 | 1 tasks | 0 files |
 | Phase 05-xss-sanitization-recovery P01 | 3 | 2 tasks | 2 files |
+| Phase 08-css-architecture-themejs-cleanup P01 | 4 | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -104,6 +105,8 @@ Recent decisions affecting current work:
 - [Phase 06-metafield-resolution-event-delegation]: _calculateLineItems() was pre-implemented in 48cca5a (feat(07-01)) — plan 06-02 verified all success criteria without code changes
 - [Phase 05-xss-sanitization-recovery]: DOMPurify loaded via jsDelivr CDN with defer before configurator.js — mixed strategy: sanitize() for product data, DOM builder for summary list, static strings left as-is
 - [Phase 05-xss-sanitization-recovery]: _escAttr() deleted — tooltip interpolation relies on outer DOMPurify.sanitize() call wrapping the full HTML block
+- [Phase 08-css-architecture-themejs-cleanup]: Extracted {% stylesheet %} block verbatim to assets/configurator.css — zero Liquid expressions confirmed, pure CSS safe to copy
+- [Phase 08-css-architecture-themejs-cleanup]: Retained {% style %} block in configurator.liquid for dynamic Liquid variables (background_color, padding) — only static {% stylesheet %} block extracted
 
 ### Pending Todos
 
@@ -124,5 +127,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-20
-Stopped at: Completed 02-04-PLAN.md — cart validation with toast, error recovery retry button, grouped config summary card persisted as Shopify cart line item property
+Stopped at: Completed 08-01-PLAN.md — configurator CSS extracted to assets/configurator.css, 24 var declarations replaced with const/let in theme.js
 Resume file: None

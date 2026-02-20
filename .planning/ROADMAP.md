@@ -19,7 +19,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 5: XSS Sanitization Recovery** - [Gap closure] Re-add DOMPurify CDN, sanitize all innerHTML call sites, delete _escAttr() (completed 2026-02-20)
 - [x] **Phase 6: Metafield Resolution & Event Delegation Recovery** - [Gap closure] Replace regex product matching with metafield lookups, add connectedCallback guard, fix event delegation (completed 2026-02-20)
 - [ ] **Phase 7: Price Unification & Locale Formatting** - [Gap closure] Implement _calculateLineItems() single source of truth, wire money() to __shopLocale
-- [ ] **Phase 8: CSS Architecture & theme.js Cleanup** - [Gap closure] Extract configurator CSS to asset file, fix conditional loading, var→const/let in theme.js
+- [x] **Phase 8: CSS Architecture & theme.js Cleanup** - [Gap closure] Extract configurator CSS to asset file, fix conditional loading, var→const/let in theme.js (completed 2026-02-20)
 
 ## Phase Details
 
@@ -137,7 +137,7 @@ Plans:
   1. assets/configurator.css exists and contains all configurator styles extracted from the {% stylesheet %} block
   2. theme.liquid loads configurator.css conditionally only when template.suffix == 'configurator' — no 404 on other pages
   3. theme.js uses const/let exclusively — zero var declarations remain
-**Plans:** 1 plan
+**Plans:** 1/1 plans complete
 Plans:
 - [ ] 08-01-PLAN.md — Extract configurator CSS to asset file and replace all var declarations in theme.js
 
@@ -155,4 +155,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 | 5. XSS Sanitization Recovery | 1/1 | Complete   | 2026-02-20 |
 | 6. Metafield Resolution & Event Delegation | 2/2 | Complete   | 2026-02-20 |
 | 7. Price Unification & Locale Formatting | 0/1 | Pending |  |
-| 8. CSS Architecture & theme.js Cleanup | 0/1 | Pending |  |
+| 8. CSS Architecture & theme.js Cleanup | 1/1 | Complete   | 2026-02-20 |
