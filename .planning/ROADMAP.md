@@ -137,6 +137,9 @@ Plans:
   1. assets/configurator.css exists and contains all configurator styles extracted from the {% stylesheet %} block
   2. theme.liquid loads configurator.css conditionally only when template.suffix == 'configurator' — no 404 on other pages
   3. theme.js uses const/let exclusively — zero var declarations remain
+**Plans:** 1 plan
+Plans:
+- [ ] 08-01-PLAN.md — Extract configurator CSS to asset file and replace all var declarations in theme.js
 
 ## Progress
 
@@ -152,4 +155,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 | 5. XSS Sanitization Recovery | 1/1 | Complete   | 2026-02-20 |
 | 6. Metafield Resolution & Event Delegation | 2/2 | Complete   | 2026-02-20 |
 | 7. Price Unification & Locale Formatting | 0/1 | Pending |  |
-| 8. CSS Architecture & theme.js Cleanup | 0/0 | Pending |  |
+| 8. CSS Architecture & theme.js Cleanup | 0/1 | Pending |  |
