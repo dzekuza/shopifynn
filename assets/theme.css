@@ -1606,8 +1606,8 @@ ul, ol {
   transition: transform 0.5s ease;
 }
 
-.product-card__link:hover .product-card__image {
-  opacity: 0.85;
+.product-card__link:hover .product-card__image:only-child {
+  opacity: 0.92;
   transition: opacity 0.3s ease;
 }
 
@@ -3916,12 +3916,14 @@ ul, ol {
   border: none;
   color: var(--color-secondary);
   font-weight: 600;
+  font-size: 15px;
   text-decoration: underline;
+  text-underline-offset: 3px;
   padding: 0;
 }
 
 .dynamic-content__link-button:hover {
-  color: var(--color-primary);
+  color: var(--color-accent);
 }
 
 /* Spacer & Divider */

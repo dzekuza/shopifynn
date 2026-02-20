@@ -1,28 +1,30 @@
-<div class="product-card">
+<div class="product-card{% if settings.card_show_shadow %} product-card--shadow{% endif %}{% unless settings.card_hover_zoom %} product-card--no-zoom{% endunless %}">
   <a href="{{ product.url }}" class="product-card__link">
     <div class="product-card__image-wrap">
       {% if product.featured_image %}
         <img
-          src="{{ product.featured_image | image_url: width: 480 }}"
+          src="{{ product.featured_image | image_url: width: 720 }}"
           srcset="
             {{ product.featured_image | image_url: width: 240 }} 240w,
             {{ product.featured_image | image_url: width: 360 }} 360w,
-            {{ product.featured_image | image_url: width: 480 }} 480w
+            {{ product.featured_image | image_url: width: 480 }} 480w,
+            {{ product.featured_image | image_url: width: 720 }} 720w
           "
-          sizes="(max-width: 768px) 50vw, 25vw"
+          sizes="(max-width: 767px) 45vw, (max-width: 1023px) 30vw, 25vw"
           alt="{{ product.title | escape }}"
           loading="lazy"
           class="product-card__image"
         >
         {% if show_secondary_image and product.images.size > 1 %}
           <img
-            src="{{ product.images[1] | image_url: width: 480 }}"
+            src="{{ product.images[1] | image_url: width: 720 }}"
             srcset="
               {{ product.images[1] | image_url: width: 240 }} 240w,
               {{ product.images[1] | image_url: width: 360 }} 360w,
-              {{ product.images[1] | image_url: width: 480 }} 480w
+              {{ product.images[1] | image_url: width: 480 }} 480w,
+              {{ product.images[1] | image_url: width: 720 }} 720w
             "
-            sizes="(max-width: 768px) 50vw, 25vw"
+            sizes="(max-width: 767px) 45vw, (max-width: 1023px) 30vw, 25vw"
             alt="{{ product.title | escape }}"
             loading="lazy"
             class="product-card__image product-card__image--secondary"
