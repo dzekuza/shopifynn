@@ -46,6 +46,10 @@
     /* ══ 2. LIFECYCLE & INITIALIZATION ══════════════════════════════════ */
 
     connectedCallback() {
+      if (typeof DOMPurify === 'undefined') {
+        console.error('[Configurator] DOMPurify failed to load — XSS sanitization unavailable.');
+        return;
+      }
       const dataEl = this.querySelector('[data-configurator-products]');
       if (!dataEl) {
         this._renderEditorPlaceholder();
