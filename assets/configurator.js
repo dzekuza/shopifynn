@@ -210,7 +210,7 @@
           <div class="cfg-cards" data-size-cards></div>
         </div>`;
 
-      container.innerHTML = html;
+      container.innerHTML = DOMPurify.sanitize(html);
     }
 
     _renderCollectionStep(container, dataKey, mode) {
@@ -236,7 +236,7 @@
                 ${p.body ? `<span class="cfg-radio-card__desc">${p.body}</span>` : ''}
               </span>
               ${p.price > 0 ? `<span class="cfg-radio-card__price">+${money(p.price)}</span>` : ''}
-              ${tooltip ? `<button type="button" class="cfg-tooltip-btn" data-tooltip="${this._escAttr(tooltip)}" aria-label="More info">?</button>` : ''}
+              ${tooltip ? `<button type="button" class="cfg-tooltip-btn" data-tooltip="${tooltip}" aria-label="More info">?</button>` : ''}
             </span>
           </label>`;
       }
@@ -262,7 +262,7 @@
         </div>`;
       }
 
-      container.innerHTML = html;
+      container.innerHTML = DOMPurify.sanitize(html);
     }
 
     _renderCheckboxStep(container, stateKey) {
@@ -274,7 +274,7 @@
       }
 
       const tooltip = product.meta?.info_tooltip;
-      container.innerHTML = `
+      container.innerHTML = DOMPurify.sanitize(`
         <label class="cfg-checkbox-card" data-action="toggle-checkbox" data-key="${stateKey}" data-product-id="${product.id}" data-variant-id="${product.variants?.[0]?.id || ''}" data-price="${product.price}">
           <input type="checkbox" class="cfg-checkbox-card__input">
           <span class="cfg-checkbox-card__body">
@@ -283,14 +283,14 @@
               <span class="cfg-checkbox-card__title">${product.title}</span>
               ${product.price > 0 ? `<span class="cfg-checkbox-card__price">+${money(product.price)}</span>` : '<span class="cfg-checkbox-card__price">Included</span>'}
             </span>
-            ${tooltip ? `<button type="button" class="cfg-tooltip-btn" data-tooltip="${this._escAttr(tooltip)}" aria-label="More info">?</button>` : ''}
+            ${tooltip ? `<button type="button" class="cfg-tooltip-btn" data-tooltip="${tooltip}" aria-label="More info">?</button>` : ''}
           </span>
-        </label>`;
+        </label>`);
     }
 
     _renderCheckboxDropdownStep(container, stateKey, dataKey) {
       const products = this.data[dataKey] || [];
-      container.innerHTML = `
+      container.innerHTML = DOMPurify.sanitize(`
         <label class="cfg-checkbox-card" data-action="toggle-checkbox" data-key="${stateKey}" data-reveals="cfg-filter-options">
           <input type="checkbox" class="cfg-checkbox-card__input">
           <span class="cfg-checkbox-card__body">
@@ -315,7 +315,7 @@
               </label>
             `).join('')}
           </div>
-        </div>`;
+        </div>`);
     }
 
     _renderCheckboxQtyStep(container, stateKey) {
@@ -327,7 +327,7 @@
       const max = product.meta?.max_qty || 8;
       const def = product.meta?.default_qty || min;
 
-      container.innerHTML = `
+      container.innerHTML = DOMPurify.sanitize(`
         <label class="cfg-checkbox-card" data-action="toggle-checkbox" data-key="${stateKey}" data-product-id="${product.id}" data-variant-id="${product.variants?.[0]?.id || ''}" data-price="${product.price}" data-reveals="cfg-${stateKey}-qty">
           <input type="checkbox" class="cfg-checkbox-card__input">
           <span class="cfg-checkbox-card__body">
@@ -345,7 +345,7 @@
             <span class="cfg-qty-value" data-qty-value="${stateKey}">${def}</span>
             <button type="button" class="cfg-qty-btn" data-action="qty-plus" data-group="${stateKey}" aria-label="Increase quantity">+</button>
           </div>
-        </div>`;
+        </div>`);
       this.state.pillowQty = def;
     }
 
@@ -377,25 +377,25 @@
                   <span class="cfg-checkbox-card__title">${addon.title}</span>
                   ${addon.price > 0 ? `<span class="cfg-checkbox-card__price">+${money(addon.price)}</span>` : ''}
                 </span>
-                ${tooltip ? `<button type="button" class="cfg-tooltip-btn" data-tooltip="${this._escAttr(tooltip)}" aria-label="More info">?</button>` : ''}
+                ${tooltip ? `<button type="button" class="cfg-tooltip-btn" data-tooltip="${tooltip}" aria-label="More info">?</button>` : ''}
               </span>
             </label>`;
         }
         html += '</div>';
       }
 
-      container.innerHTML = html;
+      container.innerHTML = DOMPurify.sanitize(html);
     }
 
     _renderDiagramStep(container, key) {
       const imgData = this.data.diagrams?.[key] || {};
       if (key === 'controls') {
-        container.innerHTML = `
+        container.innerHTML = DOMPurify.sanitize(`
           <p class="cfg-desc">Mark the installation locations for controls and systems on the diagram below.</p>
           ${imgData.image ? `<img src="${imgData.image}" alt="Control installation diagram" class="cfg-diagram-img" loading="lazy">` : '<div class="cfg-diagram-placeholder">Diagram images will be uploaded by admin</div>'}
-          <p class="cfg-note">Default positions are pre-selected. Modify if needed during order review.</p>`;
+          <p class="cfg-note">Default positions are pre-selected. Modify if needed during order review.</p>`);
       } else {
-        container.innerHTML = `
+        container.innerHTML = DOMPurify.sanitize(`
           <div class="cfg-card-options" data-heater-options>
             <div class="cfg-card cfg-card--option cfg-card--selected" data-action="heater-conn" data-value="straight" tabindex="0" role="button">
               ${imgData.straight ? `<img src="${imgData.straight}" alt="Straight connection" class="cfg-card__img" loading="lazy">` : ''}
@@ -407,7 +407,7 @@
               <span class="cfg-card__label">90° Angle connection</span>
               <span class="cfg-card__sublabel">+${money(this.data.heater_90?.price || 0)}</span>
             </div>
-          </div>`;
+          </div>`);
       }
     }
 
@@ -422,7 +422,7 @@
       };
       const persons = { XL: '6–8 persons', L: '6–8 persons', M: '2 persons' };
 
-      container.innerHTML = sizes.map(s => `
+      container.innerHTML = DOMPurify.sanitize(sizes.map(s => `
         <div class="cfg-card cfg-card--size" data-action="select-size" data-size="${s.label}" tabindex="0" role="button" aria-pressed="false">
           <div class="cfg-card__info">
             <h4 class="cfg-card__name">${s.label}</h4>
@@ -431,7 +431,7 @@
           </div>
           <div class="cfg-card__price">From ${money(s.minPrice)}</div>
         </div>
-      `).join('');
+      `).join(''));
     }
 
     _showVariants(group, product) {
@@ -447,18 +447,18 @@
       const isColor = variants.some(v => v.option1 && /pearl|granite|grey|black|brown|white|blue|green|azure|ivory|silver|midnight|crystal|glacier|arctic|anthracite|chocolate|fir|cedar|thermal|ral/i.test(v.option1));
 
       if (isColor && swatchContainer) {
-        swatchContainer.innerHTML = variants.map((v, i) => `
+        swatchContainer.innerHTML = DOMPurify.sanitize(variants.map((v, i) => `
           <div class="cfg-swatch ${i === 0 ? 'cfg-swatch--selected' : ''}" data-action="select-variant" data-group="${group}" data-variant-id="${v.id}" data-price="${v.price}" title="${v.option1}" tabindex="0" role="button" aria-pressed="${i === 0}" aria-label="${v.option1}">
             <span class="cfg-swatch__label">${v.option1}</span>
           </div>
-        `).join('');
+        `).join(''));
       } else if (pillsContainer) {
-        pillsContainer.innerHTML = variants.map((v, i) => `
+        pillsContainer.innerHTML = DOMPurify.sanitize(variants.map((v, i) => `
           <button type="button" class="cfg-pill ${i === 0 ? 'cfg-pill--selected' : ''}" data-action="select-variant" data-group="${group}" data-variant-id="${v.id}" data-price="${v.price}">
             ${v.option1}${v.option2 ? ' / ' + v.option2 : ''}
             ${v.price > product.variants[0].price ? ` <span class="cfg-pill__extra">+${money(v.price - product.variants[0].price)}</span>` : ''}
           </button>
-        `).join('');
+        `).join(''));
       }
 
       area.style.display = 'block';
@@ -1711,11 +1711,11 @@
     _updateGallery(images) {
       if (!this.gallery || !images?.length) return;
       this._galleryImages = images;
-      this.gallery.innerHTML = images.map((img, i) => `
+      this.gallery.innerHTML = DOMPurify.sanitize(images.map((img, i) => `
         <div class="cfg-thumb ${i === 0 ? 'cfg-thumb--active' : ''}" data-action="select-thumb" data-thumb-idx="${i}" tabindex="0" role="button" aria-label="View image ${i + 1}">
           <img src="${img.thumb || img.src}" alt="${img.alt || 'Hot tub view'}" loading="lazy">
         </div>
-      `).join('');
+      `).join(''));
       if (images[0]) this._preloadImage(images[0].src);
       if (images[0]) this._setMainImage(images[0].src);
     }
@@ -1739,10 +1739,6 @@
 
     _closeTooltips() {
       this.querySelectorAll('.cfg-tooltip').forEach(t => t.remove());
-    }
-
-    _escAttr(str) {
-      return str.replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;');
     }
   }
 
