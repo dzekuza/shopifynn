@@ -108,18 +108,22 @@ Plans:
   2. _isInternalOvenProduct() reads meta.oven_type instead of regex on product.title — no regex title matching for oven type
   3. connectedCallback has a null guard preventing querySelector throws in Shopify theme editor
   4. _showVariants() uses event delegation via _bindEvents instead of direct addEventListener — no listener accumulation on step re-visits
+**Plans:** 2 plans
+Plans:
+- [ ] 06-01-PLAN.md — Metafield resolution, connectedCallback guard, event delegation
+- [ ] 06-02-PLAN.md — Unified _calculateLineItems() for price display and cart payload
 
 ### Phase 7: Price Unification & Locale Formatting
 **Goal**: A single _calculateLineItems() function drives both display price and cart payload, and currency formatting respects the shop locale
 **Depends on**: Phase 6
-**Requirements**: CONF-07, CONF-08
+**Requirements**: CONF-04, CONF-07, CONF-08
 **Gap Closure**: Closes gaps from audit — Phase 2 price consolidation and locale formatting were overwritten
 **Success Criteria** (what must be TRUE):
   1. _calculateLineItems() exists and returns line items used by both _updatePrice() display and _buildCartItems() cart payload
   2. money() reads window.__shopLocale for locale and window.__shopCurrency for currency code — no hardcoded de-DE or EUR
 **Plans:** 1 plan
 Plans:
-- [ ] 07-01-PLAN.md — Locale-aware money() rewrite + event delegation cleanup
+- [ ] 07-01-PLAN.md — Locale-aware money() rewrite, _calculateLineItems() unification, and event delegation cleanup
 
 ### Phase 8: CSS Architecture & theme.js Cleanup
 **Goal**: Configurator CSS lives in a dedicated cacheable asset file, and theme.js uses modern variable declarations exclusively
