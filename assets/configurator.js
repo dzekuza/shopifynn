@@ -78,6 +78,15 @@
       this.maxUnlocked = 1;
       this._cacheEls();
       this._renderSteps();
+
+      // Set inert on locked step bodies after initial render
+      for (let i = 2; i <= STEPS.length; i++) {
+        const el = this._stepEls[i];
+        if (!el) continue;
+        const body = el.querySelector('.cfg-step__body');
+        if (body) body.setAttribute('inert', '');
+      }
+
       this._bindEvents();
     }
 
@@ -92,6 +101,22 @@
       this.cartError = this.querySelector('[data-cart-error]');
       this.summaryList = this.querySelector('[data-summary-list]');
       this.summaryCard = this.querySelector('[data-summary-card]');
+      this.stickyBar = this.querySelector('[data-sticky-bar]');
+      this.stickyPrice = this.querySelector('[data-sticky-price]');
+      this.stickyCta = this.querySelector('[data-action="sticky-add-to-cart"]');
+      this._initStickyBar();
+
+      // Step element map — keyed by step number for O(1) lookups
+      this._stepEls = {};
+      for (let i = 1; i <= 15; i++) {
+        const el = this.querySelector(`[data-step="${i}"]`);
+        if (el) this._stepEls[i] = el;
+      }
+
+      // Additional hot-path nodes
+      this._ovenNote = this.querySelector('[data-oven-note]');
+      this._sizeSection = this.querySelector('[data-size-section]');
+      this._sizeCardsContainer = this.querySelector('[data-size-cards]');
     }
 
     /* ══ 3. STEP RENDERING ══════════════════════════════════════════════ */
@@ -195,9 +220,9 @@
         html += `<div class="cfg-qty-area" data-qty-area="${dataKey}" style="display:none;">
           <label class="cfg-label">Number of nozzles:</label>
           <div class="cfg-qty-selector" data-qty-selector="${dataKey}">
-            <button type="button" class="cfg-qty-btn" data-action="qty-minus" data-group="${dataKey}">−</button>
+            <button type="button" class="cfg-qty-btn" data-action="qty-minus" data-group="${dataKey}" aria-label="Decrease quantity">−</button>
             <span class="cfg-qty-value" data-qty-value="${dataKey}">0</span>
-            <button type="button" class="cfg-qty-btn" data-action="qty-plus" data-group="${dataKey}">+</button>
+            <button type="button" class="cfg-qty-btn" data-action="qty-plus" data-group="${dataKey}" aria-label="Increase quantity">+</button>
           </div>
         </div>`;
       }
@@ -281,9 +306,9 @@
         <div class="cfg-conditional" id="cfg-${stateKey}-qty" style="display:none;">
           <label class="cfg-label">Quantity:</label>
           <div class="cfg-qty-selector" data-qty-selector="${stateKey}" data-min="${min}" data-max="${max}">
-            <button type="button" class="cfg-qty-btn" data-action="qty-minus" data-group="${stateKey}">−</button>
+            <button type="button" class="cfg-qty-btn" data-action="qty-minus" data-group="${stateKey}" aria-label="Decrease quantity">−</button>
             <span class="cfg-qty-value" data-qty-value="${stateKey}">${def}</span>
-            <button type="button" class="cfg-qty-btn" data-action="qty-plus" data-group="${stateKey}">+</button>
+            <button type="button" class="cfg-qty-btn" data-action="qty-plus" data-group="${stateKey}" aria-label="Increase quantity">+</button>
           </div>
         </div>`;
       this.state.pillowQty = def;
@@ -439,13 +464,31 @@
       if (stepNum <= this.maxUnlocked) return;
       this.maxUnlocked = stepNum;
       for (let i = 1; i <= STEPS.length; i++) {
-        const el = this.querySelector(`[data-step="${i}"]`);
+        const el = this._stepEls[i];
         if (!el) continue;
         el.classList.toggle('cfg-step--locked', i > this.maxUnlocked);
+        el.setAttribute('aria-disabled', String(i > this.maxUnlocked));
+        const body = el.querySelector('.cfg-step__body');
+        if (body) {
+          if (i > this.maxUnlocked) {
+            body.setAttribute('inert', '');
+          } else {
+            body.removeAttribute('inert');
+          }
+        }
       }
       if (this.state.size && this.ctaBtn) {
         this.ctaBtn.disabled = false;
         this.ctaBtn.textContent = 'Add to Cart';
+        if (this.stickyCta) this.stickyCta.disabled = false;
+      }
+      // Move focus to the first focusable element in the newly unlocked step
+      const newStep = this._stepEls[stepNum];
+      if (newStep) {
+        setTimeout(() => {
+          const firstFocusable = newStep.querySelector('button, [tabindex="0"], input, [data-action]');
+          if (firstFocusable) firstFocusable.focus();
+        }, 200);
       }
     }
 
@@ -493,6 +536,9 @@
             this._hideError();
             this._handleAddToCart();
             break;
+          case 'sticky-add-to-cart':
+            this._handleAddToCart();
+            break;
         }
 
         // Tooltip
@@ -505,6 +551,21 @@
 
       // Keyboard support
       this.addEventListener('keydown', (e) => {
+        if (['ArrowLeft', 'ArrowUp', 'ArrowRight', 'ArrowDown'].includes(e.key)) {
+          const target = e.target.closest('[data-action]');
+          if (!target) return;
+          const group = target.closest('.cfg-cards, .cfg-product-list, .cfg-swatches, .cfg-toggle-group, .cfg-card-options');
+          if (!group) return;
+          const items = [...group.querySelectorAll('[data-action]')];
+          const idx = items.indexOf(target);
+          if (idx === -1) return;
+          e.preventDefault();
+          const next = (e.key === 'ArrowRight' || e.key === 'ArrowDown')
+            ? items[(idx + 1) % items.length]
+            : items[(idx - 1 + items.length) % items.length];
+          next.focus();
+          return;
+        }
         if (e.key !== 'Enter' && e.key !== ' ') return;
         const target = e.target.closest('[data-action]');
         if (!target) return;
@@ -544,6 +605,7 @@
 
       // Show tier image
       if (tier.image) {
+        this._preloadImage(tier.image);
         this._setMainImage(tier.image);
       }
 
@@ -792,6 +854,7 @@
         this.state.selectedBaseProduct = product;
         this.state.baseVariantId = product.variants?.[0]?.id || null;
         this.state.basePrice = product.variants?.[0]?.price || product.price || 0;
+        if (product.image) this._preloadImage(product.image);
         if (product.image) this._setMainImage(product.image);
       } else {
         this.state.selectedBaseProduct = null;
@@ -884,9 +947,17 @@
       }
 
       // Update display
+      const formatted = money(total);
+      const hasSize = !!this.state.size;
       if (this.totalPriceEl) {
-        this.totalPriceEl.textContent = money(total);
-        this.totalPriceEl.style.visibility = this.state.size ? 'visible' : 'hidden';
+        this.totalPriceEl.textContent = formatted;
+        this.totalPriceEl.style.visibility = hasSize ? 'visible' : 'hidden';
+      }
+      if (this.stickyPrice) {
+        this.stickyPrice.textContent = formatted;
+      }
+      if (this.stickyBar) {
+        this.stickyBar.style.display = hasSize ? '' : 'none';
       }
 
       this._currentTotal = total;
@@ -1130,8 +1201,10 @@
       }
 
       this.ctaBtn.disabled = true;
+      if (this.stickyCta) this.stickyCta.disabled = true;
       const originalText = this.ctaBtn.textContent;
       this.ctaBtn.textContent = 'Adding…';
+      if (this.stickyCta) this.stickyCta.textContent = 'Adding…';
 
       try {
         const items = this._buildCartItems();
@@ -1149,13 +1222,19 @@
         }
 
         this.ctaBtn.textContent = '✓ Added to Cart!';
+        if (this.stickyCta) this.stickyCta.textContent = '✓ Added!';
         window.dispatchEvent(new CustomEvent('cart:refresh'));
-        setTimeout(() => { this.ctaBtn.textContent = originalText; this.ctaBtn.disabled = false; }, 2500);
+        setTimeout(() => {
+          this.ctaBtn.textContent = originalText;
+          this.ctaBtn.disabled = false;
+          if (this.stickyCta) { this.stickyCta.textContent = 'Add to Cart'; this.stickyCta.disabled = false; }
+        }, 2500);
       } catch (error) {
         console.error('[Configurator]', error);
         this._showError(error.message);
         this.ctaBtn.textContent = originalText;
         this.ctaBtn.disabled = false;
+        if (this.stickyCta) { this.stickyCta.textContent = 'Add to Cart'; this.stickyCta.disabled = false; }
       }
     }
 
@@ -1275,6 +1354,20 @@
 
     /* ══ 8. UI UTILITIES ════════════════════════════════════════════════ */
 
+    _initStickyBar() {
+      if (!this.stickyBar) return;
+
+      // Show/hide sticky bar based on whether the main CTA is visible
+      const bottom = this.querySelector('.cfg__bottom');
+      if (bottom && 'IntersectionObserver' in window) {
+        this._stickyObserver = new IntersectionObserver((entries) => {
+          const isVisible = entries[0].isIntersecting;
+          this.stickyBar.classList.toggle('cfg-sticky-bar--visible', !isVisible);
+        }, { threshold: 0 });
+        this._stickyObserver.observe(bottom);
+      }
+    }
+
     _showToast(message, duration = 3000) {
       const existing = this.querySelector('.cfg-toast');
       if (existing) existing.remove();
@@ -1289,6 +1382,16 @@
         toast.classList.remove('cfg-toast--visible');
         toast.addEventListener('transitionend', () => toast.remove(), { once: true });
       }, duration);
+    }
+
+    _preloadImage(url) {
+      return new Promise((resolve) => {
+        if (!url) { resolve(); return; }
+        const img = new Image();
+        img.onload = resolve;
+        img.onerror = resolve; // resolve on error too — don't block UI
+        img.src = url;
+      });
     }
 
     _setMainImage(url) {
@@ -1311,6 +1414,7 @@
           <img src="${img.thumb || img.src}" alt="${img.alt || 'Hot tub view'}" loading="lazy">
         </div>
       `).join('');
+      if (images[0]) this._preloadImage(images[0].src);
       if (images[0]) this._setMainImage(images[0].src);
 
       this.gallery.addEventListener('click', (e) => {
@@ -1318,12 +1422,13 @@
         if (!thumb) return;
         const idx = parseInt(thumb.dataset.thumbIdx);
         this.gallery.querySelectorAll('.cfg-thumb').forEach((t, i) => t.classList.toggle('cfg-thumb--active', i === idx));
+        if (images[idx]) this._preloadImage(images[idx].src);
         if (images[idx]) this._setMainImage(images[idx].src);
       });
     }
 
     _scrollToStep(num) {
-      const el = this.querySelector(`[data-step="${num}"]`);
+      const el = this._stepEls[num];
       if (!el) return;
       setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 150);
     }
