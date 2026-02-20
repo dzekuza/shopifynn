@@ -16,6 +16,10 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 2: Configurator Stabilization** - Replace fragile string-matching with metafield lookups, consolidate pricing, add validation, and clean up architecture (completed 2026-02-20)
 - [x] **Phase 3: Performance and Accessibility** - Eliminate DOM performance problems and meet WCAG 2.1 AA baseline (completed 2026-02-20)
 - [x] **Phase 4: Visual Polish and Brand Content** - Elevate section designs to luxury tier and create About/Story page (completed 2026-02-19)
+- [ ] **Phase 5: XSS Sanitization Recovery** - [Gap closure] Re-add DOMPurify CDN, sanitize all innerHTML call sites, delete _escAttr()
+- [ ] **Phase 6: Metafield Resolution & Event Delegation Recovery** - [Gap closure] Replace regex product matching with metafield lookups, add connectedCallback guard, fix event delegation
+- [ ] **Phase 7: Price Unification & Locale Formatting** - [Gap closure] Implement _calculateLineItems() single source of truth, wire money() to __shopLocale
+- [ ] **Phase 8: CSS Architecture & theme.js Cleanup** - [Gap closure] Extract configurator CSS to asset file, fix conditional loading, var→const/let in theme.js
 
 ## Phase Details
 
@@ -84,14 +88,58 @@ Plans:
 - [ ] 04-01-PLAN.md — CSS polish for hero, features, testimonials sections + GSAP animation consistency
 - [ ] 04-02-PLAN.md — Create About/Story page JSON template with editorial section composition
 
+### Phase 5: XSS Sanitization Recovery
+**Goal**: All XSS vectors in configurator.js are eliminated — DOMPurify loads on the configurator template, all innerHTML call sites use sanitization or DOM builder APIs, and _escAttr() is deleted
+**Depends on**: Phase 1 (credential work must be done first)
+**Requirements**: SEC-04, SEC-05, SEC-06
+**Gap Closure**: Closes gaps from audit — Phase 1 XSS work was overwritten during subsequent phases
+**Success Criteria** (what must be TRUE):
+  1. DOMPurify 3.2.7 loads via CDN `<script>` tag on the configurator template before configurator.js
+  2. All innerHTML call sites in configurator.js use DOMPurify.sanitize() or DOM builder APIs — no raw string interpolation
+  3. _escAttr() method is deleted from configurator.js — zero references remain
+
+### Phase 6: Metafield Resolution & Event Delegation Recovery
+**Goal**: The configurator resolves products via metafield data instead of regex title matching, and event listeners use delegation instead of per-element binding
+**Depends on**: Phase 5
+**Requirements**: CONF-01, CONF-02, CONF-03, CONF-04
+**Gap Closure**: Closes gaps from audit — Phase 2 metafield migration and event delegation were overwritten
+**Success Criteria** (what must be TRUE):
+  1. _getSizeFromProduct() reads meta.size instead of regex on product.title — no regex title matching for size
+  2. _isInternalOvenProduct() reads meta.oven_type instead of regex on product.title — no regex title matching for oven type
+  3. connectedCallback has a null guard preventing querySelector throws in Shopify theme editor
+  4. _showVariants() uses event delegation via _bindEvents instead of direct addEventListener — no listener accumulation on step re-visits
+
+### Phase 7: Price Unification & Locale Formatting
+**Goal**: A single _calculateLineItems() function drives both display price and cart payload, and currency formatting respects the shop locale
+**Depends on**: Phase 6
+**Requirements**: CONF-07, CONF-08
+**Gap Closure**: Closes gaps from audit — Phase 2 price consolidation and locale formatting were overwritten
+**Success Criteria** (what must be TRUE):
+  1. _calculateLineItems() exists and returns line items used by both _updatePrice() display and _buildCartItems() cart payload
+  2. money() reads window.__shopLocale for locale and window.__shopCurrency for currency code — no hardcoded de-DE or EUR
+
+### Phase 8: CSS Architecture & theme.js Cleanup
+**Goal**: Configurator CSS lives in a dedicated cacheable asset file, and theme.js uses modern variable declarations exclusively
+**Depends on**: Phase 7
+**Requirements**: ARCH-01, ARCH-02, ARCH-04
+**Gap Closure**: Closes gaps from audit — CSS extraction never completed and theme.js var cleanup was overwritten
+**Success Criteria** (what must be TRUE):
+  1. assets/configurator.css exists and contains all configurator styles extracted from the {% stylesheet %} block
+  2. theme.liquid loads configurator.css conditionally only when template.suffix == 'configurator' — no 404 on other pages
+  3. theme.js uses const/let exclusively — zero var declarations remain
+
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 → 2 → 3 → 4
+Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Security Foundation | 1/2 | In Progress|  |
-| 2. Configurator Stabilization | 5/5 | Complete   | 2026-02-20 |
-| 3. Performance and Accessibility | 3/3 | Complete    | 2026-02-20 |
-| 4. Visual Polish and Brand Content | 2/2 | Complete   | 2026-02-19 |
+| 1. Security Foundation | 1/2 | In Progress |  |
+| 2. Configurator Stabilization | 5/5 | Complete | 2026-02-20 |
+| 3. Performance and Accessibility | 5/5 | Complete | 2026-02-20 |
+| 4. Visual Polish and Brand Content | 2/2 | Complete | 2026-02-19 |
+| 5. XSS Sanitization Recovery | 0/0 | Pending |  |
+| 6. Metafield Resolution & Event Delegation | 0/0 | Pending |  |
+| 7. Price Unification & Locale Formatting | 0/0 | Pending |  |
+| 8. CSS Architecture & theme.js Cleanup | 0/0 | Pending |  |

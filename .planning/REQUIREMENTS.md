@@ -12,20 +12,20 @@ Requirements for production-ready launch. Each maps to roadmap phases.
 - [ ] **SEC-01**: Rotate all exposed Shopify API credentials (CLIENT_ID, CLIENT_SECRET, API key) in Shopify Admin
 - [ ] **SEC-02**: Purge credentials from git history using git-filter-repo
 - [ ] **SEC-03**: Add .env to .gitignore and remove hardcoded credentials from setup scripts
-- [x] **SEC-04**: Sanitize all 15+ innerHTML call sites in configurator.js using textContent, DOM APIs, or DOMPurify
-- [x] **SEC-05**: Load DOMPurify 3.2.7 from CDN on configurator template for necessary markup sanitization
-- [x] **SEC-06**: Remove insecure custom _escAttr() method and replace with proper sanitization
+- [ ] **SEC-04**: Sanitize all 15+ innerHTML call sites in configurator.js using textContent, DOM APIs, or DOMPurify
+- [ ] **SEC-05**: Load DOMPurify 3.2.7 from CDN on configurator template for necessary markup sanitization
+- [ ] **SEC-06**: Remove insecure custom _escAttr() method and replace with proper sanitization
 
 ### Configurator Stability
 
-- [x] **CONF-01**: Replace regex-based product title matching with metafield-based lookups (configurator.size, configurator.oven_type, configurator.addon_type)
-- [x] **CONF-02**: Extend configurator-product-json.liquid to include size, oven_type, and addon_type from metafields
-- [x] **CONF-03**: Delete all string-matching fallback methods (_getSizeFromProduct, _isInternalOvenProduct) in same commit as metafield migration
-- [x] **CONF-04**: Consolidate two price calculation paths into single _calculateLineItems() function used by both display and cart
+- [ ] **CONF-01**: Replace regex-based product title matching with metafield-based lookups (configurator.size, configurator.oven_type, configurator.addon_type)
+- [ ] **CONF-02**: Extend configurator-product-json.liquid to include size, oven_type, and addon_type from metafields
+- [ ] **CONF-03**: Delete all string-matching fallback methods (_getSizeFromProduct, _isInternalOvenProduct) in same commit as metafield migration
+- [ ] **CONF-04**: Consolidate two price calculation paths into single _calculateLineItems() function used by both display and cart
 - [x] **CONF-05**: Add step validation before cart — user cannot add to cart with incomplete required configuration
 - [x] **CONF-06**: Add clear error recovery on cart add failure with retry option and failure explanation
-- [x] **CONF-07**: Replace per-element event listeners with event delegation on parent containers
-- [x] **CONF-08**: Fix locale-aware currency formatting using window.Shopify.locale instead of hardcoded de-DE
+- [ ] **CONF-07**: Replace per-element event listeners with event delegation on parent containers
+- [ ] **CONF-08**: Fix locale-aware currency formatting using window.Shopify.locale instead of hardcoded de-DE
 - [x] **CONF-09**: Format configuration summary for order confirmation email display
 
 ### Performance
@@ -59,8 +59,8 @@ Requirements for production-ready launch. Each maps to roadmap phases.
 
 ### Architecture
 
-- [x] **ARCH-01**: Extract configurator CSS from section {% stylesheet %} block to assets/configurator.css
-- [x] **ARCH-02**: Load configurator.css conditionally only on configurator template
+- [ ] **ARCH-01**: Extract configurator CSS from section {% stylesheet %} block to assets/configurator.css
+- [ ] **ARCH-02**: Load configurator.css conditionally only on configurator template
 - [x] **ARCH-03**: Internally decompose configurator.js into 8 responsibility groups with clear comment banners
 - [ ] **ARCH-04**: Clean up var/const/let inconsistency in theme.js
 
@@ -113,17 +113,17 @@ Which phases cover which requirements. Updated during roadmap creation.
 | SEC-01 | Phase 1 | Pending |
 | SEC-02 | Phase 1 | Pending |
 | SEC-03 | Phase 1 | Pending |
-| SEC-04 | Phase 1 | Complete |
-| SEC-05 | Phase 1 | Complete |
-| SEC-06 | Phase 1 | Complete |
-| CONF-01 | Phase 2 | Complete |
-| CONF-02 | Phase 2 | Complete |
-| CONF-03 | Phase 2 | Complete |
-| CONF-04 | Phase 2 | Complete |
+| SEC-04 | Phase 5 | Pending |
+| SEC-05 | Phase 5 | Pending |
+| SEC-06 | Phase 5 | Pending |
+| CONF-01 | Phase 6 | Pending |
+| CONF-02 | Phase 6 | Pending |
+| CONF-03 | Phase 6 | Pending |
+| CONF-04 | Phase 6 | Pending |
 | CONF-05 | Phase 2 | Complete |
 | CONF-06 | Phase 2 | Complete |
-| CONF-07 | Phase 2 | Complete |
-| CONF-08 | Phase 2 | Complete |
+| CONF-07 | Phase 7 | Pending |
+| CONF-08 | Phase 7 | Pending |
 | CONF-09 | Phase 2 | Complete |
 | PERF-01 | Phase 3 | Complete |
 | PERF-02 | Phase 3 | Complete |
@@ -142,16 +142,17 @@ Which phases cover which requirements. Updated during roadmap creation.
 | BRAND-01 | Phase 4 | Complete |
 | BRAND-02 | Phase 4 | Complete |
 | BRAND-03 | Phase 4 | Complete |
-| ARCH-01 | Phase 2 | Complete |
-| ARCH-02 | Phase 2 | Complete |
+| ARCH-01 | Phase 8 | Pending |
+| ARCH-02 | Phase 8 | Pending |
 | ARCH-03 | Phase 2 | Complete |
-| ARCH-04 | Phase 1 | Pending |
+| ARCH-04 | Phase 8 | Pending |
 
 **Coverage:**
 - v1 requirements: 36 total
 - Mapped to phases: 36
 - Unmapped: 0 ✓
+- Pending (gap closure): 14
 
 ---
 *Requirements defined: 2026-02-20*
-*Last updated: 2026-02-20 after initial definition*
+*Last updated: 2026-02-20 after gap closure phase creation*
