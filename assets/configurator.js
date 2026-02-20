@@ -854,19 +854,28 @@
       if (!tier || !this.state.size) return;
 
       const products = tier.products || [];
-      const size = this.state.size;
+      const size = this.state.size.toUpperCase();
       const wantInternal = this.state.ovenType === 'internal';
 
-      // Find product matching size + oven type
-      let product = products.find(p =>
-        this._getSizeFromProduct(p) === size && this._isInternalOvenProduct(p) === wantInternal
-      );
+      // Filter to products matching size via metafield — no regex
+      const sizeProducts = products.filter(p => (p.meta?.size || '').toUpperCase() === size);
+      if (sizeProducts.length === 0) {
+        console.warn('[Configurator] No products found for size:', size, '— check configurator.size metafields');
+        this.state.selectedBaseProduct = null;
+        this.state.baseVariantId = null;
+        this.state.basePrice = 0;
+        return;
+      }
 
-      // Fallback: if internal not found, try external
+      // Find product matching oven type via metafield
+      let product = sizeProducts.find(p => {
+        const ovenType = (p.meta?.oven_type || '').toLowerCase();
+        return wantInternal ? ovenType === 'internal' : ovenType === 'external';
+      });
+
+      // Fallback: if internal not found, use external
       if (!product && wantInternal) {
-        product = products.find(p =>
-          this._getSizeFromProduct(p) === size && !this._isInternalOvenProduct(p)
-        );
+        product = sizeProducts.find(p => (p.meta?.oven_type || '').toLowerCase() === 'external');
         if (product) {
           this.state.ovenType = 'external';
           this.querySelectorAll('[data-action="oven-type"]').forEach(btn => {
@@ -893,11 +902,11 @@
       if (!tier || !this.state.size) return;
 
       const products = tier.products || [];
-      const size = this.state.size;
+      const size = this.state.size.toUpperCase();
 
-      // Check if an internal oven product exists for this size
+      // Check if an internal oven product exists for this size via metafield — no regex
       const hasInternal = products.some(p =>
-        this._getSizeFromProduct(p) === size && this._isInternalOvenProduct(p)
+        (p.meta?.size || '').toUpperCase() === size && (p.meta?.oven_type || '').toLowerCase() === 'internal'
       );
 
       const internalBtn = this.querySelector('[data-action="oven-type"][data-value="internal"]');
@@ -1555,6 +1564,17 @@
     }
 
     /* ══ 8. UI UTILITIES ════════════════════════════════════════════════ */
+
+    _renderProductError(message) {
+      // Render a visible admin-facing error inside the active step body
+      const activeStep = this.querySelector('.cfg-step:not(.cfg-step--locked) .cfg-step__body');
+      const target = activeStep || this.stepsContainer || this;
+      const errorEl = document.createElement('div');
+      errorEl.className = 'cfg-product-error';
+      errorEl.style.cssText = 'padding: 16px; background: #fdf0ed; border: 1.5px solid var(--color-accent, #C85E3F); border-radius: 8px; color: var(--color-accent, #C85E3F); font-size: 14px; margin-top: 16px;';
+      errorEl.textContent = message;
+      target.appendChild(errorEl);
+    }
 
     _initStickyBar() {
       if (!this.stickyBar) return;
