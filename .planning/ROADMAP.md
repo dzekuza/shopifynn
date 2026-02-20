@@ -153,9 +153,9 @@ Plans:
   3. REQUIREMENTS.md checkboxes for SEC-01, SEC-02, SEC-03 are `[x]` Complete
   4. CONF-04 traceability correctly reflects Phase 7 (not Phase 6)
   5. ROADMAP progress table is accurate for all phases
-**Plans:** 0/1
+**Plans:** 1 plan
 Plans:
-- [ ] 09-01-PLAN.md — Wire cart:refresh listener, create missing verifications, fix bookkeeping
+- [ ] 09-01-PLAN.md — Wire cart:refresh listener, create VERIFICATION.md for Phases 1/2/4, fix ROADMAP checkboxes
 
 ## Progress
 
