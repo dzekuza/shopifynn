@@ -1001,49 +1001,168 @@
     _updateSummary() {
       if (!this.summaryCard && !this.summaryList) return;
 
-      // Build grouped data structure for display
+      // Build grouped data structure — each item is { label, image, price, qty, stepNum }
       const groups = [];
 
-      // Base Model group
+      // Base Model group (stepNum 1)
       if (this.state.model && this.state.size) {
         const tierTitle = this.state.selectedTier?.title || this.state.model;
         const ovenLabel = this.state.ovenType === 'internal' ? 'Internal Oven' : 'External Oven';
         groups.push({
           heading: 'Base Model',
-          items: [`${tierTitle}, Size ${this.state.size}, ${ovenLabel}`],
+          stepNum: 1,
+          items: [{
+            label: `${tierTitle}, Size ${this.state.size}, ${ovenLabel}`,
+            image: this.state.selectedBaseProduct?.image || null,
+            price: this.state.basePrice || 0,
+            qty: null,
+          }],
         });
       }
 
-      // Heating group (add-ons and alternate connection only — base oven is part of Base Model)
+      // Heating group — oven add-ons and alternate connection only (stepNum 4)
       const heatingItems = [];
-      if (this.state.glassDoor) heatingItems.push('Door with glass');
-      if (this.state.chimney) heatingItems.push('Chimney heat protection');
-      if (this.state.heaterConnection !== 'straight') heatingItems.push('90° angle connection');
-      if (heatingItems.length > 0) groups.push({ heading: 'Heating', items: heatingItems });
+      if (this.state.glassDoor) {
+        const addon = (this.data.oven_addons || []).find(a => a.title.toLowerCase().includes('glass'));
+        heatingItems.push({
+          label: 'Door with glass',
+          image: addon?.image || null,
+          price: this._getAddonPrice('glass'),
+          qty: null,
+        });
+      }
+      if (this.state.chimney) {
+        const addon = (this.data.oven_addons || []).find(a => a.title.toLowerCase().includes('chimney'));
+        heatingItems.push({
+          label: 'Chimney heat protection',
+          image: addon?.image || null,
+          price: this._getAddonPrice('chimney'),
+          qty: null,
+        });
+      }
+      if (this.state.heaterConnection !== 'straight') {
+        heatingItems.push({
+          label: '90° angle connection',
+          image: null,
+          price: this.data.heater_90?.price || 0,
+          qty: null,
+        });
+      }
+      if (heatingItems.length > 0) groups.push({ heading: 'Heating', stepNum: 4, items: heatingItems });
 
-      // Wellness group
+      // Wellness group — hydro (stepNum 6), air (stepNum 7)
       const wellnessItems = [];
-      if (this.state.hydro) wellnessItems.push(`${this._getProductTitle('hydro', this.state.hydro)} (${this.state.hydroNozzles} nozzles)`);
-      if (this.state.air) wellnessItems.push(`${this._getProductTitle('air', this.state.air)} (${this.state.airNozzles} nozzles)`);
-      if (wellnessItems.length > 0) groups.push({ heading: 'Wellness Features', items: wellnessItems });
+      if (this.state.hydro) {
+        wellnessItems.push({
+          label: `${this._getProductTitle('hydro', this.state.hydro)} (${this.state.hydroNozzles} nozzles)`,
+          image: this._getProductImage('hydro', this.state.hydro),
+          price: this._getSelectedProductPrice('hydro', 'hydro'),
+          qty: null,
+        });
+      }
+      if (this.state.air) {
+        wellnessItems.push({
+          label: `${this._getProductTitle('air', this.state.air)} (${this.state.airNozzles} nozzles)`,
+          image: this._getProductImage('air', this.state.air),
+          price: this._getSelectedProductPrice('air', 'air'),
+          qty: null,
+        });
+      }
+      if (wellnessItems.length > 0) groups.push({ heading: 'Wellness Features', stepNum: 6, items: wellnessItems });
 
-      // Accessories group
+      // Accessories group — multiple steps; stepNum points to liner step (2) as entry point
       const accItems = [];
-      if (this.state.liner) accItems.push(`Liner: ${this._getProductTitle('liners', this.state.liner)}`);
-      if (this.state.insulation) accItems.push('Insulation');
-      if (this.state.exterior) accItems.push(`Exterior: ${this._getProductTitle('exteriors', this.state.exterior)}`);
-      if (this.state.cover) accItems.push(`Cover: ${this._getProductTitle('covers', this.state.cover)}`);
-      if (this.state.stairs) accItems.push('Stairs');
-      if (this.state.led) accItems.push(`LED: ${this._getProductTitle('leds', this.state.led)} ×${this.state.ledQty}`);
-      if (this.state.pillows) accItems.push(`Pillows ×${this.state.pillowQty || 2}`);
-      if (this.state.thermometer) accItems.push(`Thermometer: ${this._getProductTitle('thermometers', this.state.thermometer)}`);
-      if (this.state.filterEnabled && this.state.filterProduct) accItems.push(`Filter: ${this._getProductTitle('filters', this.state.filterProduct)}`);
-      if (accItems.length > 0) groups.push({ heading: 'Accessories', items: accItems });
+      if (this.state.liner) {
+        accItems.push({
+          label: `Liner: ${this._getProductTitle('liners', this.state.liner)}`,
+          image: this._getProductImage('liners', this.state.liner),
+          price: this._getSelectedVariantPrice('liners', 'liner', 'linerVariant'),
+          qty: null,
+          stepNum: 2,
+        });
+      }
+      if (this.state.insulation) {
+        accItems.push({
+          label: 'Insulation',
+          image: this._getProductImage('insulations', null),
+          price: this._getProductPrice('insulations'),
+          qty: null,
+          stepNum: 3,
+        });
+      }
+      if (this.state.exterior) {
+        accItems.push({
+          label: `Exterior: ${this._getProductTitle('exteriors', this.state.exterior)}`,
+          image: this._getProductImage('exteriors', this.state.exterior),
+          price: this._getSelectedVariantPrice('exteriors', 'exterior', 'exteriorVariant'),
+          qty: null,
+          stepNum: 5,
+        });
+      }
+      if (this.state.filterEnabled && this.state.filterProduct) {
+        accItems.push({
+          label: `Filter: ${this._getProductTitle('filters', this.state.filterProduct)}`,
+          image: this._getProductImage('filters', this.state.filterProduct),
+          price: this._getSelectedProductPrice('filters', 'filterProduct'),
+          qty: null,
+          stepNum: 8,
+        });
+      }
+      if (this.state.led) {
+        accItems.push({
+          label: `LED: ${this._getProductTitle('leds', this.state.led)} ×${this.state.ledQty}`,
+          image: this._getProductImage('leds', this.state.led),
+          price: this._getSelectedProductPrice('leds', 'led'),
+          qty: this.state.ledQty || 1,
+          stepNum: 9,
+        });
+      }
+      if (this.state.thermometer) {
+        accItems.push({
+          label: `Thermometer: ${this._getProductTitle('thermometers', this.state.thermometer)}`,
+          image: this._getProductImage('thermometers', this.state.thermometer),
+          price: this._getSelectedProductPrice('thermometers', 'thermometer'),
+          qty: null,
+          stepNum: 10,
+        });
+      }
+      if (this.state.stairs) {
+        accItems.push({
+          label: 'Stairs',
+          image: this._getProductImage('stairs', null),
+          price: this._getProductPrice('stairs'),
+          qty: null,
+          stepNum: 11,
+        });
+      }
+      if (this.state.pillows) {
+        accItems.push({
+          label: `Pillows ×${this.state.pillowQty || 2}`,
+          image: this._getProductImage('pillows', null),
+          price: this._getProductPrice('pillows'),
+          qty: this.state.pillowQty || 2,
+          stepNum: 12,
+        });
+      }
+      if (this.state.cover) {
+        accItems.push({
+          label: `Cover: ${this._getProductTitle('covers', this.state.cover)}`,
+          image: this._getProductImage('covers', this.state.cover),
+          price: this._getSelectedVariantPrice('covers', 'cover', 'coverVariant'),
+          qty: null,
+          stepNum: 13,
+        });
+      }
+      if (accItems.length > 0) {
+        // For the Accessories group, stepNum points to liner (step 2) as the entry anchor
+        const firstStepNum = accItems[0].stepNum || 2;
+        groups.push({ heading: 'Accessories', stepNum: firstStepNum, items: accItems });
+      }
 
       // Use cached total from _updatePrice() to avoid recalculation
       const total = this._currentTotal || 0;
 
-      // Build summary card DOM
+      // Build summary card DOM using DOM builder (no innerHTML per XSS safety decision [02-04])
       const buildCard = () => {
         const card = document.createElement('div');
         card.className = 'cfg-summary';
@@ -1052,19 +1171,64 @@
           const groupEl = document.createElement('div');
           groupEl.className = 'cfg-summary__group';
 
+          // Group header row: heading left, Edit button right
+          const headerEl = document.createElement('div');
+          headerEl.className = 'cfg-summary__group-header';
+
           const headingEl = document.createElement('div');
           headingEl.className = 'cfg-summary__heading';
           headingEl.textContent = group.heading;
-          groupEl.appendChild(headingEl);
+          headerEl.appendChild(headingEl);
 
-          const itemsEl = document.createElement('div');
-          itemsEl.className = 'cfg-summary__items';
+          const editBtn = document.createElement('button');
+          editBtn.type = 'button';
+          editBtn.className = 'cfg-summary__edit';
+          editBtn.textContent = 'Edit';
+          editBtn.dataset.editStep = String(group.stepNum);
+          headerEl.appendChild(editBtn);
+
+          groupEl.appendChild(headerEl);
+
+          // Items
           for (const item of group.items) {
-            const line = document.createElement('div');
-            line.textContent = item;
-            itemsEl.appendChild(line);
+            const itemEl = document.createElement('div');
+            itemEl.className = 'cfg-summary__item';
+
+            // Thumbnail or placeholder
+            if (item.image) {
+              const img = document.createElement('img');
+              img.className = 'cfg-summary__img';
+              img.src = item.image;
+              img.alt = item.label;
+              img.loading = 'lazy';
+              img.width = 48;
+              img.height = 48;
+              itemEl.appendChild(img);
+            } else {
+              const placeholder = document.createElement('div');
+              placeholder.className = 'cfg-summary__img-placeholder';
+              itemEl.appendChild(placeholder);
+            }
+
+            // Info: label + price
+            const infoEl = document.createElement('div');
+            infoEl.className = 'cfg-summary__item-info';
+
+            const labelEl = document.createElement('span');
+            labelEl.className = 'cfg-summary__item-label';
+            labelEl.textContent = item.label;
+            infoEl.appendChild(labelEl);
+
+            const priceEl = document.createElement('span');
+            priceEl.className = 'cfg-summary__item-price';
+            const itemTotal = item.price * (item.qty || 1);
+            priceEl.textContent = itemTotal > 0 ? money(itemTotal) : 'Included';
+            infoEl.appendChild(priceEl);
+
+            itemEl.appendChild(infoEl);
+            groupEl.appendChild(itemEl);
           }
-          groupEl.appendChild(itemsEl);
+
           card.appendChild(groupEl);
         }
 
@@ -1074,6 +1238,15 @@
           totalEl.textContent = `Total: ${money(total)}`;
           card.appendChild(totalEl);
         }
+
+        // Event delegation for Edit buttons
+        card.addEventListener('click', (e) => {
+          const btn = e.target.closest('[data-edit-step]');
+          if (!btn) return;
+          const stepNum = parseInt(btn.dataset.editStep, 10);
+          this._scrollToStep(stepNum);
+        });
+
         return card;
       };
 
@@ -1083,13 +1256,7 @@
         return;
       }
 
-      // Render to summary card (before CTA button)
-      if (this.summaryCard) {
-        this.summaryCard.replaceChildren(buildCard());
-        this.summaryCard.style.display = '';
-      }
-
-      // Also render to summary list section (existing "Your Configuration" step)
+      // Render to summary list section ("Your Configuration" step)
       if (this.summaryList) {
         this.summaryList.replaceChildren(buildCard());
       }
@@ -1163,6 +1330,16 @@
     _getProductTitle(dataKey, productId) {
       const products = this.data[dataKey] || [];
       return products.find(p => p.id === productId)?.title || '—';
+    }
+
+    _getProductImage(dataKey, productId) {
+      const products = this.data[dataKey] || [];
+      if (productId === null || productId === undefined) {
+        // For single-product categories stored as arrays (insulations, stairs, pillows)
+        const product = Array.isArray(products) ? products[0] : products;
+        return product?.image || null;
+      }
+      return products.find(p => p.id === productId)?.image || null;
     }
 
     /* ══ 7. CART & VALIDATION ════════════════════════════════════════════ */
