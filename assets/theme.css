@@ -91,7 +91,6 @@ ul, ol {
 }
 
 .section__header {
-  text-align: center;
   max-width: 640px;
   margin: 0 auto 64px;
 }
@@ -653,9 +652,6 @@ ul, ol {
 .hero__content {
   position: relative;
   z-index: 2;
-  text-align: center;
-  max-width: 720px;
-  margin: 0 auto;
   padding: 40px 24px;
 }
 
@@ -682,14 +678,11 @@ ul, ol {
   opacity: 0.85;
   margin-bottom: 36px;
   max-width: 520px;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 .hero__buttons {
   display: flex;
   gap: 16px;
-  justify-content: center;
   flex-wrap: wrap;
 }
 
@@ -944,7 +937,6 @@ ul, ol {
 }
 
 .features__card {
-  text-align: center;
   padding: 40px 32px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
@@ -1243,7 +1235,6 @@ ul, ol {
    ============================================ */
 
 .newsletter__inner {
-  text-align: center;
   max-width: 560px;
   margin: 0 auto;
 }
