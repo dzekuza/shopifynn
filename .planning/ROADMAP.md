@@ -62,11 +62,13 @@ Plans:
   3. All interactive elements in the configurator have appropriate ARIA labels and roles — a screen reader announces step number, option names, and selection state
   4. All images across sections and snippets have descriptive alt text, and all touch targets are at minimum 44x44px on mobile
   5. GSAP loads from a pinned CDN URL and theme.js guards against GSAP being undefined before initializing scroll animations
-**Plans:** 3 plans
+**Plans:** 5 plans
 Plans:
 - [ ] 03-01-PLAN.md — Pin GSAP CDN version, verify existence guard, fix muted text color contrast
 - [ ] 03-02-PLAN.md — Lazy loading sweep and alt text audit across all sections and snippets
 - [ ] 03-03-PLAN.md — Configurator image preloading, DOM caching, ARIA semantics, keyboard nav, touch targets
+- [ ] 03-04-PLAN.md — [Gap closure] Image preloading, DOM caching expansion, keyboard nav + ARIA management in configurator.js
+- [ ] 03-05-PLAN.md — [Gap closure] ARIA group structure on step markup + touch target CSS fixes in configurator.liquid
 
 ### Phase 4: Visual Polish and Brand Content
 **Goal**: The storefront presents the Aurowe brand at luxury tier — elevated hero, features, and testimonials sections, plus a new About/Story page
