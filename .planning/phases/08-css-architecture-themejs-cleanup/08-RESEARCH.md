@@ -4,6 +4,16 @@
 **Domain:** Shopify Liquid theme asset management, CSS extraction, JavaScript modernization
 **Confidence:** HIGH
 
+<phase_requirements>
+## Phase Requirements
+
+| ID | Description | Research Support |
+|----|-------------|-----------------|
+| ARCH-01 | Extract configurator CSS from section `{% stylesheet %}` block to `assets/configurator.css` | `{% stylesheet %}` block spans lines 11–258 of `sections/configurator.liquid`, ~18 KB of pure static CSS with zero Liquid expressions — safe to extract verbatim |
+| ARCH-02 | Load `configurator.css` conditionally only on configurator template — no 404 on other pages | Conditional block already implemented in `layout/theme.liquid` lines 51–53 using `template.suffix == 'configurator'`; only requires the asset file to exist |
+| ARCH-04 | Clean up `var`/`const`/`let` inconsistency in `theme.js` — zero `var` declarations remaining | 23 `var` usages fully catalogued across Product Gallery (lines 250–260) and Variant Picker/Color Swatches (lines 296–426); replacement type (`const` vs `let`) determined per reassignment analysis |
+</phase_requirements>
+
 ---
 
 ## Summary
