@@ -178,6 +178,16 @@
   .cfg__error { font-size: 13px; color: #ff3b30; display: none; align-items: center; flex-wrap: wrap; gap: 0.25rem; }
   .cfg__specs-link { color: var(--color-secondary, #3A8F7D); font-size: 15px; text-decoration: none; text-align: center; display: block; }
   .cfg__specs-link:hover { text-decoration: underline; }
+
+  /* ── Sticky bottom bar ── */
+  .cfg-sticky-bar { position: fixed; bottom: 0; left: 0; right: 0; z-index: 999; background: rgba(255,255,255,.95); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-top: 1px solid rgba(0,0,0,.08); box-shadow: 0 -4px 20px rgba(0,0,0,.06); transform: translateY(100%); transition: transform .3s ease; }
+  .cfg-sticky-bar--visible { transform: translateY(0); }
+  .cfg-sticky-bar__inner { max-width: 1200px; margin: 0 auto; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  .cfg-sticky-bar__price { font-family: var(--font-heading); font-size: 24px; font-weight: 600; color: var(--color-primary, #1A2332); letter-spacing: -0.5px; }
+  .cfg-sticky-bar__cta { padding: 12px 28px; background: var(--color-accent, #5EC2AA); color: var(--color-primary, #1A2332); border: none; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; transition: background .2s, transform .15s; font-family: inherit; white-space: nowrap; }
+  .cfg-sticky-bar__cta:hover { background: var(--color-secondary, #3A8F7D); color: #fff; transform: translateY(-1px); }
+  .cfg-sticky-bar__cta:disabled { opacity: .45; cursor: not-allowed; }
+  @media (max-width: 749px) { .cfg-sticky-bar__inner { padding: 10px 16px; } .cfg-sticky-bar__price { font-size: 20px; } .cfg-sticky-bar__cta { padding: 10px 20px; font-size: 14px; } }
 {% endstylesheet %}
 
 {% style %}
@@ -232,13 +242,16 @@
           {%- when 15 -%}{%- assign s_title = 'Heater Connection Type' -%}{%- assign s_sub = 'Connection angle.' -%}
         {%- endcase -%}
 
-        <div class="cfg-step{{ locked }}" data-step="{{ i }}">
+        <div class="cfg-step{{ locked }}" data-step="{{ i }}"
+             role="group"
+             aria-labelledby="cfg-step-title-{{ i }}"
+             {%- if i > 1 %} aria-disabled="true"{% endif %}>
           <div class="cfg-step__header">
             <span class="cfg-step__badge" aria-hidden="true">{{ i }}</span>
-            <h3 class="cfg-step__title">{{ s_title }}</h3>
+            <h3 class="cfg-step__title" id="cfg-step-title-{{ i }}">{{ s_title }}</h3>
           </div>
           <p class="cfg-step__subtitle">{{ s_sub }}</p>
-          <div class="cfg-step__body">
+          <div class="cfg-step__body"{% if i > 1 %} inert{% endif %}>
             {%- comment -%} Content rendered by JS from JSON data {%- endcomment -%}
           </div>
         </div>
@@ -247,10 +260,12 @@
       {%- endfor -%}
 
       {%- comment -%} ── Summary ── {%- endcomment -%}
-      <div class="cfg-step" data-step="summary">
+      <div class="cfg-step" data-step="summary"
+           role="group"
+           aria-labelledby="cfg-step-title-summary">
         <div class="cfg-step__header">
           <span class="cfg-step__badge" aria-hidden="true">✓</span>
-          <h3 class="cfg-step__title">Your Configuration</h3>
+          <h3 class="cfg-step__title" id="cfg-step-title-summary">Your Configuration</h3>
         </div>
         <div data-summary-list></div>
       </div>
@@ -265,6 +280,14 @@
           <a href="{{ section.settings.specs_page }}" class="cfg__specs-link">View full specifications</a>
         {%- endif -%}
       </div>
+    </div>
+  </div>
+
+  {%- comment -%} ── Sticky bottom bar ── {%- endcomment -%}
+  <div class="cfg-sticky-bar" data-sticky-bar style="display:none;">
+    <div class="cfg-sticky-bar__inner">
+      <span class="cfg-sticky-bar__price" data-sticky-price></span>
+      <button class="cfg-sticky-bar__cta" data-action="sticky-add-to-cart">Add to Cart</button>
     </div>
   </div>
 
