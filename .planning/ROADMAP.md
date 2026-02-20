@@ -97,6 +97,9 @@ Plans:
   1. DOMPurify 3.2.7 loads via CDN `<script>` tag on the configurator template before configurator.js
   2. All innerHTML call sites in configurator.js use DOMPurify.sanitize() or DOM builder APIs — no raw string interpolation
   3. _escAttr() method is deleted from configurator.js — zero references remain
+**Plans:** 1 plan
+Plans:
+- [ ] 05-01-PLAN.md — Load DOMPurify CDN, sanitize all dynamic innerHTML sites, delete _escAttr()
 
 ### Phase 6: Metafield Resolution & Event Delegation Recovery
 **Goal**: The configurator resolves products via metafield data instead of regex title matching, and event listeners use delegation instead of per-element binding
@@ -146,7 +149,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 | 2. Configurator Stabilization | 5/5 | Complete | 2026-02-20 |
 | 3. Performance and Accessibility | 5/5 | Complete | 2026-02-20 |
 | 4. Visual Polish and Brand Content | 2/2 | Complete | 2026-02-19 |
-| 5. XSS Sanitization Recovery | 0/0 | Pending |  |
+| 5. XSS Sanitization Recovery | 0/1 | Pending |  |
 | 6. Metafield Resolution & Event Delegation | 0/2 | Pending |  |
 | 7. Price Unification & Locale Formatting | 0/1 | Pending |  |
 | 8. CSS Architecture & theme.js Cleanup | 0/0 | Pending |  |
