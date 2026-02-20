@@ -117,6 +117,9 @@ Plans:
 **Success Criteria** (what must be TRUE):
   1. _calculateLineItems() exists and returns line items used by both _updatePrice() display and _buildCartItems() cart payload
   2. money() reads window.__shopLocale for locale and window.__shopCurrency for currency code — no hardcoded de-DE or EUR
+**Plans:** 1 plan
+Plans:
+- [ ] 07-01-PLAN.md — Locale-aware money() rewrite + event delegation cleanup
 
 ### Phase 8: CSS Architecture & theme.js Cleanup
 **Goal**: Configurator CSS lives in a dedicated cacheable asset file, and theme.js uses modern variable declarations exclusively
@@ -141,5 +144,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 | 4. Visual Polish and Brand Content | 2/2 | Complete | 2026-02-19 |
 | 5. XSS Sanitization Recovery | 0/0 | Pending |  |
 | 6. Metafield Resolution & Event Delegation | 0/0 | Pending |  |
-| 7. Price Unification & Locale Formatting | 0/0 | Pending |  |
+| 7. Price Unification & Locale Formatting | 0/1 | Pending |  |
 | 8. CSS Architecture & theme.js Cleanup | 0/0 | Pending |  |
