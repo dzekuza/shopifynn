@@ -9,9 +9,9 @@ Requirements for production-ready launch. Each maps to roadmap phases.
 
 ### Security
 
-- [ ] **SEC-01**: Rotate all exposed Shopify API credentials (CLIENT_ID, CLIENT_SECRET, API key) in Shopify Admin
-- [ ] **SEC-02**: Purge credentials from git history using git-filter-repo
-- [ ] **SEC-03**: Add .env to .gitignore and remove hardcoded credentials from setup scripts
+- [x] **SEC-01**: Rotate all exposed Shopify API credentials (CLIENT_ID, CLIENT_SECRET, API key) in Shopify Admin
+- [x] **SEC-02**: Purge credentials from git history using git-filter-repo
+- [x] **SEC-03**: Add .env to .gitignore and remove hardcoded credentials from setup scripts
 - [x] **SEC-04**: Sanitize all 15+ innerHTML call sites in configurator.js using textContent, DOM APIs, or DOMPurify
 - [x] **SEC-05**: Load DOMPurify 3.2.7 from CDN on configurator template for necessary markup sanitization
 - [x] **SEC-06**: Remove insecure custom _escAttr() method and replace with proper sanitization
@@ -110,16 +110,16 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| SEC-01 | Phase 1 | Pending |
-| SEC-02 | Phase 1 | Pending |
-| SEC-03 | Phase 1 | Pending |
+| SEC-01 | Phase 1 | Complete |
+| SEC-02 | Phase 1 | Complete |
+| SEC-03 | Phase 1 | Complete |
 | SEC-04 | Phase 5 | Complete |
 | SEC-05 | Phase 5 | Complete |
 | SEC-06 | Phase 5 | Complete |
 | CONF-01 | Phase 6 | Complete |
 | CONF-02 | Phase 6 | Complete |
 | CONF-03 | Phase 6 | Complete |
-| CONF-04 | Phase 6 | Complete |
+| CONF-04 | Phase 7 | Complete |
 | CONF-05 | Phase 2 | Complete |
 | CONF-06 | Phase 2 | Complete |
 | CONF-07 | Phase 7 | Complete |
@@ -151,8 +151,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 - v1 requirements: 36 total
 - Mapped to phases: 36
 - Unmapped: 0 ✓
-- Pending (gap closure): 14
+- Pending (gap closure): 0
 
 ---
 *Requirements defined: 2026-02-20*
-*Last updated: 2026-02-20 after gap closure phase creation*
+*Last updated: 2026-02-20 after Phase 9 gap closure creation*

@@ -12,14 +12,15 @@ A four-phase overhaul of the Aurowe Shopify theme, moving in a strict dependency
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Security Foundation** - Rotate credentials, purge git history, and fix all XSS-vulnerable innerHTML call sites
+- [x] **Phase 1: Security Foundation** - Rotate credentials, purge git history, and fix all XSS-vulnerable innerHTML call sites (completed 2026-02-20)
 - [x] **Phase 2: Configurator Stabilization** - Replace fragile string-matching with metafield lookups, consolidate pricing, add validation, and clean up architecture (completed 2026-02-20)
 - [x] **Phase 3: Performance and Accessibility** - Eliminate DOM performance problems and meet WCAG 2.1 AA baseline (completed 2026-02-20)
 - [x] **Phase 4: Visual Polish and Brand Content** - Elevate section designs to luxury tier and create About/Story page (completed 2026-02-19)
 - [x] **Phase 5: XSS Sanitization Recovery** - [Gap closure] Re-add DOMPurify CDN, sanitize all innerHTML call sites, delete _escAttr() (completed 2026-02-20)
 - [x] **Phase 6: Metafield Resolution & Event Delegation Recovery** - [Gap closure] Replace regex product matching with metafield lookups, add connectedCallback guard, fix event delegation (completed 2026-02-20)
-- [ ] **Phase 7: Price Unification & Locale Formatting** - [Gap closure] Implement _calculateLineItems() single source of truth, wire money() to __shopLocale
+- [x] **Phase 7: Price Unification & Locale Formatting** - [Gap closure] Implement _calculateLineItems() single source of truth, wire money() to __shopLocale (completed 2026-02-20)
 - [x] **Phase 8: CSS Architecture & theme.js Cleanup** - [Gap closure] Extract configurator CSS to asset file, fix conditional loading, var→const/let in theme.js (completed 2026-02-20)
+- [ ] **Phase 9: Cart Count Integration & Milestone Cleanup** - [Gap closure] Wire cart:refresh listener in theme.js, create missing VERIFICATION.md for Phases 1/2/4, fix ROADMAP/REQUIREMENTS bookkeeping
 
 ## Phase Details
 
@@ -33,7 +34,7 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. All innerHTML call sites in configurator.js use textContent, DOM builder APIs, or DOMPurify.sanitize() — no raw string interpolation into innerHTML
   4. DOMPurify 3.2.7 loads on the configurator template and _escAttr() is deleted from the codebase
   5. theme.js uses const/let exclusively — no var declarations remain
-**Plans:** 1/2 plans executed
+**Plans:** 2/2 plans complete
 Plans:
 - [ ] 01-01-PLAN.md — Credential management (.gitignore, .env.example, script refactoring) and theme.js var→const/let migration
 - [ ] 01-02-PLAN.md — DOMPurify integration and innerHTML XSS sanitization in configurator.js
@@ -124,7 +125,7 @@ Plans:
 **Success Criteria** (what must be TRUE):
   1. _calculateLineItems() exists and returns line items used by both _updatePrice() display and _buildCartItems() cart payload
   2. money() reads window.__shopLocale for locale and window.__shopCurrency for currency code — no hardcoded de-DE or EUR
-**Plans:** 1 plan
+**Plans:** 1/1 plans complete
 Plans:
 - [ ] 07-01-PLAN.md — Locale-aware money() rewrite, _calculateLineItems() unification, and event delegation cleanup
 
@@ -141,18 +142,34 @@ Plans:
 Plans:
 - [ ] 08-01-PLAN.md — Extract configurator CSS to asset file and replace all var declarations in theme.js
 
+### Phase 9: Cart Count Integration & Milestone Cleanup
+**Goal**: The header cart count updates immediately after add-to-cart, all phases have VERIFICATION.md files, and all ROADMAP/REQUIREMENTS bookkeeping is accurate
+**Depends on**: Phase 8
+**Requirements**: CONF-06 (integration fix)
+**Gap Closure**: Closes gaps from audit — orphaned cart:refresh event, missing VERIFICATION.md for Phases 1/2/4, bookkeeping discrepancies
+**Success Criteria** (what must be TRUE):
+  1. After add-to-cart in the configurator, the header `[data-cart-count]` updates to the new item count without page reload
+  2. VERIFICATION.md exists for Phase 1, Phase 2, and Phase 4 with pass/fail results for each requirement
+  3. REQUIREMENTS.md checkboxes for SEC-01, SEC-02, SEC-03 are `[x]` Complete
+  4. CONF-04 traceability correctly reflects Phase 7 (not Phase 6)
+  5. ROADMAP progress table is accurate for all phases
+**Plans:** 0/1
+Plans:
+- [ ] 09-01-PLAN.md — Wire cart:refresh listener, create missing verifications, fix bookkeeping
+
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
+Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 → 9
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Security Foundation | 1/2 | In Progress |  |
+| 1. Security Foundation | 2/2 | Complete | 2026-02-20 |
 | 2. Configurator Stabilization | 5/5 | Complete | 2026-02-20 |
 | 3. Performance and Accessibility | 5/5 | Complete | 2026-02-20 |
 | 4. Visual Polish and Brand Content | 2/2 | Complete | 2026-02-19 |
-| 5. XSS Sanitization Recovery | 1/1 | Complete   | 2026-02-20 |
-| 6. Metafield Resolution & Event Delegation | 2/2 | Complete   | 2026-02-20 |
-| 7. Price Unification & Locale Formatting | 0/1 | Pending |  |
-| 8. CSS Architecture & theme.js Cleanup | 1/1 | Complete    | 2026-02-20 |
+| 5. XSS Sanitization Recovery | 1/1 | Complete | 2026-02-20 |
+| 6. Metafield Resolution & Event Delegation | 2/2 | Complete | 2026-02-20 |
+| 7. Price Unification & Locale Formatting | 1/1 | Complete | 2026-02-20 |
+| 8. CSS Architecture & theme.js Cleanup | 1/1 | Complete | 2026-02-20 |
+| 9. Cart Count Integration & Milestone Cleanup | 0/1 | Pending |  |
