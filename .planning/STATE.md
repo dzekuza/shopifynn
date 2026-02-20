@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-02-20)
 
 **Core value:** The hot tub configurator must work flawlessly — it's the primary revenue driver where customers build and price their custom configuration across 15 steps.
-**Current focus:** Phase 2 — Configurator Stabilization (Complete — all 4 plans done) / Phase 3 complete
+**Current focus:** Phase 3 — Performance and Accessibility (Plan 04 of 05 complete)
 
 ## Current Position
 
 Phase: 3 of 4 (Performance and Accessibility)
-Plan: 4 of 4 in phase 02-configurator-stabilization
-Status: Phase 02 complete
-Last activity: 2026-02-20 — Completed 02-04: Cart validation, error recovery with retry, grouped configuration summary card
+Plan: 5 of 5 in phase 03-performance-and-accessibility
+Status: Phase 03 plan 04 complete — ready for plan 05 (final verification)
+Last activity: 2026-02-20 — Completed 03-04: image preloading, DOM caching, ARIA management, keyboard navigation, inert toggling in configurator.js
 
-Progress: [███████░░░] 75%
+Progress: [████████░░] 80%
 
 ## Performance Metrics
 
@@ -43,6 +43,7 @@ Progress: [███████░░░] 75%
 | Phase 02-configurator-stabilization P05 | 5 | 1 tasks | 1 files |
 | Phase 02-configurator-stabilization P05 | 8 | 1 tasks | 1 files |
 | Phase 03-performance-and-accessibility P05 | 2 | 2 tasks | 1 files |
+| Phase 03-performance-and-accessibility P04 | 2 | 2 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -88,6 +89,8 @@ Recent decisions affecting current work:
 - [Phase 02-configurator-stabilization]: configurator.js reorganized into 8 banner-delimited responsibility groups using /* ══ N. NAME ══ */ format — pure code movement, no logic changes
 - [Phase 03-performance-and-accessibility]: inert on .cfg-step__body only keeps step heading accessible while removing body from tab order; aria-disabled+inert set via Liquid on initial render, JS manages dynamic removal
 - [Phase 03-performance-and-accessibility]: min-width/min-height on .cfg-tooltip-btn expands touch target to 44px WCAG 2.5.5 minimum without changing 20px visual circle appearance
+- [Phase 03-performance-and-accessibility]: Arrow key group containers: .cfg-cards, .cfg-product-list, .cfg-swatches, .cfg-toggle-group, .cfg-card-options — matches actual rendered wrapper classes
+- [Phase 03-performance-and-accessibility]: _stepEls built during _cacheEls before _renderSteps — step shell elements exist in Liquid template, body content added by _renderSteps
 
 ### Pending Todos
 
