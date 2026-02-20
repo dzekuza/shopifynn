@@ -40,6 +40,7 @@ Progress: [███████░░░] 75%
 | Phase 02-configurator-stabilization P02 | 2 | 2 tasks | 2 files |
 | Phase 02-configurator-stabilization P04 | 4 | 2 tasks | 2 files |
 | Phase 02-configurator-stabilization P04 | 3 | 2 tasks | 2 files |
+| Phase 02-configurator-stabilization P05 | 5 | 1 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -79,6 +80,9 @@ Recent decisions affecting current work:
 - [Phase 02-configurator-stabilization]: CSS added to configurator.liquid stylesheet block — no separate assets/configurator.css file exists in this project architecture
 - [Phase 02-configurator-stabilization]: Summary card renders to data-summary-card element before CTA button — always visible regardless of step scroll position
 - [Phase 02-configurator-stabilization]: _currentTotal cached in _updatePrice() so _updateSummary() never independently recalculates prices
+- [Phase 02-configurator-stabilization]: _renderSizeCards/_showVariants/_showQtySelector in STEP RENDERING (build step-specific DOM, not general UI helpers)
+- [Phase 02-configurator-stabilization]: _buildConfigSummary in PRICE CALCULATION — consumed by both display and cart, core concern is canonical config description
+- [Phase 02-configurator-stabilization]: _unlockThrough/_scrollToStep in UI UTILITIES — manage UX progression/scroll state, general utilities not tied to business logic
 
 ### Pending Todos
 

@@ -61,7 +61,7 @@ Requirements for production-ready launch. Each maps to roadmap phases.
 
 - [x] **ARCH-01**: Extract configurator CSS from section {% stylesheet %} block to assets/configurator.css
 - [x] **ARCH-02**: Load configurator.css conditionally only on configurator template
-- [ ] **ARCH-03**: Internally decompose configurator.js into 8 responsibility groups with clear comment banners
+- [x] **ARCH-03**: Internally decompose configurator.js into 8 responsibility groups with clear comment banners
 - [ ] **ARCH-04**: Clean up var/const/let inconsistency in theme.js
 
 ## v2 Requirements
@@ -144,7 +144,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | BRAND-03 | Phase 4 | Complete |
 | ARCH-01 | Phase 2 | Complete |
 | ARCH-02 | Phase 2 | Complete |
-| ARCH-03 | Phase 2 | Pending |
+| ARCH-03 | Phase 2 | Complete |
 | ARCH-04 | Phase 1 | Pending |
 
 **Coverage:**
