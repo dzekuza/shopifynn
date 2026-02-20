@@ -49,6 +49,7 @@ Progress: [██████████] 100%
 | Phase 06-metafield-resolution-event-delegation P02 | 1 | 1 tasks | 0 files |
 | Phase 05-xss-sanitization-recovery P01 | 3 | 2 tasks | 2 files |
 | Phase 08-css-architecture-themejs-cleanup P01 | 4 | 2 tasks | 3 files |
+| Phase 08-css-architecture-themejs-cleanup P01 | 5 | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -107,6 +108,8 @@ Recent decisions affecting current work:
 - [Phase 05-xss-sanitization-recovery]: _escAttr() deleted — tooltip interpolation relies on outer DOMPurify.sanitize() call wrapping the full HTML block
 - [Phase 08-css-architecture-themejs-cleanup]: Extracted {% stylesheet %} block verbatim to assets/configurator.css — zero Liquid expressions confirmed, pure CSS safe to copy
 - [Phase 08-css-architecture-themejs-cleanup]: Retained {% style %} block in configurator.liquid for dynamic Liquid variables (background_color, padding) — only static {% stylesheet %} block extracted
+- [Phase 08-css-architecture-themejs-cleanup]: Configurator CSS extracted to assets/configurator.css — cacheable static file, stylesheet block removed from section
+- [Phase 08-css-architecture-themejs-cleanup]: theme.js var→const/let migration: 19 const bindings (never reassigned), 4 let bindings (touchStartX, productVariants, loop i, hiddenSelect)
 
 ### Pending Todos
 
