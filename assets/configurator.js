@@ -12,8 +12,14 @@
   /* ══ 1. CONFIG & CONSTANTS ══════════════════════════════════════════ */
 
   function money(cents) {
-    const val = (cents / 100).toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    return '€' + val;
+    const locale = window.__shopLocale || 'de-DE';
+    const currency = window.__shopCurrency || 'EUR';
+    return new Intl.NumberFormat(locale, {
+      style: 'currency',
+      currency: currency,
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(cents / 100);
   }
 
   const STEPS = [
@@ -40,7 +46,12 @@
     /* ══ 2. LIFECYCLE & INITIALIZATION ══════════════════════════════════ */
 
     connectedCallback() {
-      this.data = JSON.parse(this.querySelector('[data-configurator-products]').textContent);
+      const dataEl = this.querySelector('[data-configurator-products]');
+      if (!dataEl) {
+        this._renderEditorPlaceholder();
+        return;
+      }
+      this.data = JSON.parse(dataEl.textContent);
       this.state = {
         model: null,               // 'classic', 'premium', 'signature'
         selectedTier: null,        // tier object { key, title, products[] }
@@ -88,6 +99,26 @@
       }
 
       this._bindEvents();
+    }
+
+    _renderEditorPlaceholder() {
+      this.innerHTML = `
+        <div style="
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          min-height: 400px;
+          padding: 48px 32px;
+          text-align: center;
+          font-family: var(--font-body, sans-serif);
+          background: var(--color-surface, #EDE7DD);
+          border-radius: 12px;
+          border: 1px solid rgba(0,0,0,.08);
+        ">
+          <p style="font-family: var(--font-heading, serif); font-size: 22px; font-weight: 600; color: var(--color-primary, #262626); margin: 0 0 12px;">Hot Tub Configurator</p>
+          <p style="font-size: 15px; color: var(--color-text-muted, #7D7B78); margin: 0; max-width: 340px; line-height: 1.6;">The configurator preview is not available in the theme editor. Assign collections in the section settings to enable the live experience.</p>
+        </div>`;
     }
 
     _cacheEls() {
@@ -792,26 +823,16 @@
 
     /* ══ 5. PRODUCT RESOLUTION ══════════════════════════════════════════ */
 
-    _getSizeFromProduct(product) {
-      const text = product.title || '';
-      if (/\bXL\b/i.test(text)) return 'XL';
-      if (/\bM\b/i.test(text) && !/\bXL\b/i.test(text)) return 'M';
-      if (/\bL\b/i.test(text) && !/\bXL\b/i.test(text)) return 'L';
-      return null;
-    }
-
-    _isInternalOvenProduct(product) {
-      const title = (product.title || '').trim();
-      return /\bI\s*$/.test(title) || /internal|integr/i.test(title);
-    }
-
     _extractSizes(products) {
       const sizeMap = new Map();
       const sizeOrder = ['XL', 'L', 'M'];
 
       for (const p of products) {
-        const size = this._getSizeFromProduct(p);
-        if (!size) continue;
+        const size = (p.meta?.size || '').toUpperCase();
+        if (!size) {
+          console.warn('[Configurator] Product missing meta.size — skipping:', p.title);
+          continue;
+        }
 
         if (!sizeMap.has(size)) {
           sizeMap.set(size, { key: size.toLowerCase(), label: size, minPrice: p.price, products: [] });
@@ -819,6 +840,10 @@
         const entry = sizeMap.get(size);
         entry.products.push(p);
         if (p.price < entry.minPrice) entry.minPrice = p.price;
+      }
+
+      if (sizeMap.size === 0) {
+        this._renderProductError('No sizes available for this model. Please check product metafield configuration.');
       }
 
       return sizeOrder.filter(s => sizeMap.has(s)).map(s => sizeMap.get(s));
