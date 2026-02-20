@@ -210,49 +210,57 @@
 
   /* ---- Product Gallery (vanilla) ---- */
 
-  const gallery = document.querySelector('[data-product-gallery]');
+  try {
+    const gallery = document.querySelector('[data-product-gallery]');
 
-  if (gallery) {
-    const slides = gallery.querySelectorAll('.product__gallery-slide');
-    const thumbs = gallery.querySelectorAll('.product__gallery-thumb');
-    const prevBtn = gallery.querySelector('[data-gallery-prev]');
-    const nextBtn = gallery.querySelector('[data-gallery-next]');
-    let currentIndex = 0;
+    if (gallery) {
+      const slides = gallery.querySelectorAll('.product__gallery-slide');
+      const thumbs = gallery.querySelectorAll('.product__gallery-thumb');
+      const prevBtn = gallery.querySelector('[data-gallery-prev]');
+      const nextBtn = gallery.querySelector('[data-gallery-next]');
+      let currentIndex = 0;
 
-    function goToSlide(index) {
-      if (index < 0) index = slides.length - 1;
-      if (index >= slides.length) index = 0;
-      slides[currentIndex].classList.remove('is-active');
-      thumbs[currentIndex].classList.remove('is-active');
-      currentIndex = index;
-      slides[currentIndex].classList.add('is-active');
-      thumbs[currentIndex].classList.add('is-active');
-      // Scroll active thumb into view
-      thumbs[currentIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-    }
-
-    // Expose for variant image syncing
-    window.__productGallery = { goToSlide: goToSlide, getCurrentIndex: function () { return currentIndex; } };
-
-    prevBtn.addEventListener('click', function () { goToSlide(currentIndex - 1); });
-    nextBtn.addEventListener('click', function () { goToSlide(currentIndex + 1); });
-
-    thumbs.forEach(function (thumb) {
-      thumb.addEventListener('click', function () {
-        goToSlide(parseInt(thumb.dataset.thumbIndex, 10));
-      });
-    });
-
-    // Touch swipe support
-    let touchStartX = 0;
-    const track = gallery.querySelector('[data-gallery-track]');
-    track.addEventListener('touchstart', function (e) { touchStartX = e.touches[0].clientX; }, { passive: true });
-    track.addEventListener('touchend', function (e) {
-      const diff = touchStartX - e.changedTouches[0].clientX;
-      if (Math.abs(diff) > 40) {
-        goToSlide(diff > 0 ? currentIndex + 1 : currentIndex - 1);
+      function goToSlide(index) {
+        if (!slides.length) return;
+        if (index < 0) index = slides.length - 1;
+        if (index >= slides.length) index = 0;
+        if (slides[currentIndex]) slides[currentIndex].classList.remove('is-active');
+        if (thumbs[currentIndex]) thumbs[currentIndex].classList.remove('is-active');
+        currentIndex = index;
+        if (slides[currentIndex]) slides[currentIndex].classList.add('is-active');
+        if (thumbs[currentIndex]) {
+          thumbs[currentIndex].classList.add('is-active');
+          thumbs[currentIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        }
       }
-    });
+
+      // Expose for variant image syncing
+      window.__productGallery = { goToSlide: goToSlide, getCurrentIndex: function () { return currentIndex; } };
+
+      if (prevBtn) prevBtn.addEventListener('click', function () { goToSlide(currentIndex - 1); });
+      if (nextBtn) nextBtn.addEventListener('click', function () { goToSlide(currentIndex + 1); });
+
+      thumbs.forEach(function (thumb) {
+        thumb.addEventListener('click', function () {
+          goToSlide(parseInt(thumb.dataset.thumbIndex, 10));
+        });
+      });
+
+      // Touch swipe support
+      var touchStartX = 0;
+      var track = gallery.querySelector('[data-gallery-track]');
+      if (track) {
+        track.addEventListener('touchstart', function (e) { touchStartX = e.touches[0].clientX; }, { passive: true });
+        track.addEventListener('touchend', function (e) {
+          var diff = touchStartX - e.changedTouches[0].clientX;
+          if (Math.abs(diff) > 40) {
+            goToSlide(diff > 0 ? currentIndex + 1 : currentIndex - 1);
+          }
+        });
+      }
+    }
+  } catch (e) {
+    console.warn('AUROWE: Gallery init error', e);
   }
 
   /* ---- Quantity Selector ---- */
@@ -284,137 +292,141 @@
 
   /* ---- Variant Picker ---- */
 
-  let productVariants = [];
-  const productJsonEl = document.querySelector('[data-product-json]');
+  try {
+    var productVariants = [];
+    var productJsonEl = document.querySelector('[data-product-json]');
 
-  if (productJsonEl) {
-    try {
-      productVariants = JSON.parse(productJsonEl.textContent);
-    } catch (e) {
-      console.warn('AUROWE: Could not parse product variants JSON');
+    if (productJsonEl) {
+      try {
+        productVariants = JSON.parse(productJsonEl.textContent);
+      } catch (e) {
+        console.warn('AUROWE: Could not parse product variants JSON');
+      }
     }
-  }
 
-  // Store original button text early
-  const addToCartBtn = document.querySelector('.product__add-to-cart');
-  if (addToCartBtn && !addToCartBtn.dataset.addText) {
-    addToCartBtn.dataset.addText = addToCartBtn.textContent.trim();
-  }
+    // Store original button text early
+    var addToCartBtn = document.querySelector('.product__add-to-cart');
+    if (addToCartBtn && !addToCartBtn.dataset.addText) {
+      addToCartBtn.dataset.addText = addToCartBtn.textContent.trim();
+    }
 
-  function getSelectedOptions() {
-    const options = [];
-    document.querySelectorAll('[data-option-index]').forEach(function (s) {
-      options.push(s.value);
-    });
-    return options;
-  }
-
-  function findVariant(selectedOptions) {
-    return productVariants.find(function (variant) {
-      return selectedOptions.every(function (val, i) {
-        return variant['option' + (i + 1)] === val;
+    function getSelectedOptions() {
+      var options = [];
+      document.querySelectorAll('[data-option-index]').forEach(function (s) {
+        options.push(s.value);
       });
-    });
-  }
-
-  function onVariantChange() {
-    const selectedOptions = getSelectedOptions();
-    const matchedVariant = findVariant(selectedOptions);
-
-    if (!matchedVariant) return;
-
-    // Update hidden variant ID input
-    const variantInput = document.querySelector('[data-variant-id]');
-    if (variantInput) variantInput.value = matchedVariant.id;
-
-    // Update price display
-    const priceEl = document.querySelector('[data-product-price]');
-    if (priceEl) {
-      priceEl.textContent = Shopify.formatMoney ? Shopify.formatMoney(matchedVariant.price) : (matchedVariant.price / 100).toLocaleString(undefined, { style: 'currency', currency: window.__shopCurrency || 'EUR' });
+      return options;
     }
 
-    // Update compare-at price and save badge
-    const compareEl = document.querySelector('[data-compare-price]');
-    const saveBadge = document.querySelector('.product__save-badge');
-    if (matchedVariant.compare_at_price && matchedVariant.compare_at_price > matchedVariant.price) {
-      if (compareEl) {
-        compareEl.textContent = (matchedVariant.compare_at_price / 100).toLocaleString(undefined, { style: 'currency', currency: window.__shopCurrency || 'EUR' });
-        compareEl.style.display = '';
-      }
-      if (saveBadge) {
-        const saved = ((matchedVariant.compare_at_price - matchedVariant.price) / 100).toLocaleString(undefined, { style: 'currency', currency: window.__shopCurrency || 'EUR' });
-        saveBadge.textContent = 'Save ' + saved;
-        saveBadge.style.display = '';
-      }
-    } else {
-      if (compareEl) compareEl.style.display = 'none';
-      if (saveBadge) saveBadge.style.display = 'none';
+    function findVariant(selectedOptions) {
+      return productVariants.find(function (variant) {
+        return selectedOptions.every(function (val, i) {
+          return variant['option' + (i + 1)] === val;
+        });
+      });
     }
 
-    // Update Add to Cart button
-    const btn = document.querySelector('.product__add-to-cart');
-    if (btn) {
-      if (matchedVariant.available) {
-        btn.disabled = false;
-        btn.textContent = btn.dataset.addText || 'Add to Cart';
+    function onVariantChange() {
+      var selectedOptions = getSelectedOptions();
+      var matchedVariant = findVariant(selectedOptions);
+
+      if (!matchedVariant) return;
+
+      // Update hidden variant ID input
+      var variantInput = document.querySelector('[data-variant-id]');
+      if (variantInput) variantInput.value = matchedVariant.id;
+
+      // Update price display
+      var priceEl = document.querySelector('[data-product-price]');
+      if (priceEl) {
+        priceEl.textContent = (typeof Shopify !== 'undefined' && Shopify.formatMoney) ? Shopify.formatMoney(matchedVariant.price) : (matchedVariant.price / 100).toLocaleString(undefined, { style: 'currency', currency: window.__shopCurrency || 'EUR' });
+      }
+
+      // Update compare-at price and save badge
+      var compareEl = document.querySelector('[data-compare-price]');
+      var saveBadge = document.querySelector('.product__save-badge');
+      if (matchedVariant.compare_at_price && matchedVariant.compare_at_price > matchedVariant.price) {
+        if (compareEl) {
+          compareEl.textContent = (matchedVariant.compare_at_price / 100).toLocaleString(undefined, { style: 'currency', currency: window.__shopCurrency || 'EUR' });
+          compareEl.style.display = '';
+        }
+        if (saveBadge) {
+          var saved = ((matchedVariant.compare_at_price - matchedVariant.price) / 100).toLocaleString(undefined, { style: 'currency', currency: window.__shopCurrency || 'EUR' });
+          saveBadge.textContent = 'Save ' + saved;
+          saveBadge.style.display = '';
+        }
       } else {
-        btn.disabled = true;
-        btn.textContent = 'Sold Out';
+        if (compareEl) compareEl.style.display = 'none';
+        if (saveBadge) saveBadge.style.display = 'none';
       }
-    }
 
-    // Update URL for shareability
-    const url = new URL(window.location.href);
-    url.searchParams.set('variant', matchedVariant.id);
-    window.history.replaceState({}, '', url.toString());
+      // Update Add to Cart button
+      var btn = document.querySelector('.product__add-to-cart');
+      if (btn) {
+        if (matchedVariant.available) {
+          btn.disabled = false;
+          btn.textContent = btn.dataset.addText || 'Add to Cart';
+        } else {
+          btn.disabled = true;
+          btn.textContent = 'Sold Out';
+        }
+      }
 
-    // Update gallery image if variant has a featured image
-    if (matchedVariant.featured_image && window.__productGallery) {
-      const galleryImages = document.querySelectorAll('.product__gallery-slide img');
-      const filename = matchedVariant.featured_image.src.split('?')[0].split('/').pop();
-      for (let i = 0; i < galleryImages.length; i++) {
-        if (galleryImages[i].src.indexOf(filename) !== -1) {
-          window.__productGallery.goToSlide(i);
-          break;
+      // Update URL for shareability
+      var url = new URL(window.location.href);
+      url.searchParams.set('variant', matchedVariant.id);
+      window.history.replaceState({}, '', url.toString());
+
+      // Update gallery image if variant has a featured image
+      if (matchedVariant.featured_image && window.__productGallery) {
+        var galleryImages = document.querySelectorAll('.product__gallery-slide img');
+        var filename = matchedVariant.featured_image.src.split('?')[0].split('/').pop();
+        for (var i = 0; i < galleryImages.length; i++) {
+          if (galleryImages[i].src.indexOf(filename) !== -1) {
+            window.__productGallery.goToSlide(i);
+            break;
+          }
         }
       }
     }
-  }
 
-  // Bind change events on all option selects (including non-color dropdowns)
-  document.querySelectorAll('[data-option-index]').forEach(function (select) {
-    select.addEventListener('change', onVariantChange);
-  });
-
-  /* ---- Color Swatches ---- */
-
-  document.querySelectorAll('.product__swatch').forEach(function (swatch) {
-    swatch.addEventListener('click', function () {
-      const value = swatch.dataset.value;
-
-      // Update active swatch visually
-      const group = swatch.closest('.product__swatches');
-      if (group) {
-        group.querySelectorAll('.product__swatch').forEach(function (s) { s.classList.remove('product__swatch--active'); });
-      }
-      swatch.classList.add('product__swatch--active');
-
-      // Update the hidden select and dispatch change event
-      let hiddenSelect = swatch.closest('.product__option');
-      if (hiddenSelect) hiddenSelect = hiddenSelect.querySelector('[data-option-index]');
-      if (hiddenSelect) {
-        hiddenSelect.value = value;
-        hiddenSelect.dispatchEvent(new Event('change', { bubbles: true }));
-      }
-
-      // Update the selected value label
-      const optionWrap = swatch.closest('.product__option');
-      if (optionWrap) {
-        const valueLabel = optionWrap.querySelector('[data-swatch-value]');
-        if (valueLabel) valueLabel.textContent = value;
-      }
+    // Bind change events on all option selects (including non-color dropdowns)
+    document.querySelectorAll('[data-option-index]').forEach(function (select) {
+      select.addEventListener('change', onVariantChange);
     });
-  });
+
+    /* ---- Color Swatches ---- */
+
+    document.querySelectorAll('.product__swatch').forEach(function (swatch) {
+      swatch.addEventListener('click', function () {
+        var value = swatch.dataset.value;
+
+        // Update active swatch visually
+        var group = swatch.closest('.product__swatches');
+        if (group) {
+          group.querySelectorAll('.product__swatch').forEach(function (s) { s.classList.remove('product__swatch--active'); });
+        }
+        swatch.classList.add('product__swatch--active');
+
+        // Update the hidden select and dispatch change event
+        var hiddenSelect = swatch.closest('.product__option');
+        if (hiddenSelect) hiddenSelect = hiddenSelect.querySelector('[data-option-index]');
+        if (hiddenSelect) {
+          hiddenSelect.value = value;
+          hiddenSelect.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+
+        // Update the selected value label
+        var optionWrap = swatch.closest('.product__option');
+        if (optionWrap) {
+          var valueLabel = optionWrap.querySelector('[data-swatch-value]');
+          if (valueLabel) valueLabel.textContent = value;
+        }
+      });
+    });
+  } catch (e) {
+    console.warn('AUROWE: Variant/swatch init error', e);
+  }
 
   /* ---- Collection Sort ---- */
 

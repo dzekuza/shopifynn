@@ -40,6 +40,14 @@
           "type": "separator",
           "settings": {}
         },
+        "family_selector": {
+          "type": "product_family_selector",
+          "settings": {
+            "size_xl_dims": "Ø200/225 cm",
+            "size_l_dims": "Ø180/200 cm",
+            "size_m_dims": "100×180/120×200 cm"
+          }
+        },
         "variant_picker": {
           "type": "variant_picker",
           "settings": {}
@@ -106,6 +114,7 @@
         "price",
         "financing",
         "separator-1",
+        "family_selector",
         "variant_picker",
         "quantity",
         "buy_buttons",

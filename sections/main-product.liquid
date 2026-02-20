@@ -108,6 +108,91 @@
                 {% endif %}
               </div>
 
+            {% when 'product_family_selector' %}
+              {%- assign pf_size_meta = product.metafields.custom.configurator_size.value -%}
+              {%- assign pf_tier_meta = product.metafields.custom.configurator_tier.value -%}
+              {% if pf_size_meta != blank and pf_tier_meta != blank %}
+                {%- assign pf_size = pf_size_meta | first | default: pf_size_meta -%}
+                {%- assign pf_tier = pf_tier_meta | first | default: pf_tier_meta -%}
+                {%- assign pf_oven = product.metafields.custom.oven_type.value | default: 'external' -%}
+                {%- assign pf_tier_lower = pf_tier | downcase -%}
+                {%- assign pf_is_integrated = false -%}
+                {%- if pf_oven == 'integrated' -%}{%- assign pf_is_integrated = true -%}{%- endif -%}
+
+                <div class="product__block product__family-selectors" {{ block.shopify_attributes }}>
+                  {%- comment -%} Size selector {%- endcomment -%}
+                  <div class="product__family-group">
+                    <span class="product__family-label">Size</span>
+                    <div class="product__family-btns" role="group" aria-label="Select size">
+                      {%- assign pf_sizes = 'XL,L,M' | split: ',' -%}
+                      {%- for s in pf_sizes -%}
+                        {%- assign s_lower = s | downcase -%}
+                        {%- assign pf_handle = 'nordic-elite-' | append: s_lower | append: '-' | append: pf_tier_lower -%}
+                        {%- if pf_is_integrated and s != 'M' -%}
+                          {%- assign pf_handle = pf_handle | append: '-i' -%}
+                        {%- endif -%}
+                        {%- assign pf_is_active = false -%}
+                        {%- if s == pf_size -%}{%- assign pf_is_active = true -%}{%- endif -%}
+                        {%- assign pf_dims = '' -%}
+                        {%- if s == 'XL' -%}{%- assign pf_dims = block.settings.size_xl_dims -%}
+                        {%- elsif s == 'L' -%}{%- assign pf_dims = block.settings.size_l_dims -%}
+                        {%- elsif s == 'M' -%}{%- assign pf_dims = block.settings.size_m_dims -%}{%- endif -%}
+                        <a href="{{ pf_handle | prepend: '/products/' }}"
+                          class="product__family-btn{% if pf_is_active %} product__family-btn--active{% endif %}"
+                          {% if pf_is_active %}aria-current="true"{% endif %}>
+                          <span class="product__family-btn-name">{{ s }}</span>
+                          {% if pf_dims != blank %}<span class="product__family-btn-sub">{{ pf_dims }}</span>{% endif %}
+                        </a>
+                      {%- endfor -%}
+                    </div>
+                  </div>
+
+                  {%- comment -%} Tier / Collection selector {%- endcomment -%}
+                  <div class="product__family-group">
+                    <span class="product__family-label">Collection</span>
+                    <div class="product__family-btns" role="group" aria-label="Select collection">
+                      {%- assign pf_tiers = 'Classic,Premium,Signature' | split: ',' -%}
+                      {%- assign pf_size_lower = pf_size | downcase -%}
+                      {%- for t in pf_tiers -%}
+                        {%- assign t_lower = t | downcase -%}
+                        {%- assign pf_handle = 'nordic-elite-' | append: pf_size_lower | append: '-' | append: t_lower -%}
+                        {%- if pf_is_integrated and pf_size != 'M' -%}
+                          {%- assign pf_handle = pf_handle | append: '-i' -%}
+                        {%- endif -%}
+                        {%- assign pf_is_active = false -%}
+                        {%- if t == pf_tier -%}{%- assign pf_is_active = true -%}{%- endif -%}
+                        <a href="{{ pf_handle | prepend: '/products/' }}"
+                          class="product__family-btn product__family-btn--tier-{{ t_lower }}{% if pf_is_active %} product__family-btn--active{% endif %}"
+                          {% if pf_is_active %}aria-current="true"{% endif %}>
+                          <span class="product__family-btn-name">{{ t }}</span>
+                        </a>
+                      {%- endfor -%}
+                    </div>
+                  </div>
+
+                  {%- comment -%} Oven type toggle — hidden for M size {%- endcomment -%}
+                  {%- if pf_size != 'M' -%}
+                    <div class="product__family-group">
+                      <span class="product__family-label">Oven Type</span>
+                      <div class="product__family-btns product__family-btns--toggle" role="group" aria-label="Select oven type">
+                        {%- assign pf_ext_handle = 'nordic-elite-' | append: pf_size_lower | append: '-' | append: pf_tier_lower -%}
+                        {%- assign pf_int_handle = pf_ext_handle | append: '-i' -%}
+                        <a href="{{ pf_ext_handle | prepend: '/products/' }}"
+                          class="product__family-btn{% unless pf_is_integrated %} product__family-btn--active{% endunless %}"
+                          {% unless pf_is_integrated %}aria-current="true"{% endunless %}>
+                          <span class="product__family-btn-name">External</span>
+                        </a>
+                        <a href="{{ pf_int_handle | prepend: '/products/' }}"
+                          class="product__family-btn{% if pf_is_integrated %} product__family-btn--active{% endif %}"
+                          {% if pf_is_integrated %}aria-current="true"{% endif %}>
+                          <span class="product__family-btn-name">Integrated</span>
+                        </a>
+                      </div>
+                    </div>
+                  {%- endif -%}
+                </div>
+              {% endif %}
+
             {% when 'variant_picker' %}
               <div class="product__block" {{ block.shopify_attributes }}>
                 {% unless product.has_only_default_variant %}
@@ -678,6 +763,31 @@
             { "value": "leaf", "label": "Materials" }
           ],
           "default": "ruler"
+        }
+      ]
+    },
+    {
+      "type": "product_family_selector",
+      "name": "Product Family Selector",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "size_xl_dims",
+          "label": "XL dimensions",
+          "default": "Ø200/225 cm"
+        },
+        {
+          "type": "text",
+          "id": "size_l_dims",
+          "label": "L dimensions",
+          "default": "Ø180/200 cm"
+        },
+        {
+          "type": "text",
+          "id": "size_m_dims",
+          "label": "M dimensions",
+          "default": "100×180/120×200 cm"
         }
       ]
     },
