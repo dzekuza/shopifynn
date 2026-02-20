@@ -42,6 +42,7 @@ Progress: [███████░░░] 75%
 | Phase 02-configurator-stabilization P04 | 3 | 2 tasks | 2 files |
 | Phase 02-configurator-stabilization P05 | 5 | 1 tasks | 1 files |
 | Phase 02-configurator-stabilization P05 | 8 | 1 tasks | 1 files |
+| Phase 03-performance-and-accessibility P05 | 2 | 2 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -85,6 +86,8 @@ Recent decisions affecting current work:
 - [Phase 02-configurator-stabilization]: _buildConfigSummary in PRICE CALCULATION — consumed by both display and cart, core concern is canonical config description
 - [Phase 02-configurator-stabilization]: _unlockThrough/_scrollToStep in UI UTILITIES — manage UX progression/scroll state, general utilities not tied to business logic
 - [Phase 02-configurator-stabilization]: configurator.js reorganized into 8 banner-delimited responsibility groups using /* ══ N. NAME ══ */ format — pure code movement, no logic changes
+- [Phase 03-performance-and-accessibility]: inert on .cfg-step__body only keeps step heading accessible while removing body from tab order; aria-disabled+inert set via Liquid on initial render, JS manages dynamic removal
+- [Phase 03-performance-and-accessibility]: min-width/min-height on .cfg-tooltip-btn expands touch target to 44px WCAG 2.5.5 minimum without changing 20px visual circle appearance
 
 ### Pending Todos
 
