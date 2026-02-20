@@ -1574,6 +1574,91 @@ ul, ol {
 }
 
 /* ============================================
+   COLLECTION PRODUCTS
+   ============================================ */
+
+.collection-products__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.collection-products__empty {
+  text-align: center;
+  color: var(--color-text-muted);
+  padding: 40px 0;
+}
+
+@media (min-width: 600px) {
+  .collection-products__grid--3 { grid-template-columns: repeat(3, 1fr); }
+  .collection-products__grid--4 { grid-template-columns: repeat(2, 1fr); }
+  .collection-products__grid--5 { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (min-width: 1024px) {
+  .collection-products__grid--3 { grid-template-columns: repeat(3, 1fr); }
+  .collection-products__grid--4 { grid-template-columns: repeat(4, 1fr); }
+  .collection-products__grid--5 { grid-template-columns: repeat(5, 1fr); }
+}
+
+/* Carousel */
+.collection-products__carousel-wrap {
+  position: relative;
+}
+
+.collection-products__carousel {
+  display: flex;
+  gap: 24px;
+  overflow: hidden;
+  transition: transform 0.4s ease;
+}
+
+.collection-products__slide {
+  flex: 0 0 calc(25% - 18px);
+  min-width: 0;
+}
+
+.collection-products__nav {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.collection-products__arrow {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--color-primary);
+  background: transparent;
+  color: var(--color-primary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.collection-products__arrow:hover:not(:disabled) {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.collection-products__arrow:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.section--dark .collection-products__arrow {
+  border-color: #fff;
+  color: #fff;
+}
+
+.section--dark .collection-products__arrow:hover:not(:disabled) {
+  background: #fff;
+  color: var(--color-primary);
+}
+
+/* ============================================
    PRODUCT CARD (snippet)
    ============================================ */
 

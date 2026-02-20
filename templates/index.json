@@ -383,15 +383,78 @@
         "padding_top": 40,
         "padding_bottom": 40
       }
+    },
+    "featured-collections": {
+      "type": "featured-collections",
+      "blocks": {
+        "hot-tubs": {
+          "type": "collection_card",
+          "settings": {
+            "heading": "Hot Tubs",
+            "description": "Experience the warmth of Nordic craftsmanship.",
+            "link_text": "Explore",
+            "text_alignment": "left"
+          }
+        },
+        "cold-tubs": {
+          "type": "collection_card",
+          "settings": {
+            "heading": "Cold Tubs",
+            "description": "Invigorate your body with cold water therapy.",
+            "link_text": "Explore",
+            "text_alignment": "left"
+          }
+        }
+      },
+      "block_order": [
+        "hot-tubs",
+        "cold-tubs"
+      ],
+      "settings": {
+        "heading": "Our Collections",
+        "subheading": "From soothing warmth to invigorating cold — find your perfect tub.",
+        "heading_size": "medium",
+        "text_size": "medium",
+        "text_alignment": "center",
+        "columns": "2",
+        "grid_gap": 24,
+        "color_scheme": "default",
+        "padding_top": 40,
+        "padding_bottom": 40
+      }
+    },
+    "collection-products": {
+      "type": "collection-products",
+      "settings": {
+        "heading": "Featured Products",
+        "subheading": "Explore our handcrafted selection of Nordic hot and cold tubs.",
+        "heading_size": "medium",
+        "text_size": "medium",
+        "layout": "grid",
+        "columns": "4",
+        "grid_gap": 24,
+        "product_limit": 8,
+        "text_alignment": "center",
+        "show_secondary_image": true,
+        "show_vendor": false,
+        "show_view_all": true,
+        "view_all_text": "View all products",
+        "view_all_style": "outline",
+        "color_scheme": "default",
+        "padding_top": 40,
+        "padding_bottom": 40
+      }
     }
   },
   "order": [
     "hero",
     "product-tiers",
+    "collection-products",
     "features",
     "testimonials",
     "stats-bar",
     "faq",
-    "newsletter"
+    "newsletter",
+    "featured-collections"
   ]
 }
