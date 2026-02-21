@@ -92,7 +92,8 @@
           "settings": {
             "heading": "Shipping & Returns",
             "icon": "truck",
-            "content": "<p>Free shipping on orders over €500. Delivery within 4-6 weeks. 30-day return policy.</p>"
+            "content": "<p>Free shipping on orders over €500. Delivery within 4-6 weeks. 30-day return policy.</p>",
+            "page": ""
           }
         },
         "warranty": {
@@ -100,7 +101,8 @@
           "settings": {
             "heading": "Warranty",
             "icon": "shield",
-            "content": "<p>All our products come with a comprehensive warranty. Contact us for details.</p>"
+            "content": "<p>All our products come with a comprehensive warranty. Contact us for details.</p>",
+            "page": ""
           }
         },
         "share": {
@@ -127,9 +129,145 @@
         "share"
       ],
       "settings": {}
+    },
+    "image_with_text_CX8UVX": {
+      "type": "image-with-text",
+      "name": "Image with Text",
+      "settings": {
+        "image": "shopify://shop_images/67efa600cbff0c09012ce189_Camilla-Akerberg-x-Icetubs.avif",
+        "image_alt": "",
+        "video_fit": "contain",
+        "subtitle": "Our Story",
+        "heading": "Why buy our ice bath?",
+        "text": "<p>At Icetubs, we handcraft each ice bath with precision, ensuring top-quality through multiple quality checks. Our Icetubs Engine\u2122\ufe0f offers both cooling and heating, giving you flexibility for cold and warm therapy. Our advanced filtration system keeps water crystal clear without chemicals, while our sustainable design minimizes water waste. With various designs to fit your needs, we ensure everyone can benefit from ice bathing. Enjoy precise temperature control and a personalized cold therapy experience with Icetubs.</p>",
+        "button_text": "Learn More",
+        "button_url": "",
+        "button_style": "primary",
+        "heading_size": "medium",
+        "text_size": "medium",
+        "layout": "image_left",
+        "text_alignment": "left",
+        "color_scheme": "default",
+        "padding_top": 100,
+        "padding_bottom": 100
+      }
+    },
+    "features_zPVyKD": {
+      "type": "features",
+      "blocks": {
+        "feature_7fqQLm": {
+          "type": "feature",
+          "settings": {
+            "icon": "craft",
+            "heading": "Handcrafted in Scandinavia",
+            "text": "Each tub is meticulously built by skilled Nordic artisans using time-honored techniques.",
+            "text_alignment": "center"
+          }
+        },
+        "feature_nQGDKg": {
+          "type": "feature",
+          "settings": {
+            "icon": "leaf",
+            "heading": "Sustainable Materials",
+            "text": "Responsibly sourced thermowood and eco-friendly finishes that stand the test of time.",
+            "text_alignment": "center"
+          }
+        },
+        "feature_Yr7iUF": {
+          "type": "feature",
+          "settings": {
+            "icon": "shield",
+            "heading": "Up to 10-Year Warranty",
+            "text": "We stand behind every tub with industry-leading warranty coverage.",
+            "text_alignment": "center"
+          }
+        },
+        "feature_zhGkDL": {
+          "type": "feature",
+          "settings": {
+            "icon": "palette",
+            "heading": "Fully Customizable",
+            "text": "Choose your size, wood finish, liner color, and equipment to match your vision.",
+            "text_alignment": "center"
+          }
+        }
+      },
+      "block_order": [
+        "feature_7fqQLm",
+        "feature_nQGDKg",
+        "feature_Yr7iUF",
+        "feature_zhGkDL"
+      ],
+      "name": "Features",
+      "settings": {
+        "heading": "Quality for your IceBath",
+        "subheading": "The IceBath is designed for those who demand the best. With reliable performance, effortless maintenance, and a focus on sustainability, every IceBath is built to exceed expectations.",
+        "heading_size": "medium",
+        "text_size": "medium",
+        "text_alignment": "center",
+        "columns": "4",
+        "grid_gap": 24,
+        "color_scheme": "surface",
+        "padding_top": 100,
+        "padding_bottom": 100
+      }
+    },
+    "collection_list_achHTU": {
+      "type": "collection-list",
+      "blocks": {
+        "collection_card_fN4Kfq": {
+          "type": "collection_card",
+          "settings": {
+            "collection": "l-hot-tubs-1",
+            "title": "",
+            "image": "shopify://shop_images/67efa600cbff0c09012ce189_Camilla-Akerberg-x-Icetubs.avif",
+            "video_fit": "cover"
+          }
+        },
+        "collection_card_QVq7TF": {
+          "type": "collection_card",
+          "settings": {
+            "collection": "l-hot-tubs",
+            "title": "",
+            "image": "shopify://shop_images/67efa600cbff0c09012ce189_Camilla-Akerberg-x-Icetubs.avif",
+            "video_fit": "cover"
+          }
+        },
+        "collection_card_9igafw": {
+          "type": "collection_card",
+          "settings": {
+            "collection": "nordic-elite-signature",
+            "title": "",
+            "image": "shopify://shop_images/67efa600cbff0c09012ce189_Camilla-Akerberg-x-Icetubs.avif",
+            "video_fit": "cover"
+          }
+        }
+      },
+      "block_order": [
+        "collection_card_fN4Kfq",
+        "collection_card_QVq7TF",
+        "collection_card_9igafw"
+      ],
+      "name": "Collection List",
+      "settings": {
+        "heading": "More of our products",
+        "subheading": "In addition to the IceBath, we also offer the IceBarrel, which provides a seated, upright position. The ProBath is a larger option that can be used at home or in commercial settings like gyms and wellness centers. For commercial use, visit our business page for more information",
+        "show_count": true,
+        "heading_size": "large",
+        "text_size": "medium",
+        "text_alignment": "center",
+        "columns": "3",
+        "grid_gap": 24,
+        "color_scheme": "default",
+        "padding_top": 100,
+        "padding_bottom": 100
+      }
     }
   },
   "order": [
-    "main-product"
+    "main-product",
+    "image_with_text_CX8UVX",
+    "features_zPVyKD",
+    "collection_list_achHTU"
   ]
 }

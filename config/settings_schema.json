@@ -127,6 +127,69 @@
     ]
   },
   {
+    "name": "Product cards",
+    "settings": [
+      {
+        "type": "select",
+        "id": "card_image_border_radius",
+        "label": "Image border radius",
+        "options": [
+          { "value": "0", "label": "Square (0px)" },
+          { "value": "4px", "label": "Subtle (4px)" },
+          { "value": "8px", "label": "Rounded (8px)" },
+          { "value": "12px", "label": "Soft (12px)" },
+          { "value": "16px", "label": "Pill (16px)" }
+        ],
+        "default": "0"
+      },
+      {
+        "type": "select",
+        "id": "card_image_ratio",
+        "label": "Image aspect ratio",
+        "options": [
+          { "value": "1", "label": "Square (1:1)" },
+          { "value": "3/4", "label": "Portrait (3:4)" },
+          { "value": "4/3", "label": "Landscape (4:3)" },
+          { "value": "auto", "label": "Natural" }
+        ],
+        "default": "1"
+      },
+      {
+        "type": "checkbox",
+        "id": "card_show_shadow",
+        "label": "Show card shadow",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "card_hover_zoom",
+        "label": "Image zoom on hover",
+        "default": true
+      },
+      {
+        "type": "select",
+        "id": "card_badge_style",
+        "label": "Badge style",
+        "options": [
+          { "value": "pill", "label": "Pill" },
+          { "value": "square", "label": "Square" },
+          { "value": "rounded", "label": "Rounded" }
+        ],
+        "default": "pill"
+      },
+      {
+        "type": "select",
+        "id": "card_text_alignment",
+        "label": "Text alignment",
+        "options": [
+          { "value": "left", "label": "Left" },
+          { "value": "center", "label": "Center" }
+        ],
+        "default": "left"
+      }
+    ]
+  },
+  {
     "name": "Favicon",
     "settings": [
       {

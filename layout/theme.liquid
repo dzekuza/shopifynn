@@ -32,6 +32,12 @@
       --font-body: {{ settings.font_body.family }}, {{ settings.font_body.fallback_families }};
       --font-heading-weight: {{ settings.font_heading.weight }};
       --font-body-weight: {{ settings.font_body.weight }};
+
+      /* Product card settings */
+      --card-image-radius: {{ settings.card_image_border_radius }};
+      --card-image-ratio: {{ settings.card_image_ratio }};
+      --card-text-align: {{ settings.card_text_alignment }};
+      --card-badge-radius: {% case settings.card_badge_style %}{% when 'pill' %}20px{% when 'rounded' %}6px{% when 'square' %}0{% endcase %};
     }
   </style>
 
