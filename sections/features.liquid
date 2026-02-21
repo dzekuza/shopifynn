@@ -16,53 +16,9 @@
             <div class="features__icon">
               <img src="{{ block.settings.custom_image | image_url: width: 80 }}" alt="{{ block.settings.heading | escape }}" width="40" height="40" loading="lazy">
             </div>
-          {% else %}
+          {% elsif block.settings.icon != 'none' %}
             <div class="features__icon">
-              {% case block.settings.icon %}
-                {% when 'craft' %}
-                  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/>
-                  </svg>
-                {% when 'leaf' %}
-                  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <path d="M17 8C8 10 5.9 16.17 3.82 21.34l1.89-.82"/>
-                    <path d="M17 8c4-1 6 3 6 3s-4 2-8 0"/>
-                    <path d="M17 8l-5 5"/>
-                  </svg>
-                {% when 'shield' %}
-                  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                    <polyline points="9 12 11 14 15 10"/>
-                  </svg>
-                {% when 'palette' %}
-                  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <circle cx="13.5" cy="6.5" r="1.5"/>
-                    <circle cx="17.5" cy="10.5" r="1.5"/>
-                    <circle cx="8.5" cy="7.5" r="1.5"/>
-                    <circle cx="6.5" cy="12.5" r="1.5"/>
-                    <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.93 0 1.5-.67 1.5-1.5 0-.38-.15-.74-.39-1.02-.24-.28-.39-.64-.39-1.02 0-.83.67-1.5 1.5-1.5H16c3.31 0 6-2.69 6-6 0-5.17-4.49-9-10-9z"/>
-                  </svg>
-                {% when 'snowflake' %}
-                  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <line x1="12" y1="2" x2="12" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/>
-                    <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/><line x1="19.07" y1="4.93" x2="4.93" y2="19.07"/>
-                    <polyline points="8 2 12 6 16 2"/><polyline points="8 22 12 18 16 22"/>
-                    <polyline points="2 8 6 12 2 16"/><polyline points="22 8 18 12 22 16"/>
-                  </svg>
-                {% when 'truck' %}
-                  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
-                    <circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>
-                  </svg>
-                {% when 'star' %}
-                  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-                  </svg>
-                {% when 'heart' %}
-                  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
-                  </svg>
-              {% endcase %}
+              {% render 'icon', name: block.settings.icon, size: 40 %}
             </div>
           {% endif %}
           <h3 class="features__title">{{ block.settings.heading }}</h3>
@@ -199,14 +155,59 @@
           "id": "icon",
           "label": "Icon",
           "options": [
-            { "value": "craft", "label": "Handcrafted" },
-            { "value": "leaf", "label": "Natural" },
-            { "value": "shield", "label": "Warranty" },
-            { "value": "palette", "label": "Custom" },
-            { "value": "snowflake", "label": "Cold" },
-            { "value": "truck", "label": "Delivery" },
-            { "value": "star", "label": "Star" },
-            { "value": "heart", "label": "Heart" }
+            { "value": "none", "label": "None" },
+            { "value": "craft", "label": "Craft / Tool" },
+            { "value": "leaf", "label": "Leaf / Eco" },
+            { "value": "shield", "label": "Shield / Warranty" },
+            { "value": "palette", "label": "Palette / Custom" },
+            { "value": "snowflake", "label": "Snowflake / Cold" },
+            { "value": "truck", "label": "Truck / Delivery" },
+            { "value": "star", "label": "Star / Rating" },
+            { "value": "heart", "label": "Heart / Love" },
+            { "value": "globe", "label": "Globe / Worldwide" },
+            { "value": "pin", "label": "Pin / Location" },
+            { "value": "check", "label": "Checkmark" },
+            { "value": "award", "label": "Award / Medal" },
+            { "value": "thermometer", "label": "Thermometer" },
+            { "value": "droplet", "label": "Droplet / Water" },
+            { "value": "flame", "label": "Flame / Heat" },
+            { "value": "sun", "label": "Sun" },
+            { "value": "moon", "label": "Moon" },
+            { "value": "wind", "label": "Wind" },
+            { "value": "zap", "label": "Zap / Lightning" },
+            { "value": "clock", "label": "Clock / Time" },
+            { "value": "users", "label": "Users / People" },
+            { "value": "home", "label": "Home" },
+            { "value": "settings", "label": "Settings / Gear" },
+            { "value": "lock", "label": "Lock / Secure" },
+            { "value": "refresh", "label": "Refresh / Cycle" },
+            { "value": "wifi", "label": "WiFi / Connected" },
+            { "value": "battery", "label": "Battery / Power" },
+            { "value": "package", "label": "Package / Box" },
+            { "value": "phone", "label": "Phone" },
+            { "value": "mail", "label": "Mail / Email" },
+            { "value": "target", "label": "Target / Focus" },
+            { "value": "layers", "label": "Layers / Stack" },
+            { "value": "sliders", "label": "Sliders / Adjust" },
+            { "value": "trending-up", "label": "Trending Up / Growth" },
+            { "value": "coffee", "label": "Coffee / Relax" },
+            { "value": "smile", "label": "Smile / Happy" },
+            { "value": "thumbs-up", "label": "Thumbs Up" },
+            { "value": "eye", "label": "Eye / View" },
+            { "value": "camera", "label": "Camera / Photo" },
+            { "value": "music", "label": "Music" },
+            { "value": "book", "label": "Book" },
+            { "value": "gift", "label": "Gift" },
+            { "value": "tag", "label": "Tag / Price" },
+            { "value": "percent", "label": "Percent / Discount" },
+            { "value": "recycle", "label": "Recycle" },
+            { "value": "compass", "label": "Compass / Navigate" },
+            { "value": "anchor", "label": "Anchor / Marine" },
+            { "value": "life-buoy", "label": "Life Buoy / Safety" },
+            { "value": "feather", "label": "Feather / Light" },
+            { "value": "dollar", "label": "Dollar / Price" },
+            { "value": "waves", "label": "Waves / Water" },
+            { "value": "mountain", "label": "Mountain / Nature" }
           ],
           "default": "craft"
         },

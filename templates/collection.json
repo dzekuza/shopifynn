@@ -19,14 +19,14 @@
         "show_options": true,
         "show_vendor": false,
         "show_secondary_image": true,
-        "heading_size": "small",
+        "heading_size": "large",
         "text_alignment": "left",
         "mobile_columns": "1",
         "columns": "3",
         "grid_gap": 12,
         "products_per_page": 12,
-        "padding_top": 24,
-        "padding_bottom": 24
+        "padding_top": 100,
+        "padding_bottom": 100
       }
     }
   },

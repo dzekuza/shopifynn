@@ -9,13 +9,13 @@
  */
 {
   "current": {
-    "color_primary": "#262626",
-    "color_secondary": "#B6754D",
-    "color_accent": "#C85E3F",
-    "color_background": "#F4F1EC",
-    "color_surface": "#EDE7DD",
-    "color_text": "#262626",
-    "color_text_muted": "#6A6864",
+    "color_primary": "#1E2D3B",
+    "color_secondary": "#5B8A72",
+    "color_accent": "#7B6FA0",
+    "color_background": "#F5F7F6",
+    "color_surface": "#E8EDE9",
+    "color_text": "#1E2D3B",
+    "color_text_muted": "#7A8B8A",
     "font_heading": "plus_jakarta_sans_n7",
     "font_body": "plus_jakarta_sans_n4",
     "logo": "shopify://shop_images/newdarkk.png",
@@ -27,8 +27,10 @@
         "settings": {
           "menu": "main-menu",
           "sticky_header": true,
-          "announcement_text": "Free shipping on orders over €500",
-          "announcement_bg_color": "#262626",
+          "mega_menu_trigger": "Products",
+          "quiz_text": "Help me choose",
+          "quiz_url": "",
+          "announcement_bg_color": "#1e2d3b",
           "announcement_text_color": "#ffffff"
         }
       },
@@ -53,7 +55,7 @@
             "type": "text",
             "settings": {
               "heading": "Contact Us",
-              "text": "<p>info@aurowe.com<br>+358 123 456 789<br>Helsinki, Finland</p>"
+              "text": "<p>info@aurowe.com<br/>+358 123 456 789<br/>Helsinki, Finland</p>"
             }
           }
         },
@@ -64,7 +66,7 @@
         ],
         "settings": {
           "about_text": "Premium Nordic hot and cold tubs, handcrafted with care and built to last a lifetime.",
-          "color_scheme": "dark",
+          "color_scheme": "surface",
           "padding_top": 48,
           "padding_bottom": 32
         }

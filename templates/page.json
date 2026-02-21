@@ -11,11 +11,82 @@
   "sections": {
     "main-page": {
       "type": "main-page",
+      "disabled": true,
       "settings": {
         "show_title": true,
-        "content_width": 800
+        "heading_size": "medium",
+        "text_alignment": "left",
+        "content_width": 800,
+        "color_scheme": "default",
+        "padding_top": 40,
+        "padding_bottom": 40
+      }
+    },
+    "lifestyle_gallery_fXVeEz": {
+      "type": "lifestyle-gallery",
+      "blocks": {
+        "image_xTYPwV": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/Sauna_Winter_Forest_Side.png",
+            "video_fit": "cover",
+            "alt": "",
+            "caption": "",
+            "size": "medium"
+          }
+        },
+        "image_ky6Myd": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/Sauna_Winter_Forest_Side.png",
+            "video_fit": "cover",
+            "alt": "",
+            "caption": "",
+            "size": "medium"
+          }
+        },
+        "image_JxfErV": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/Sauna_Winter_Forest_Side.png",
+            "video_fit": "cover",
+            "alt": "",
+            "caption": "",
+            "size": "medium"
+          }
+        },
+        "image_TGb7eK": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/Sauna_Winter_Forest_Side.png",
+            "video_fit": "cover",
+            "alt": "",
+            "caption": "",
+            "size": "medium"
+          }
+        }
+      },
+      "block_order": [
+        "image_xTYPwV",
+        "image_ky6Myd",
+        "image_JxfErV",
+        "image_TGb7eK"
+      ],
+      "name": "Lifestyle Gallery",
+      "settings": {
+        "heading": "Life with Aurowe",
+        "subheading": "See how our tubs transform outdoor living spaces.",
+        "heading_size": "large",
+        "text_alignment": "center",
+        "grid_gap": 16,
+        "color_scheme": "default",
+        "padding_top": 100,
+        "padding_bottom": 100
       }
     }
   },
-  "order": ["main-page"]
+  "order": [
+    "main-page",
+    "lifestyle_gallery_fXVeEz"
+  ]
 }

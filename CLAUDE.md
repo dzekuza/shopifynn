@@ -44,15 +44,15 @@ The 15-step hot tub configurator is the most complex part of the theme:
 
 Base products use 3 tiers (Classic/Premium/Signature) with variants encoding size (XL/L/M) and oven type (external/internal). Steps cover: model size, fiberglass liner, insulation, heating, exterior panel, hydro massage, air system, filter, LED lighting, thermometer, stairs, pillows, cover, control installation, heater connection.
 
-### Color Palette
+### Color Palette (Nordic Aurora)
 ```
-Primary:    #262626   (charcoal — headings)
-Secondary:  #B6754D   (bronze — accents)
-Accent:     #C85E3F   (terracotta — CTAs)
-Background: #F4F1EC   (warm beige)
-Surface:    #EDE7DD   (light taupe — cards)
-Text:       #262626
-Text Muted: #7D7B78
+Primary:    #1E2D3B   (deep fjord navy — headings)
+Secondary:  #5B8A72   (muted aurora green — accents)
+Accent:     #7B6FA0   (soft aurora violet — CTAs)
+Background: #F5F7F6   (icy mist white)
+Surface:    #E8EDE9   (frost green tint — cards)
+Text:       #1E2D3B
+Text Muted: #7A8B8A   (cool sage grey)
 ```
 
 ## Conventions

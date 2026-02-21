@@ -14,48 +14,48 @@
         "type": "color",
         "id": "color_primary",
         "label": "Primary",
-        "default": "#262626",
-        "info": "Deep charcoal for headings"
+        "default": "#1E2D3B",
+        "info": "Deep fjord navy — headings"
       },
       {
         "type": "color",
         "id": "color_secondary",
         "label": "Secondary",
-        "default": "#B6754D",
-        "info": "Warm bronze accent"
+        "default": "#5B8A72",
+        "info": "Muted aurora green — accents"
       },
       {
         "type": "color",
         "id": "color_accent",
         "label": "Accent",
-        "default": "#C85E3F",
-        "info": "Warm terracotta for CTAs and highlights"
+        "default": "#7B6FA0",
+        "info": "Soft aurora violet — CTAs and highlights"
       },
       {
         "type": "color",
         "id": "color_background",
         "label": "Background",
-        "default": "#F4F1EC",
-        "info": "Warm beige page background"
+        "default": "#F5F7F6",
+        "info": "Icy mist white"
       },
       {
         "type": "color",
         "id": "color_surface",
         "label": "Surface",
-        "default": "#EDE7DD",
-        "info": "Light taupe — cards and alternating sections"
+        "default": "#E8EDE9",
+        "info": "Frost green tint — cards and alternating sections"
       },
       {
         "type": "color",
         "id": "color_text",
         "label": "Body text",
-        "default": "#262626"
+        "default": "#1E2D3B"
       },
       {
         "type": "color",
         "id": "color_text_muted",
         "label": "Muted text",
-        "default": "#6A6864"
+        "default": "#7A8B8A"
       }
     ]
   },

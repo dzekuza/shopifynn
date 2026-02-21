@@ -1,13 +1,17 @@
-<footer class="footer {% if section.settings.color_scheme == 'dark' %}section--dark{% elsif section.settings.color_scheme == 'surface' %}section--surface{% else %}section--dark{% endif %}" style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;">
+<footer class="footer {% if section.settings.color_scheme == 'dark' %}section--dark{% elsif section.settings.color_scheme == 'surface' %}section--surface{% endif %}" style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;">
   <div class="container">
     <div class="footer__grid">
       <div class="footer__col">
         <div class="footer__logo">
           {% if settings.logo %}
+            {%- assign footer_logo_2x = settings.logo_width | times: 2 -%}
+            {%- assign footer_logo_3x = settings.logo_width | times: 3 -%}
             <img
-              src="{{ settings.logo | image_url: width: settings.logo_width }}"
+              src="{{ settings.logo | image_url: width: footer_logo_2x }}"
+              srcset="{{ settings.logo | image_url: width: settings.logo_width }} 1x, {{ settings.logo | image_url: width: footer_logo_2x }} 2x, {{ settings.logo | image_url: width: footer_logo_3x }} 3x"
               alt="{{ shop.name }}"
               width="{{ settings.logo_width }}"
+              height="{{ settings.logo_width | divided_by: settings.logo.aspect_ratio }}"
               loading="lazy"
             >
           {% else %}
