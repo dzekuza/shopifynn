@@ -27,7 +27,11 @@
             <select class="product-compare__select" data-compare-select="{{ side_label }}">
               <option value="">Select a model...</option>
               {%- for block in section.blocks -%}
-                <option value="{{ forloop.index0 }}">{{ block.settings.product_name }}</option>
+                {%- if block.settings.product != blank -%}
+                  <option value="{{ forloop.index0 }}">{{ block.settings.product.title }}</option>
+                {%- elsif block.settings.product_name != blank -%}
+                  <option value="{{ forloop.index0 }}">{{ block.settings.product_name }}</option>
+                {%- endif -%}
               {%- endfor -%}
             </select>
 
@@ -40,6 +44,7 @@
                 loading="lazy"
               >
               <h3 class="product-compare__name" data-compare-name="{{ side_label }}"></h3>
+              <p class="product-compare__price" data-compare-price="{{ side_label }}"></p>
               <a
                 class="product-compare__shop-link button button--primary"
                 data-compare-link="{{ side_label }}"
@@ -66,10 +71,31 @@
   <script type="application/json" data-compare-products>
     [
       {%- for block in section.blocks -%}
+        {%- assign cp_product = block.settings.product -%}
+        {%- if cp_product != blank -%}
+          {%- assign cp_name = cp_product.title -%}
+          {%- assign cp_url = cp_product.url -%}
+          {%- if cp_product.featured_image -%}
+            {%- assign cp_image = cp_product.featured_image | image_url: width: 800 -%}
+          {%- elsif block.settings.product_image != blank -%}
+            {%- assign cp_image = block.settings.product_image | image_url: width: 800 -%}
+          {%- else -%}
+            {%- assign cp_image = '' -%}
+          {%- endif -%}
+        {%- else -%}
+          {%- assign cp_name = block.settings.product_name -%}
+          {%- assign cp_url = block.settings.product_url | default: '#' -%}
+          {%- if block.settings.product_image != blank -%}
+            {%- assign cp_image = block.settings.product_image | image_url: width: 800 -%}
+          {%- else -%}
+            {%- assign cp_image = '' -%}
+          {%- endif -%}
+        {%- endif -%}
         {
-          "name": {{ block.settings.product_name | json }},
-          "image": {% if block.settings.product_image != blank %}"{{ block.settings.product_image | image_url: width: 800 }}"{% else %}""{% endif %},
-          "url": {{ block.settings.product_url | default: '#' | json }},
+          "name": {{ cp_name | json }},
+          "image": {{ cp_image | json }},
+          "url": {{ cp_url | json }},
+          "price": {{ cp_product.price | default: 0 | money | json }},
           "specs": {
             "Design": {{ block.settings.spec_design | json }},
             "Access": {{ block.settings.spec_access | json }},
@@ -162,6 +188,7 @@
       var display = section.querySelector('[data-compare-display="' + side + '"]');
       var img = section.querySelector('[data-compare-img="' + side + '"]');
       var name = section.querySelector('[data-compare-name="' + side + '"]');
+      var price = section.querySelector('[data-compare-price="' + side + '"]');
       var link = section.querySelector('[data-compare-link="' + side + '"]');
       var specsBody = section.querySelector('[data-compare-specs="' + side + '"]');
 
@@ -187,6 +214,7 @@
       }
 
       name.textContent = product.name;
+      if (price) price.textContent = product.price || '';
       link.href = product.url || '#';
 
       var rows = '';
@@ -282,19 +310,26 @@
       "name": "Product",
       "settings": [
         {
+          "type": "product",
+          "id": "product",
+          "label": "Product",
+          "info": "Select a product from your store. Name, image, and URL are pulled automatically."
+        },
+        { "type": "header", "content": "Manual overrides (used if no product selected)" },
+        {
           "type": "text",
           "id": "product_name",
-          "label": "Product name"
+          "label": "Product name (fallback)"
         },
         {
           "type": "image_picker",
           "id": "product_image",
-          "label": "Product image"
+          "label": "Product image (override)"
         },
         {
           "type": "url",
           "id": "product_url",
-          "label": "Product URL"
+          "label": "Product URL (fallback)"
         },
         { "type": "header", "content": "Specifications" },
         {
@@ -519,351 +554,11 @@
   "presets": [
     {
       "name": "Product Compare",
-      "blocks": [
-        {
-          "type": "product",
-          "settings": {
-            "product_name": "IceBarrel",
-            "spec_design": "Vertical",
-            "spec_access": "Barrel-like",
-            "spec_heater": "Optional heater (+€495)",
-            "spec_indoor_outdoor": "Indoor & outdoor",
-            "spec_weatherproof": "Yes",
-            "spec_materials": "Thermo wood + Stainless steel 304",
-            "spec_cover": "Thermo & lockable cover",
-            "spec_filter": "1 filter",
-            "spec_micron_filter": "5 micron",
-            "spec_warranty": "2 years",
-            "spec_portable": "No",
-            "spec_commercial": "No",
-            "spec_wifi": "Yes",
-            "spec_filter_duration": "1 month",
-            "spec_drainage_valve": "Yes",
-            "spec_auto_drainage": "No",
-            "spec_overflow_tank": "No",
-            "spec_setup_time": "15 min",
-            "spec_engine_cover": "Step engine cover",
-            "spec_control": "Wifi / App / Schedule / Eco",
-            "spec_included": "2yr warranty + Thermo cover + Filter set + Help desk",
-            "spec_phone_holder": "Yes",
-            "spec_stairs_addon": "Yes",
-            "spec_water_refill": "2 months",
-            "spec_cooling_capacity": "1HP / 3.17kW",
-            "spec_power_consumption": "1.07kW",
-            "spec_power_supply": "220V~ / 50Hz",
-            "spec_temp_range": "-7°C ~ 43°C",
-            "spec_refrigerant": "R32",
-            "spec_ozone": "200-300ppm",
-            "spec_pump_flow": "55L/min",
-            "spec_noise": "60dB",
-            "spec_max_power": "1.7kW",
-            "spec_max_current": "7.5A",
-            "spec_water_flow": "2m³/h",
-            "spec_pressure_drop": "14kPa",
-            "spec_dimensions": "155.5 x 68 x 117.5 cm",
-            "spec_volume": "350L",
-            "spec_weight_empty": "148 kg",
-            "spec_weight_full": "498 kg",
-            "spec_weight_packaging": "162 kg",
-            "spec_uv_light": "No",
-            "spec_frost_resistance": "No"
-          }
-        },
-        {
-          "type": "product",
-          "settings": {
-            "product_name": "IceBarrel Stairs",
-            "spec_design": "Vertical",
-            "spec_access": "Barrel-like",
-            "spec_heater": "Optional heater (+€495)",
-            "spec_indoor_outdoor": "Indoor & outdoor",
-            "spec_weatherproof": "Yes",
-            "spec_materials": "Thermo wood + Stainless steel 304",
-            "spec_cover": "Thermo & lockable cover",
-            "spec_filter": "1 filter",
-            "spec_micron_filter": "5 micron",
-            "spec_warranty": "2 years",
-            "spec_portable": "No",
-            "spec_commercial": "No",
-            "spec_wifi": "Yes",
-            "spec_filter_duration": "1 month",
-            "spec_drainage_valve": "Yes",
-            "spec_auto_drainage": "No",
-            "spec_overflow_tank": "No",
-            "spec_setup_time": "15 + 15 min",
-            "spec_engine_cover": "Stairs engine cover",
-            "spec_control": "Wifi / App / Schedule / Eco",
-            "spec_included": "2yr warranty + Thermo cover + Filter set + Help desk",
-            "spec_phone_holder": "Yes",
-            "spec_stairs_addon": "Yes",
-            "spec_water_refill": "2 months",
-            "spec_cooling_capacity": "1HP / 3.17kW",
-            "spec_power_consumption": "1.07kW",
-            "spec_power_supply": "220V~ / 50Hz",
-            "spec_temp_range": "-7°C ~ 43°C",
-            "spec_refrigerant": "R32",
-            "spec_ozone": "200-300ppm",
-            "spec_pump_flow": "55L/min",
-            "spec_noise": "60dB",
-            "spec_max_power": "1.7kW",
-            "spec_max_current": "7.5A",
-            "spec_water_flow": "2m³/h",
-            "spec_pressure_drop": "14kPa",
-            "spec_dimensions": "155.5 x 68 x 133 cm",
-            "spec_volume": "350L",
-            "spec_weight_empty": "148 kg",
-            "spec_weight_full": "498 kg",
-            "spec_weight_packaging": "162 kg",
-            "spec_uv_light": "No",
-            "spec_frost_resistance": "No"
-          }
-        },
-        {
-          "type": "product",
-          "settings": {
-            "product_name": "IceBarrel XL",
-            "spec_design": "Vertical",
-            "spec_access": "Barrel-like",
-            "spec_heater": "Optional heater (+€495)",
-            "spec_indoor_outdoor": "Indoor & outdoor",
-            "spec_weatherproof": "Yes",
-            "spec_materials": "Fiberglass + Thermo wood",
-            "spec_cover": "Thermo & lockable cover",
-            "spec_filter": "1 filter",
-            "spec_micron_filter": "5 micron",
-            "spec_warranty": "2 years",
-            "spec_portable": "No",
-            "spec_commercial": "No",
-            "spec_wifi": "Yes",
-            "spec_filter_duration": "1 month",
-            "spec_drainage_valve": "Yes",
-            "spec_auto_drainage": "No",
-            "spec_overflow_tank": "No",
-            "spec_setup_time": "15 min",
-            "spec_engine_cover": "Step engine cover",
-            "spec_control": "Wifi / App / Schedule / Eco",
-            "spec_included": "2yr warranty + Thermo cover + Filter set + Help desk",
-            "spec_phone_holder": "Yes",
-            "spec_stairs_addon": "Yes",
-            "spec_water_refill": "2 months",
-            "spec_cooling_capacity": "1HP / 3.17kW",
-            "spec_power_consumption": "1.07kW",
-            "spec_power_supply": "220V~ / 50Hz",
-            "spec_temp_range": "-7°C ~ 43°C",
-            "spec_refrigerant": "R32",
-            "spec_ozone": "200-300ppm",
-            "spec_pump_flow": "55L/min",
-            "spec_noise": "60dB",
-            "spec_max_power": "1.7kW",
-            "spec_max_current": "7.5A",
-            "spec_water_flow": "2m³/h",
-            "spec_pressure_drop": "14kPa",
-            "spec_dimensions": "178.5 x 89 x 118 cm",
-            "spec_volume": "430L",
-            "spec_weight_empty": "145 kg",
-            "spec_weight_full": "575 kg",
-            "spec_weight_packaging": "159 kg",
-            "spec_uv_light": "No",
-            "spec_frost_resistance": "No"
-          }
-        },
-        {
-          "type": "product",
-          "settings": {
-            "product_name": "IceBarrel XL Stairs",
-            "spec_design": "Vertical",
-            "spec_access": "Barrel-like",
-            "spec_heater": "Optional heater (+€495)",
-            "spec_indoor_outdoor": "Indoor & outdoor",
-            "spec_weatherproof": "Yes",
-            "spec_materials": "Fiberglass + Thermo wood",
-            "spec_cover": "Thermo & lockable cover",
-            "spec_filter": "1 filter",
-            "spec_micron_filter": "5 micron",
-            "spec_warranty": "2 years",
-            "spec_portable": "No",
-            "spec_commercial": "No",
-            "spec_wifi": "Yes",
-            "spec_filter_duration": "1 month",
-            "spec_drainage_valve": "Yes",
-            "spec_auto_drainage": "No",
-            "spec_overflow_tank": "No",
-            "spec_setup_time": "15 + 15 min",
-            "spec_engine_cover": "Stairs engine cover",
-            "spec_control": "Wifi / App / Schedule / Eco",
-            "spec_included": "2yr warranty + Thermo cover + Filter set + Help desk",
-            "spec_phone_holder": "Yes",
-            "spec_stairs_addon": "Yes",
-            "spec_water_refill": "2 months",
-            "spec_cooling_capacity": "1HP / 3.17kW",
-            "spec_power_consumption": "1.07kW",
-            "spec_power_supply": "220V~ / 50Hz",
-            "spec_temp_range": "-7°C ~ 43°C",
-            "spec_refrigerant": "R32",
-            "spec_ozone": "200-300ppm",
-            "spec_pump_flow": "55L/min",
-            "spec_noise": "60dB",
-            "spec_max_power": "1.7kW",
-            "spec_max_current": "7.5A",
-            "spec_water_flow": "2m³/h",
-            "spec_pressure_drop": "14kPa",
-            "spec_dimensions": "178.5 x 89 x 133 cm",
-            "spec_volume": "430L",
-            "spec_weight_empty": "145 kg",
-            "spec_weight_full": "575 kg",
-            "spec_weight_packaging": "159 kg",
-            "spec_uv_light": "No",
-            "spec_frost_resistance": "No"
-          }
-        },
-        {
-          "type": "product",
-          "settings": {
-            "product_name": "IceBath",
-            "spec_design": "Horizontal",
-            "spec_access": "Bath-like",
-            "spec_heater": "Optional heater (+€495)",
-            "spec_indoor_outdoor": "Indoor & outdoor",
-            "spec_weatherproof": "Yes",
-            "spec_materials": "Stainless steel 304 + Thermo wood",
-            "spec_cover": "Thermo & lockable cover",
-            "spec_filter": "1 filter",
-            "spec_micron_filter": "5 micron",
-            "spec_warranty": "2 years",
-            "spec_portable": "No",
-            "spec_commercial": "No",
-            "spec_wifi": "Yes",
-            "spec_filter_duration": "1 month",
-            "spec_drainage_valve": "Yes",
-            "spec_auto_drainage": "No",
-            "spec_overflow_tank": "No",
-            "spec_setup_time": "15 min",
-            "spec_engine_cover": "Step engine cover",
-            "spec_control": "Wifi / App / Schedule / Eco",
-            "spec_included": "2yr warranty + Thermo cover + Filter set + Help desk",
-            "spec_phone_holder": "Yes",
-            "spec_stairs_addon": "No",
-            "spec_water_refill": "2 months",
-            "spec_cooling_capacity": "1HP / 3.17kW",
-            "spec_power_consumption": "1.07kW",
-            "spec_power_supply": "220V~ / 50Hz",
-            "spec_temp_range": "-7°C ~ 43°C",
-            "spec_refrigerant": "R32",
-            "spec_ozone": "200-300ppm",
-            "spec_pump_flow": "55L/min",
-            "spec_noise": "60dB",
-            "spec_max_power": "1.7kW",
-            "spec_max_current": "7.5A",
-            "spec_water_flow": "2m³/h",
-            "spec_pressure_drop": "14kPa",
-            "spec_dimensions": "225 x 70 x 64 cm",
-            "spec_volume": "300L",
-            "spec_weight_empty": "155 kg",
-            "spec_weight_full": "455 kg",
-            "spec_weight_packaging": "164 kg",
-            "spec_uv_light": "No",
-            "spec_frost_resistance": "No"
-          }
-        },
-        {
-          "type": "product",
-          "settings": {
-            "product_name": "IceBath XL",
-            "spec_design": "Horizontal",
-            "spec_access": "Bath-like",
-            "spec_heater": "Optional heater (+€495)",
-            "spec_indoor_outdoor": "Indoor & outdoor",
-            "spec_weatherproof": "Yes",
-            "spec_materials": "Stainless steel 304 + Thermo wood",
-            "spec_cover": "Thermo & lockable cover",
-            "spec_filter": "1 filter",
-            "spec_micron_filter": "5 micron",
-            "spec_warranty": "2 years",
-            "spec_portable": "No",
-            "spec_commercial": "No",
-            "spec_wifi": "Yes",
-            "spec_filter_duration": "1 month",
-            "spec_drainage_valve": "Yes",
-            "spec_auto_drainage": "No",
-            "spec_overflow_tank": "No",
-            "spec_setup_time": "15 min",
-            "spec_engine_cover": "Step engine cover",
-            "spec_control": "Wifi / App / Schedule / Eco",
-            "spec_included": "2yr warranty + Thermo cover + Filter set + Help desk",
-            "spec_phone_holder": "Yes",
-            "spec_stairs_addon": "No",
-            "spec_water_refill": "2 months",
-            "spec_cooling_capacity": "1HP / 3.17kW",
-            "spec_power_consumption": "1.07kW",
-            "spec_power_supply": "220V~ / 50Hz",
-            "spec_temp_range": "-7°C ~ 43°C",
-            "spec_refrigerant": "R32",
-            "spec_ozone": "200-300ppm",
-            "spec_pump_flow": "55L/min",
-            "spec_noise": "60dB",
-            "spec_max_power": "1.7kW",
-            "spec_max_current": "7.5A",
-            "spec_water_flow": "2m³/h",
-            "spec_pressure_drop": "14kPa",
-            "spec_dimensions": "243 x 81 x 72 cm",
-            "spec_volume": "650L",
-            "spec_weight_empty": "180 kg",
-            "spec_weight_full": "830 kg",
-            "spec_weight_packaging": "194 kg",
-            "spec_uv_light": "No",
-            "spec_frost_resistance": "No"
-          }
-        },
-        {
-          "type": "product",
-          "settings": {
-            "product_name": "ProBath",
-            "spec_design": "Horizontal",
-            "spec_access": "Bath-like",
-            "spec_heater": "Optional heater (+€495)",
-            "spec_indoor_outdoor": "Indoor only",
-            "spec_weatherproof": "Yes",
-            "spec_materials": "SS316 + Thermo wood",
-            "spec_cover": "Thermo & lockable cover",
-            "spec_filter": "2 extra large filters",
-            "spec_micron_filter": "5 micron per filter",
-            "spec_warranty": "1 year",
-            "spec_portable": "No",
-            "spec_commercial": "Yes",
-            "spec_wifi": "Yes",
-            "spec_filter_duration": "2-3 weeks",
-            "spec_drainage_valve": "Yes",
-            "spec_auto_drainage": "Yes",
-            "spec_overflow_tank": "Yes",
-            "spec_setup_time": "Plumber install needed",
-            "spec_engine_cover": "Engine accessible by staff only",
-            "spec_control": "Wifi / App / Schedule / Eco",
-            "spec_included": "1yr warranty + Thermo cover + Filterset (4 pcs) + Help desk",
-            "spec_phone_holder": "Yes",
-            "spec_stairs_addon": "No",
-            "spec_water_refill": "Automatic",
-            "spec_cooling_capacity": "1HP / 3.17kW",
-            "spec_power_consumption": "1.07kW",
-            "spec_power_supply": "220V~ / 50Hz",
-            "spec_temp_range": "-7°C ~ 43°C",
-            "spec_refrigerant": "R32",
-            "spec_ozone": "200-300ppm",
-            "spec_pump_flow": "55L/min",
-            "spec_noise": "60dB",
-            "spec_max_power": "1.7kW",
-            "spec_max_current": "7.5A",
-            "spec_water_flow": "2m³/h",
-            "spec_pressure_drop": "14kPa",
-            "spec_dimensions": "250 x 99 x 74 cm",
-            "spec_volume": "750L",
-            "spec_weight_empty": "227 kg",
-            "spec_weight_full": "962 kg",
-            "spec_weight_packaging": "265 kg",
-            "spec_uv_light": "No",
-            "spec_frost_resistance": "No"
-          }
-        }
-      ]
+      "settings": {
+        "heading": "Which bath suits you?",
+        "subheading": "Compare models side by side to easily see the differences in size, features, and functions."
+      },
+      "blocks": []
     }
   ]
 }

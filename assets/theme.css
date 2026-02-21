@@ -5440,6 +5440,13 @@ ul, ol {
   font-weight: var(--font-heading-weight);
   font-size: 1.25rem;
   color: var(--color-primary, #1E2D3B);
+  margin-bottom: 0.25rem;
+}
+
+.product-compare__price {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--color-accent, #4A90A4);
   margin-bottom: 0.75rem;
 }
 
