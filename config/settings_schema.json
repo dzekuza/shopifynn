@@ -28,8 +28,8 @@
         "type": "color",
         "id": "color_accent",
         "label": "Accent",
-        "default": "#7B6FA0",
-        "info": "Soft aurora violet — CTAs and highlights"
+        "default": "#4A90A4",
+        "info": "Nordic fjord cyan — CTAs and highlights"
       },
       {
         "type": "color",

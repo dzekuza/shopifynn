@@ -21,6 +21,7 @@
     "logo": "shopify://shop_images/newdarkk.png",
     "logo_width": 140,
     "logo_text": "AUROWE",
+    "card_image_border_radius": "8px",
     "sections": {
       "header": {
         "type": "header",
@@ -41,14 +42,14 @@
             "type": "link_list",
             "settings": {
               "heading": "Shop",
-              "menu": "footer"
+              "menu": "main-menu"
             }
           },
           "footer-1": {
             "type": "link_list",
             "settings": {
               "heading": "Customer Service",
-              "menu": "footer"
+              "menu": "customer-account-main-menu"
             }
           },
           "footer-2": {

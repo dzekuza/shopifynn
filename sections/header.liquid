@@ -148,7 +148,7 @@
       {% if section.settings.quiz_text != blank %}
         <a href="{{ section.settings.quiz_url }}" class="header__cta button button--primary">{{ section.settings.quiz_text }}</a>
       {% endif %}
-      <a href="/cart" class="header__cart" aria-label="Cart">
+      <a href="/cart" class="header__cart" aria-label="Cart" data-cart-drawer-toggle>
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
           <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
           <line x1="3" y1="6" x2="21" y2="6"/>

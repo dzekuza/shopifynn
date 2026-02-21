@@ -30,12 +30,6 @@
             "tax_text": "Tax included. Shipping calculated at checkout."
           }
         },
-        "financing": {
-          "type": "financing",
-          "settings": {
-            "financing_text": "Starting from €49/month with financing"
-          }
-        },
         "separator-1": {
           "type": "separator",
           "settings": {}
@@ -114,7 +108,6 @@
         "title",
         "rating",
         "price",
-        "financing",
         "separator-1",
         "family_selector",
         "variant_picker",
@@ -128,7 +121,13 @@
         "warranty",
         "share"
       ],
-      "settings": {}
+      "settings": {
+        "show_vendor": true,
+        "heading_size": "medium",
+        "gallery_layout": "thumbnails_bottom",
+        "padding_top": 40,
+        "padding_bottom": 40
+      }
     },
     "image_with_text_CX8UVX": {
       "type": "image-with-text",
@@ -136,10 +135,11 @@
       "settings": {
         "image": "shopify://shop_images/67efa600cbff0c09012ce189_Camilla-Akerberg-x-Icetubs.avif",
         "image_alt": "",
+        "video_url": "",
         "video_fit": "contain",
         "subtitle": "Our Story",
         "heading": "Why buy our ice bath?",
-        "text": "<p>At Icetubs, we handcraft each ice bath with precision, ensuring top-quality through multiple quality checks. Our Icetubs Engine\u2122\ufe0f offers both cooling and heating, giving you flexibility for cold and warm therapy. Our advanced filtration system keeps water crystal clear without chemicals, while our sustainable design minimizes water waste. With various designs to fit your needs, we ensure everyone can benefit from ice bathing. Enjoy precise temperature control and a personalized cold therapy experience with Icetubs.</p>",
+        "text": "<p>At Icetubs, we handcraft each ice bath with precision, ensuring top-quality through multiple quality checks. Our Icetubs Engine™️ offers both cooling and heating, giving you flexibility for cold and warm therapy. Our advanced filtration system keeps water crystal clear without chemicals, while our sustainable design minimizes water waste. With various designs to fit your needs, we ensure everyone can benefit from ice bathing. Enjoy precise temperature control and a personalized cold therapy experience with Icetubs.</p>",
         "button_text": "Learn More",
         "button_url": "",
         "button_style": "primary",
@@ -212,55 +212,28 @@
         "padding_bottom": 100
       }
     },
-    "collection_list_achHTU": {
-      "type": "collection-list",
-      "blocks": {
-        "collection_card_fN4Kfq": {
-          "type": "collection_card",
-          "settings": {
-            "collection": "l-hot-tubs-1",
-            "title": "",
-            "image": "shopify://shop_images/67efa600cbff0c09012ce189_Camilla-Akerberg-x-Icetubs.avif",
-            "video_fit": "cover"
-          }
-        },
-        "collection_card_QVq7TF": {
-          "type": "collection_card",
-          "settings": {
-            "collection": "l-hot-tubs",
-            "title": "",
-            "image": "shopify://shop_images/67efa600cbff0c09012ce189_Camilla-Akerberg-x-Icetubs.avif",
-            "video_fit": "cover"
-          }
-        },
-        "collection_card_9igafw": {
-          "type": "collection_card",
-          "settings": {
-            "collection": "nordic-elite-signature",
-            "title": "",
-            "image": "shopify://shop_images/67efa600cbff0c09012ce189_Camilla-Akerberg-x-Icetubs.avif",
-            "video_fit": "cover"
-          }
-        }
-      },
-      "block_order": [
-        "collection_card_fN4Kfq",
-        "collection_card_QVq7TF",
-        "collection_card_9igafw"
-      ],
-      "name": "Collection List",
+    "collection_products_zVgBtM": {
+      "type": "collection-products",
+      "name": "Collection Products",
       "settings": {
-        "heading": "More of our products",
-        "subheading": "In addition to the IceBath, we also offer the IceBarrel, which provides a seated, upright position. The ProBath is a larger option that can be used at home or in commercial settings like gyms and wellness centers. For commercial use, visit our business page for more information",
-        "show_count": true,
-        "heading_size": "large",
+        "collection": "hot-tubs",
+        "product_limit": 4,
+        "heading": "You may also like",
+        "subheading": "",
+        "heading_size": "medium",
         "text_size": "medium",
-        "text_alignment": "center",
-        "columns": "3",
+        "layout": "grid",
+        "columns": "4",
         "grid_gap": 24,
+        "text_alignment": "center",
+        "show_secondary_image": true,
+        "show_vendor": false,
+        "show_view_all": true,
+        "view_all_text": "View all",
+        "view_all_style": "outline",
         "color_scheme": "default",
-        "padding_top": 100,
-        "padding_bottom": 100
+        "padding_top": 40,
+        "padding_bottom": 40
       }
     }
   },
@@ -268,6 +241,6 @@
     "main-product",
     "image_with_text_CX8UVX",
     "features_zPVyKD",
-    "collection_list_achHTU"
+    "collection_products_zVgBtM"
   ]
 }

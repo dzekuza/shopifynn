@@ -33,58 +33,61 @@
         "padding_bottom": 0
       }
     },
-    "multicolumn_zg3r9B": {
-      "type": "multicolumn",
+    "features_bpBDCE": {
+      "type": "features",
       "blocks": {
-        "column_hKM63z": {
-          "type": "column",
+        "feature_dEYxr9": {
+          "type": "feature",
           "settings": {
-            "video_fit": "cover",
-            "heading": "Premium Materials",
-            "text": "<p>Responsibly sourced Nordic thermowood for lasting beauty and durability.</p>",
-            "link_text": "",
-            "link_url": "",
+            "icon": "craft",
+            "heading": "Handcrafted in Scandinavia",
+            "text": "Each tub is meticulously built by skilled Nordic artisans using time-honored techniques.",
             "text_alignment": "center"
           }
         },
-        "column_BAiBj6": {
-          "type": "column",
+        "feature_rBxRxw": {
+          "type": "feature",
           "settings": {
-            "video_fit": "cover",
-            "heading": "Expert Craftsmanship",
-            "text": "<p>Handcrafted by skilled artisans with decades of Nordic woodworking experience.</p>",
-            "link_text": "",
-            "link_url": "",
+            "icon": "leaf",
+            "heading": "Sustainable Materials",
+            "text": "Responsibly sourced thermowood and eco-friendly finishes that stand the test of time.",
             "text_alignment": "center"
           }
         },
-        "column_kBqHMq": {
-          "type": "column",
+        "feature_3BJjtj": {
+          "type": "feature",
           "settings": {
-            "video_fit": "cover",
-            "heading": "Sustainable Design",
-            "text": "<p>Eco-friendly production processes with minimal environmental impact.</p>",
-            "link_text": "",
-            "link_url": "",
+            "icon": "shield",
+            "heading": "Up to 10-Year Warranty",
+            "text": "We stand behind every tub with industry-leading warranty coverage.",
+            "text_alignment": "center"
+          }
+        },
+        "feature_zMcgfg": {
+          "type": "feature",
+          "settings": {
+            "icon": "palette",
+            "heading": "Fully Customizable",
+            "text": "Choose your size, wood finish, liner color, and equipment to match your vision.",
             "text_alignment": "center"
           }
         }
       },
       "block_order": [
-        "column_hKM63z",
-        "column_BAiBj6",
-        "column_kBqHMq"
+        "feature_dEYxr9",
+        "feature_rBxRxw",
+        "feature_3BJjtj",
+        "feature_zMcgfg"
       ],
-      "name": "Multi-column",
+      "name": "Features",
       "settings": {
         "heading": "",
         "subheading": "",
         "heading_size": "medium",
         "text_size": "medium",
         "text_alignment": "center",
-        "columns": "3",
+        "columns": "4",
         "grid_gap": 24,
-        "image_ratio": "landscape",
         "color_scheme": "default",
         "padding_top": 40,
         "padding_bottom": 40
@@ -139,7 +142,7 @@
       "settings": {
         "heading": "1,500+ athletes and executives trust Icetubs for their daily recovery ritual.",
         "subheading": "From training grounds to boardrooms, our ice baths fuel recovery, resilience, and long-term well-being.",
-        "heading_size": "medium",
+        "heading_size": "large",
         "text_size": "medium",
         "layout": "expanding_cards",
         "text_alignment": "center",
@@ -220,7 +223,7 @@
       "settings": {
         "heading": "Find your fit with Icetubs",
         "subheading": "From the upright IceBarrel to the sleek IceBath and new IceSauna, each built to boost recovery, sharpen your mind, and elevate daily life.",
-        "heading_size": "medium",
+        "heading_size": "large",
         "text_size": "medium",
         "text_alignment": "center",
         "grid_gap": 24,
@@ -283,8 +286,8 @@
         "text_size": "medium",
         "text_alignment": "center",
         "columns": "4",
-        "grid_gap": 24,
-        "color_scheme": "dark",
+        "grid_gap": 16,
+        "color_scheme": "surface",
         "padding_top": 100,
         "padding_bottom": 100
       }
@@ -293,10 +296,10 @@
       "type": "collection-products",
       "settings": {
         "collection": "hot-tubs",
-        "product_limit": 8,
+        "product_limit": 4,
         "heading": "Featured Products",
         "subheading": "Explore our handcrafted selection of Nordic hot and cold tubs.",
-        "heading_size": "medium",
+        "heading_size": "large",
         "text_size": "medium",
         "layout": "grid",
         "columns": "4",
@@ -318,6 +321,7 @@
       "settings": {
         "image": "shopify://shop_images/67efa600cbff0c09012ce189_Camilla-Akerberg-x-Icetubs.avif",
         "image_alt": "",
+        "video_url": "",
         "video_fit": "cover",
         "subtitle": "Our Story",
         "heading": "Designed for home and business",
@@ -326,7 +330,7 @@
         "button_url": "",
         "button_style": "primary",
         "heading_size": "medium",
-        "text_size": "medium",
+        "text_size": "large",
         "layout": "image_left",
         "text_alignment": "left",
         "color_scheme": "surface",
@@ -340,6 +344,7 @@
       "settings": {
         "image": "shopify://shop_images/67efa600cbff0c09012ce189_Camilla-Akerberg-x-Icetubs.avif",
         "image_alt": "",
+        "video_url": "",
         "video_fit": "cover",
         "subtitle": "Our Story",
         "heading": "Designed for home and business",
@@ -348,7 +353,7 @@
         "button_url": "",
         "button_style": "primary",
         "heading_size": "medium",
-        "text_size": "medium",
+        "text_size": "large",
         "layout": "image_right",
         "text_alignment": "left",
         "color_scheme": "default",
@@ -410,7 +415,7 @@
         "text_alignment": "center",
         "columns": "3",
         "grid_gap": 24,
-        "color_scheme": "dark",
+        "color_scheme": "surface",
         "padding_top": 100,
         "padding_bottom": 100
       }
@@ -515,7 +520,7 @@
   },
   "order": [
     "hero",
-    "multicolumn_zg3r9B",
+    "features_bpBDCE",
     "testimonials_CqXXEi",
     "product-tiers",
     "features_kFbxwK",
