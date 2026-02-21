@@ -12,7 +12,7 @@ See: .planning/PROJECT.md (updated 2026-02-20)
 Phase: 9 of 9 (Cart Count Integration & Milestone Cleanup)
 Plan: 1 of 1 in phase 09-cart-integration-milestone-cleanup
 Status: Phase 09 plan 01 complete — cart:refresh listener wired in theme.js, VERIFICATION.md created for Phases 1/2/4, all ROADMAP plan checkboxes corrected
-Last activity: 2026-02-21 - Completed quick task 3: Add company details dialog on checkout with fields for company name, registration number, VAT — saved as cart attributes
+Last activity: 2026-02-21 - Completed quick task 4: Add product compare section with two dropdown selectors, 7 cold tub products, 41 spec fields
 
 Progress: [██████████] 100%
 
@@ -131,9 +131,10 @@ None yet.
 | 1 | Update configurator summary card UI with option images, prices, and edit buttons | 2026-02-20 | dd2d3f4 | [1-update-configurator-summary-card-ui-with](./quick/1-update-configurator-summary-card-ui-with/) |
 | 2 | Review and update sections for responsive design — grid breakpoints, product card hover, dynamic content CSS | 2026-02-20 | 5dc073d | [2-review-and-update-sections-for-responsiv](./quick/2-review-and-update-sections-for-responsiv/) |
 | 3 | Add company details collapsible section to cart sidebar — saves Company Name, Registration Number, VAT Number as Shopify cart attributes | 2026-02-21 | 7e82d7a | [3-add-company-details-dialog-on-checkout-w](./quick/3-add-company-details-dialog-on-checkout-w/) |
+| 4 | Add product compare section with two dropdown selectors, 7 cold tub products, 41 spec fields, toggle panel | 2026-02-21 | 927f20d | [4-add-product-compare-section-two-dropdown](./quick/4-add-product-compare-section-two-dropdown/) |
 
 ## Session Continuity
 
 Last session: 2026-02-21
-Stopped at: Completed quick task 3 — company details collapsible section in cart sidebar, cart attributes persistence
+Stopped at: Completed quick task 4 — product compare section with two dropdown selectors, 7 cold tub product presets, 41 spec fields
 Resume file: None
