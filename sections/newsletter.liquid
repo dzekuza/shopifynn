@@ -9,7 +9,7 @@
 
       <div class="newsletter__text">
         {% if section.settings.heading != blank %}
-          <h2 class="newsletter__heading" style="font-size: {% if section.settings.heading_size == 'small' %}1.5rem{% elsif section.settings.heading_size == 'large' %}2.75rem{% else %}2rem{% endif %};">{{ section.settings.heading }}</h2>
+          <h2 class="newsletter__heading" style="{% render 'heading-size-vars', desktop: section.settings.heading_size, mobile: section.settings.heading_size_mobile %}">{{ section.settings.heading }}</h2>
         {% endif %}
         {% if section.settings.subheading != blank %}
           <p class="newsletter__subheading">{{ section.settings.subheading }}</p>
@@ -95,6 +95,17 @@
       "type": "select",
       "id": "heading_size",
       "label": "Heading size",
+      "options": [
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "heading_size_mobile",
+      "label": "Heading size (mobile)",
       "options": [
         { "value": "small", "label": "Small" },
         { "value": "medium", "label": "Medium" },

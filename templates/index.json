@@ -84,7 +84,7 @@
         "heading": "",
         "subheading": "",
         "heading_size": "medium",
-        "text_size": "medium",
+        "text_size": "small",
         "text_alignment": "center",
         "columns": "4",
         "grid_gap": 24,
@@ -142,7 +142,7 @@
       "settings": {
         "heading": "1,500+ athletes and executives trust Icetubs for their daily recovery ritual.",
         "subheading": "From training grounds to boardrooms, our ice baths fuel recovery, resilience, and long-term well-being.",
-        "heading_size": "large",
+        "heading_size": "medium",
         "text_size": "medium",
         "layout": "expanding_cards",
         "text_alignment": "center",
@@ -223,8 +223,8 @@
       "settings": {
         "heading": "Find your fit with Icetubs",
         "subheading": "From the upright IceBarrel to the sleek IceBath and new IceSauna, each built to boost recovery, sharpen your mind, and elevate daily life.",
-        "heading_size": "large",
-        "text_size": "medium",
+        "heading_size": "medium",
+        "text_size": "small",
         "text_alignment": "center",
         "grid_gap": 24,
         "color_scheme": "default",
@@ -282,8 +282,8 @@
       "settings": {
         "heading": "The benefits of Icetubs",
         "subheading": "Cold therapy isn’t just about physical recovery, it’s a holistic approach to improving your overall wellbeing.",
-        "heading_size": "large",
-        "text_size": "medium",
+        "heading_size": "medium",
+        "text_size": "small",
         "text_alignment": "center",
         "columns": "4",
         "grid_gap": 16,
@@ -299,11 +299,11 @@
         "product_limit": 4,
         "heading": "Featured Products",
         "subheading": "Explore our handcrafted selection of Nordic hot and cold tubs.",
-        "heading_size": "large",
-        "text_size": "medium",
-        "layout": "grid",
+        "heading_size": "medium",
+        "text_size": "small",
+        "layout": "carousel",
         "columns": "4",
-        "grid_gap": 24,
+        "grid_gap": 12,
         "text_alignment": "center",
         "show_secondary_image": true,
         "show_vendor": false,
@@ -311,8 +311,8 @@
         "view_all_text": "View all products",
         "view_all_style": "outline",
         "color_scheme": "default",
-        "padding_top": 100,
-        "padding_bottom": 100
+        "padding_top": 64,
+        "padding_bottom": 64
       }
     },
     "image_with_text_9NkBcX": {
@@ -330,12 +330,12 @@
         "button_url": "",
         "button_style": "primary",
         "heading_size": "medium",
-        "text_size": "large",
+        "text_size": "small",
         "layout": "image_left",
         "text_alignment": "left",
         "color_scheme": "surface",
-        "padding_top": 100,
-        "padding_bottom": 100
+        "padding_top": 64,
+        "padding_bottom": 64
       }
     },
     "image_with_text_g6rQCM": {
@@ -353,7 +353,7 @@
         "button_url": "",
         "button_style": "primary",
         "heading_size": "medium",
-        "text_size": "large",
+        "text_size": "small",
         "layout": "image_right",
         "text_alignment": "left",
         "color_scheme": "default",
@@ -411,13 +411,13 @@
         "heading": "Health Benefits",
         "subheading": "Experience the science-backed benefits of hot and cold water therapy.",
         "heading_size": "medium",
-        "text_size": "medium",
+        "text_size": "small",
         "text_alignment": "center",
         "columns": "3",
         "grid_gap": 24,
         "color_scheme": "surface",
-        "padding_top": 100,
-        "padding_bottom": 100
+        "padding_top": 64,
+        "padding_bottom": 64
       }
     },
     "faq": {
@@ -486,14 +486,14 @@
         "button_text": "",
         "button_url": "",
         "button_style": "outline",
-        "heading_size": "large",
+        "heading_size": "small",
         "text_size": "medium",
         "text_alignment": "left",
         "layout": "side_by_side",
         "content_width": 800,
         "color_scheme": "default",
-        "padding_top": 100,
-        "padding_bottom": 100
+        "padding_top": 64,
+        "padding_bottom": 64
       }
     },
     "blog_posts_Kfz88H": {
@@ -508,13 +508,13 @@
         "show_excerpt": true,
         "show_read_more": true,
         "show_view_all": true,
-        "heading_size": "large",
-        "text_size": "medium",
+        "heading_size": "medium",
+        "text_size": "small",
         "text_alignment": "center",
         "columns": "3",
         "color_scheme": "surface",
-        "padding_top": 100,
-        "padding_bottom": 100
+        "padding_top": 64,
+        "padding_bottom": 64
       }
     }
   },

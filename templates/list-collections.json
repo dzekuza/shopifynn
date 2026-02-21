@@ -1,0 +1,20 @@
+{
+  "sections": {
+    "main-list-collections": {
+      "type": "main-list-collections",
+      "settings": {
+        "heading": "All Collections",
+        "show_count": true,
+        "heading_size": "large",
+        "text_alignment": "left",
+        "columns": "3",
+        "grid_gap": 24,
+        "padding_top": 100,
+        "padding_bottom": 100
+      }
+    }
+  },
+  "order": [
+    "main-list-collections"
+  ]
+}

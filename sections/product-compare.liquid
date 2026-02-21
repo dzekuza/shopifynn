@@ -7,7 +7,7 @@
   <div class="container">
     <div class="product-compare__header">
       {% if section.settings.heading != blank %}
-        <h2 class="product-compare__heading">{{ section.settings.heading }}</h2>
+        <h2 class="product-compare__heading" style="{% render 'heading-size-vars', desktop: section.settings.heading_size, mobile: section.settings.heading_size_mobile %}">{{ section.settings.heading }}</h2>
       {% endif %}
       {% if section.settings.subheading != blank %}
         <p class="product-compare__subheading">{{ section.settings.subheading }}</p>
@@ -25,7 +25,7 @@
           {%- if side == 2 -%}{%- assign side_label = 'right' -%}{%- endif -%}
           <div class="product-compare__column">
             <select class="product-compare__select" data-compare-select="{{ side_label }}">
-              <option value="">Select a model...</option>
+              <option value="">{{ section.settings.select_placeholder }}</option>
               {%- for block in section.blocks -%}
                 {%- if block.settings.product != blank -%}
                   <option value="{{ forloop.index0 }}">{{ block.settings.product.title }}</option>
@@ -50,10 +50,10 @@
                 data-compare-link="{{ side_label }}"
                 href="#"
               >
-                Shop now
+                {{ section.settings.shop_link_text }}
               </a>
 
-              <h4 class="product-compare__summary-heading">Summary</h4>
+              <h4 class="product-compare__summary-heading">{{ section.settings.summary_heading }}</h4>
 
               <table class="product-compare__specs">
                 <tbody data-compare-specs="{{ side_label }}">
@@ -64,7 +64,7 @@
         {%- endfor -%}
       </div>
 
-      <button class="product-compare__close" data-compare-close>Close compare models</button>
+      <button class="product-compare__close" data-compare-close>{{ section.settings.close_text }}</button>
     </div>
   </div>
 
@@ -212,12 +212,13 @@
     }
 
     var defaultButtonText = toggleBtn ? toggleBtn.textContent.trim() : 'Compare models';
+    var closeText = closeBtn ? closeBtn.textContent.trim() : 'Close compare models';
     var isOpen = false;
 
     function togglePanel() {
       isOpen = !isOpen;
       panel.style.display = isOpen ? 'block' : 'none';
-      toggleBtn.textContent = isOpen ? 'Close compare models' : defaultButtonText;
+      toggleBtn.textContent = isOpen ? closeText : defaultButtonText;
     }
 
     function closePanel() {
@@ -313,6 +314,56 @@
       "id": "button_text",
       "label": "Button text",
       "default": "Compare models"
+    },
+    {
+      "type": "text",
+      "id": "select_placeholder",
+      "label": "Dropdown placeholder",
+      "default": "Select a model..."
+    },
+    {
+      "type": "text",
+      "id": "shop_link_text",
+      "label": "Shop link text",
+      "default": "Shop now"
+    },
+    {
+      "type": "text",
+      "id": "summary_heading",
+      "label": "Summary heading",
+      "default": "Summary"
+    },
+    {
+      "type": "text",
+      "id": "close_text",
+      "label": "Close button text",
+      "default": "Close compare models"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "heading_size_mobile",
+      "label": "Heading size (mobile)",
+      "options": [
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
     },
     {
       "type": "select",

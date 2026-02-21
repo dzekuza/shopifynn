@@ -28,7 +28,7 @@
               <p class="slideshow__subtitle">{{ block.settings.subtitle }}</p>
             {% endif %}
             {% if block.settings.heading != blank %}
-              <h2 class="slideshow__heading" style="font-size: {% if block.settings.heading_size == 'small' %}1.75rem{% elsif block.settings.heading_size == 'large' %}3rem{% elsif block.settings.heading_size == 'extra_large' %}4rem{% else %}2.25rem{% endif %};">{{ block.settings.heading }}</h2>
+              <h2 class="slideshow__heading" style="{% render 'heading-size-vars', desktop: block.settings.heading_size, mobile: block.settings.heading_size_mobile, scale: 'hero' %}">{{ block.settings.heading }}</h2>
             {% endif %}
             {% if block.settings.text != blank %}
               <p class="slideshow__text">{{ block.settings.text }}</p>
@@ -194,6 +194,18 @@
           "type": "select",
           "id": "heading_size",
           "label": "Heading size",
+          "options": [
+            { "value": "small", "label": "Small" },
+            { "value": "medium", "label": "Medium" },
+            { "value": "large", "label": "Large" },
+            { "value": "extra_large", "label": "Extra large" }
+          ],
+          "default": "medium"
+        },
+        {
+          "type": "select",
+          "id": "heading_size_mobile",
+          "label": "Heading size (mobile)",
           "options": [
             { "value": "small", "label": "Small" },
             { "value": "medium", "label": "Medium" },

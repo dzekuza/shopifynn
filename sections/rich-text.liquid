@@ -6,7 +6,7 @@
           {% when 'subtitle' %}
             <p class="rich-text__subtitle" {{ block.shopify_attributes }}>{{ block.settings.subtitle }}</p>
           {% when 'heading' %}
-            <h2 class="rich-text__heading" style="font-size: {% if block.settings.heading_size == 'small' %}1.5rem{% elsif block.settings.heading_size == 'large' %}2.75rem{% elsif block.settings.heading_size == 'extra_large' %}3.5rem{% else %}2rem{% endif %};" {{ block.shopify_attributes }}>{{ block.settings.heading }}</h2>
+            <h2 class="rich-text__heading" style="{% render 'heading-size-vars', desktop: block.settings.heading_size, mobile: block.settings.heading_size_mobile %}" {{ block.shopify_attributes }}>{{ block.settings.heading }}</h2>
           {% when 'text' %}
             <div class="rich-text__text rte" style="font-size: {% if block.settings.text_size == 'small' %}0.875rem{% elsif block.settings.text_size == 'large' %}1.25rem{% else %}1rem{% endif %};" {{ block.shopify_attributes }}>{{ block.settings.text }}</div>
           {% when 'image' %}
@@ -134,6 +134,18 @@
             { "value": "medium", "label": "Medium" },
             { "value": "large", "label": "Large" },
             { "value": "extra_large", "label": "Extra Large" }
+          ],
+          "default": "medium"
+        },
+        {
+          "type": "select",
+          "id": "heading_size_mobile",
+          "label": "Heading size (mobile)",
+          "options": [
+            { "value": "small", "label": "Small" },
+            { "value": "medium", "label": "Medium" },
+            { "value": "large", "label": "Large" },
+            { "value": "extra_large", "label": "Extra large" }
           ],
           "default": "medium"
         }

@@ -2,7 +2,7 @@
   <div class="container">
     {% if section.settings.heading != blank %}
       <div class="section__header" style="text-align: {{ section.settings.text_alignment }};">
-        <h2 class="section__heading" style="font-size: {% if section.settings.heading_size == 'small' %}1.5rem{% elsif section.settings.heading_size == 'large' %}2.75rem{% else %}2rem{% endif %};">{{ section.settings.heading }}</h2>
+        <h2 class="section__heading" style="{% render 'heading-size-vars', desktop: section.settings.heading_size, mobile: section.settings.heading_size_mobile %}">{{ section.settings.heading }}</h2>
         {% if section.settings.subheading != blank %}
           <p class="section__subheading" style="font-size: {% if section.settings.text_size == 'small' %}0.875rem{% elsif section.settings.text_size == 'large' %}1.125rem{% else %}1rem{% endif %};">{{ section.settings.subheading }}</p>
         {% endif %}
@@ -17,7 +17,7 @@
     {% if collection != blank %}
       {% if layout == 'carousel' %}
         <div class="collection-products__carousel-wrap">
-          <div class="collection-products__carousel" data-carousel data-columns="{{ columns }}">
+          <div class="collection-products__carousel" data-carousel data-columns="{{ columns }}" data-mobile-columns="{{ section.settings.mobile_columns }}">
             {% for product in collection.products limit: product_limit %}
               <div class="collection-products__slide">
                 {% render 'product-card', product: product, show_secondary_image: section.settings.show_secondary_image, show_vendor: section.settings.show_vendor %}
@@ -34,7 +34,7 @@
           </div>
         </div>
       {% else %}
-        <div class="collection-products__grid collection-products__grid--{{ columns }}" style="gap: {{ section.settings.grid_gap }}px;">
+        <div class="collection-products__grid collection-products__grid--{{ columns }} collection-products__grid--mobile-{{ section.settings.mobile_columns }}" style="gap: {{ section.settings.grid_gap }}px;">
           {% for product in collection.products limit: product_limit %}
             {% render 'product-card', product: product, show_secondary_image: section.settings.show_secondary_image, show_vendor: section.settings.show_vendor %}
           {% endfor %}
@@ -58,16 +58,18 @@
   (function () {
     document.querySelectorAll('[data-carousel]').forEach(function (carousel) {
       var cols = parseInt(carousel.getAttribute('data-columns')) || 4;
+      var mobileCols = parseInt(carousel.getAttribute('data-mobile-columns')) || 2;
       var slides = carousel.querySelectorAll('.collection-products__slide');
       var total = slides.length;
       var offset = 0;
       var wrap = carousel.closest('.collection-products__carousel-wrap');
       var prevBtn = wrap.querySelector('[data-carousel-prev]');
       var nextBtn = wrap.querySelector('[data-carousel-next]');
+      var gap = 24;
 
       function getVisible() {
         var w = window.innerWidth;
-        if (w < 600) return 2;
+        if (w < 600) return mobileCols;
         if (w < 900) return Math.min(cols, 3);
         return cols;
       }
@@ -76,18 +78,24 @@
         var visible = getVisible();
         var maxOffset = Math.max(0, total - visible);
         if (offset > maxOffset) offset = maxOffset;
-        var pct = 100 / visible;
-        var gap = 24;
-        slides.forEach(function (s, i) {
-          s.style.flex = '0 0 calc(' + pct + '% - ' + (gap * (visible - 1) / visible) + 'px)';
+
+        var wrapWidth = wrap.offsetWidth;
+        var slideWidth = (wrapWidth - gap * (visible - 1)) / visible;
+
+        slides.forEach(function (s) {
+          s.style.flex = '0 0 ' + slideWidth + 'px';
         });
-        carousel.style.transform = 'translateX(calc(-' + offset + ' * (100% / ' + visible + ' + ' + (gap / visible) + 'px)))';
+
+        var translatePx = offset * (slideWidth + gap);
+        carousel.style.transform = 'translateX(-' + translatePx + 'px)';
+        carousel.style.transition = 'transform 0.4s ease';
+
         if (prevBtn) prevBtn.disabled = offset === 0;
         if (nextBtn) nextBtn.disabled = offset >= maxOffset;
       }
 
       if (prevBtn) prevBtn.addEventListener('click', function () { offset = Math.max(0, offset - 1); update(); });
-      if (nextBtn) nextBtn.addEventListener('click', function () { offset++; update(); });
+      if (nextBtn) nextBtn.addEventListener('click', function () { var visible = getVisible(); var maxOffset = Math.max(0, total - visible); offset = Math.min(maxOffset, offset + 1); update(); });
       window.addEventListener('resize', update);
       update();
     });
@@ -148,6 +156,17 @@
     },
     {
       "type": "select",
+      "id": "heading_size_mobile",
+      "label": "Heading size (mobile)",
+      "options": [
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
       "id": "text_size",
       "label": "Text size",
       "options": [
@@ -174,7 +193,7 @@
     {
       "type": "select",
       "id": "columns",
-      "label": "Products per row",
+      "label": "Products per row (desktop)",
       "options": [
         { "value": "2", "label": "2" },
         { "value": "3", "label": "3" },
@@ -182,6 +201,16 @@
         { "value": "5", "label": "5" }
       ],
       "default": "4"
+    },
+    {
+      "type": "select",
+      "id": "mobile_columns",
+      "label": "Products per row (mobile)",
+      "options": [
+        { "value": "1", "label": "1" },
+        { "value": "2", "label": "2" }
+      ],
+      "default": "2"
     },
     {
       "type": "range",

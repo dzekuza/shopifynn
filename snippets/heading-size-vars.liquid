@@ -1,0 +1,35 @@
+{%- comment -%}
+  Outputs inline CSS custom properties for responsive heading sizes.
+  Usage: {% render 'heading-size-vars', desktop: section.settings.heading_size, mobile: section.settings.heading_size_mobile, scale: 'default' %}
+  Scales: 'default' (section headings), 'hero' (hero/banner large headings)
+  Put inside a style="" attribute on the heading element.
+{%- endcomment -%}
+
+{%- if scale == 'hero' -%}
+  {%- case desktop -%}
+    {%- when 'small' -%}{%- assign _d = '2rem' -%}
+    {%- when 'large' -%}{%- assign _d = '3.5rem' -%}
+    {%- when 'extra_large' -%}{%- assign _d = '4.5rem' -%}
+    {%- else -%}{%- assign _d = '2.75rem' -%}
+  {%- endcase -%}
+  {%- case mobile -%}
+    {%- when 'small' -%}{%- assign _m = '1.5rem' -%}
+    {%- when 'large' -%}{%- assign _m = '2.5rem' -%}
+    {%- when 'extra_large' -%}{%- assign _m = '3rem' -%}
+    {%- else -%}{%- assign _m = '2rem' -%}
+  {%- endcase -%}
+{%- else -%}
+  {%- case desktop -%}
+    {%- when 'small' -%}{%- assign _d = '1.5rem' -%}
+    {%- when 'large' -%}{%- assign _d = '2.75rem' -%}
+    {%- when 'extra_large' -%}{%- assign _d = '3.5rem' -%}
+    {%- else -%}{%- assign _d = '2rem' -%}
+  {%- endcase -%}
+  {%- case mobile -%}
+    {%- when 'small' -%}{%- assign _m = '1.25rem' -%}
+    {%- when 'large' -%}{%- assign _m = '2rem' -%}
+    {%- when 'extra_large' -%}{%- assign _m = '2.5rem' -%}
+    {%- else -%}{%- assign _m = '1.5rem' -%}
+  {%- endcase -%}
+{%- endif -%}
+--heading-size: {{ _d }}; --heading-size-mobile: {{ _m }};

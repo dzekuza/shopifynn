@@ -2,7 +2,7 @@
   <div class="container">
     <div class="page-content__inner" style="max-width: {{ section.settings.content_width }}px; margin: 0 auto; text-align: {{ section.settings.text_alignment }};">
       {% if section.settings.show_title %}
-        <h1 class="page-content__title" style="font-size: {% if section.settings.heading_size == 'small' %}1.75rem{% elsif section.settings.heading_size == 'large' %}3rem{% else %}2.25rem{% endif %};">{{ page.title }}</h1>
+        <h1 class="page-content__title" style="{% render 'heading-size-vars', desktop: section.settings.heading_size, mobile: section.settings.heading_size_mobile %}">{{ page.title }}</h1>
       {% endif %}
 
       <div class="page-content__body rte">
@@ -34,6 +34,17 @@
       "type": "select",
       "id": "heading_size",
       "label": "Heading size",
+      "options": [
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "heading_size_mobile",
+      "label": "Heading size (mobile)",
       "options": [
         { "value": "small", "label": "Small" },
         { "value": "medium", "label": "Medium" },

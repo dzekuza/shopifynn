@@ -65,7 +65,7 @@
         {% endif %}
 
         {% if section.settings.heading != blank %}
-          <h2 class="image-text__heading" style="font-size: {% if section.settings.heading_size == 'small' %}1.5rem{% elsif section.settings.heading_size == 'large' %}2.75rem{% elsif section.settings.heading_size == 'extra_large' %}3.5rem{% else %}2rem{% endif %};">{{ section.settings.heading }}</h2>
+          <h2 class="image-text__heading" style="{% render 'heading-size-vars', desktop: section.settings.heading_size, mobile: section.settings.heading_size_mobile %}">{{ section.settings.heading }}</h2>
         {% endif %}
 
         {% if section.settings.text != blank %}
@@ -189,6 +189,18 @@
         { "value": "medium", "label": "Medium" },
         { "value": "large", "label": "Large" },
         { "value": "extra_large", "label": "Extra Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "heading_size_mobile",
+      "label": "Heading size (mobile)",
+      "options": [
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" },
+        { "value": "extra_large", "label": "Extra large" }
       ],
       "default": "medium"
     },

@@ -42,7 +42,7 @@
     {% if section.settings.subtitle != blank %}
       <p class="hero__subtitle">{{ section.settings.subtitle }}</p>
     {% endif %}
-    <h1 class="hero__heading" style="font-size: {% if section.settings.heading_size == 'small' %}2rem{% elsif section.settings.heading_size == 'large' %}3.5rem{% elsif section.settings.heading_size == 'extra_large' %}4.5rem{% else %}2.75rem{% endif %};">{{ section.settings.heading }}</h1>
+    <h1 class="hero__heading" style="{% render 'heading-size-vars', desktop: section.settings.heading_size, mobile: section.settings.heading_size_mobile, scale: 'hero' %}">{{ section.settings.heading }}</h1>
     {% if section.settings.text != blank %}
       <p class="hero__text" style="font-size: {% if section.settings.text_size == 'small' %}0.875rem{% elsif section.settings.text_size == 'large' %}1.25rem{% else %}1.0625rem{% endif %};{% if align == 'center' %} margin-left: auto; margin-right: auto;{% endif %}">{{ section.settings.text }}</p>
     {% endif %}
@@ -192,6 +192,18 @@
       "type": "select",
       "id": "heading_size",
       "label": "Heading size",
+      "options": [
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" },
+        { "value": "extra_large", "label": "Extra large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "heading_size_mobile",
+      "label": "Heading size (mobile)",
       "options": [
         { "value": "small", "label": "Small" },
         { "value": "medium", "label": "Medium" },

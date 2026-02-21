@@ -18,6 +18,8 @@
     "color_text_muted": "#7A8B8A",
     "font_heading": "plus_jakarta_sans_n7",
     "font_body": "plus_jakarta_sans_n4",
+    "font_size_h1_mobile": 22,
+    "font_size_body_mobile": 14,
     "logo": "shopify://shop_images/newdarkk.png",
     "logo_width": 140,
     "logo_text": "AUROWE",

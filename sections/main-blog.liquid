@@ -2,7 +2,7 @@
 <section class="blog-page section" style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;">
   <div class="container">
     <div class="blog-page__header" style="text-align: {{ section.settings.text_alignment }};">
-      <h1 class="blog-page__title" style="font-size: {% if section.settings.heading_size == 'small' %}1.75rem{% elsif section.settings.heading_size == 'large' %}3rem{% else %}2.25rem{% endif %};">{{ blog.title }}</h1>
+      <h1 class="blog-page__title" style="{% render 'heading-size-vars', desktop: section.settings.heading_size, mobile: section.settings.heading_size_mobile %}">{{ blog.title }}</h1>
     </div>
 
     {% if blog.articles.size > 0 %}
@@ -121,6 +121,17 @@
       "type": "select",
       "id": "heading_size",
       "label": "Heading size",
+      "options": [
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "heading_size_mobile",
+      "label": "Heading size (mobile)",
       "options": [
         { "value": "small", "label": "Small" },
         { "value": "medium", "label": "Medium" },

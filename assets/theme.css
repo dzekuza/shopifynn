@@ -142,7 +142,7 @@ ul, ol {
 .section__heading {
   font-family: var(--font-heading);
   font-weight: var(--font-heading-weight);
-  font-size: var(--font-size-h2, 32px);
+  font-size: var(--heading-size, var(--font-size-h2, 32px));
   line-height: 1.2;
   letter-spacing: 0.02em;
   margin-bottom: 12px;
@@ -150,7 +150,7 @@ ul, ol {
 
 @media (max-width: 749px) {
   .section__heading {
-    font-size: var(--font-size-h2-mobile, 24px);
+    font-size: var(--heading-size-mobile, var(--font-size-h2-mobile, 24px));
   }
 }
 
@@ -269,8 +269,6 @@ ul, ol {
 }
 
 .header--sticky {
-  position: sticky;
-  top: 0;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
 }
@@ -748,10 +746,16 @@ ul, ol {
 .hero__heading {
   font-family: var(--font-heading);
   font-weight: var(--font-heading-weight);
-  font-size: clamp(36px, 6vw, 64px);
+  font-size: var(--heading-size, clamp(36px, 6vw, 64px));
   line-height: 1.1;
   letter-spacing: 0.04em;
   margin-bottom: 20px;
+}
+
+@media (max-width: 749px) {
+  .hero__heading {
+    font-size: var(--heading-size-mobile, clamp(24px, 5vw, 40px));
+  }
 }
 
 .hero__text {
@@ -1671,6 +1675,21 @@ ul, ol {
   grid-template-columns: repeat(2, 1fr);
 }
 
+.collection-products__grid--mobile-1 {
+  grid-template-columns: 1fr;
+}
+
+.collection-products__grid--mobile-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+@media (min-width: 600px) {
+  .collection-products__grid--mobile-1,
+  .collection-products__grid--mobile-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 .collection-products__empty {
   text-align: center;
   color: var(--color-text-muted);
@@ -2024,9 +2043,15 @@ ul, ol {
 .product__title {
   font-family: var(--font-heading);
   font-weight: var(--font-heading-weight);
-  font-size: clamp(24px, 4vw, 36px);
+  font-size: var(--heading-size, clamp(24px, 4vw, 36px));
   line-height: 1.2;
   letter-spacing: -0.02em;
+}
+
+@media (max-width: 749px) {
+  .product__title {
+    font-size: var(--heading-size-mobile, clamp(20px, 3vw, 28px));
+  }
 }
 
 .product__price-wrap {
@@ -3186,13 +3211,19 @@ ul, ol {
 .slideshow__heading {
   font-family: var(--font-heading);
   font-weight: var(--font-heading-weight);
-  font-size: clamp(32px, 5vw, 56px);
+  font-size: var(--heading-size, clamp(32px, 5vw, 56px));
   line-height: 1.1;
   letter-spacing: -0.03em;
   margin-bottom: 16px;
   max-width: 720px;
   margin-left: auto;
   margin-right: auto;
+}
+
+@media (max-width: 749px) {
+  .slideshow__heading {
+    font-size: var(--heading-size-mobile, clamp(22px, 4vw, 36px));
+  }
 }
 
 .slideshow__text {
@@ -3578,10 +3609,16 @@ ul, ol {
 .banner__heading {
   font-family: var(--font-heading);
   font-weight: var(--font-heading-weight);
-  font-size: clamp(24px, 4vw, 40px);
+  font-size: var(--heading-size, clamp(24px, 4vw, 40px));
   line-height: 1.2;
   letter-spacing: -0.02em;
   margin-bottom: 12px;
+}
+
+@media (max-width: 749px) {
+  .banner__heading {
+    font-size: var(--heading-size-mobile, clamp(20px, 4vw, 32px));
+  }
 }
 
 .banner__text {
@@ -4376,9 +4413,73 @@ ul, ol {
     margin-bottom: 40px;
   }
 
+  .product__grid {
+    gap: 24px;
+  }
+
+  .product__gallery-main {
+    border-radius: 12px;
+    margin-bottom: 8px;
+  }
+
   .product__gallery-prev,
   .product__gallery-next {
+    width: 34px;
+    height: 34px;
+    opacity: 1;
+  }
+
+  .product__gallery-prev { left: 8px; }
+  .product__gallery-next { right: 8px; }
+
+  .product__gallery-thumbs {
+    gap: 6px;
+    padding: 0 2px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .product__gallery-thumbs::-webkit-scrollbar {
     display: none;
+  }
+
+  .product__gallery-thumb {
+    width: 56px;
+    height: 56px;
+    border-radius: 6px;
+  }
+
+  .product__price {
+    font-size: 20px;
+  }
+
+  .product__compare-price {
+    font-size: 15px;
+  }
+
+  .product__family-btn {
+    padding: 6px 12px;
+    font-size: 0.82rem;
+    min-width: 54px;
+  }
+
+  .product__family-btn-sub {
+    font-size: 0.65rem;
+  }
+
+  .product__add-to-cart {
+    padding: 14px 24px;
+    font-size: 15px;
+  }
+
+  .product__quantity-btn {
+    width: 36px;
+    height: 36px;
+  }
+
+  .product__quantity-input {
+    width: 48px;
+    font-size: 14px;
   }
 }
 

@@ -5,7 +5,7 @@
   <div class="{% if section.settings.container_width == 'contained' %}container{% else %}dynamic-content--full{% endif %}">
     {% if section.settings.heading != blank %}
       <div class="section__header" style="text-align: {{ section.settings.text_alignment }};">
-        <h2 class="section__heading" style="font-size: {% if section.settings.heading_size == 'small' %}1.5rem{% elsif section.settings.heading_size == 'large' %}2.75rem{% else %}2rem{% endif %};">{{ section.settings.heading }}</h2>
+        <h2 class="section__heading" style="{% render 'heading-size-vars', desktop: section.settings.heading_size, mobile: section.settings.heading_size_mobile %}">{{ section.settings.heading }}</h2>
         {% if section.settings.subheading != blank %}
           <p class="section__subheading">{{ section.settings.subheading }}</p>
         {% endif %}
@@ -18,7 +18,7 @@
 
           {% when 'heading' %}
             <div class="dynamic-content__block dynamic-content__heading" {{ block.shopify_attributes }}>
-              <{{ block.settings.heading_tag }} style="font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: {% if block.settings.heading_size == 'small' %}1.5rem{% elsif block.settings.heading_size == 'large' %}2.75rem{% else %}2rem{% endif %}; line-height: 1.2; letter-spacing: 0.02em;">
+              <{{ block.settings.heading_tag }} style="font-family: var(--font-heading); font-weight: var(--font-heading-weight); {% render 'heading-size-vars', desktop: block.settings.heading_size, mobile: block.settings.heading_size_mobile %} line-height: 1.2; letter-spacing: 0.02em;">
                 {{ block.settings.heading }}
               </{{ block.settings.heading_tag }}>
               {% if block.settings.subheading != blank %}
@@ -227,7 +227,7 @@
               {% endif %}
               {% if block.settings.heading != blank %}
                 <div class="dynamic-content__heading">
-                  <{{ block.settings.heading_tag }} style="font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: {% if block.settings.heading_size == 'small' %}1.5rem{% elsif block.settings.heading_size == 'large' %}2.75rem{% else %}2rem{% endif %}; line-height: 1.2; letter-spacing: 0.02em;">
+                  <{{ block.settings.heading_tag }} style="font-family: var(--font-heading); font-weight: var(--font-heading-weight); {% render 'heading-size-vars', desktop: block.settings.heading_size, mobile: block.settings.heading_size_mobile %} line-height: 1.2; letter-spacing: 0.02em;">
                     {{ block.settings.heading }}
                   </{{ block.settings.heading_tag }}>
                   {% if block.settings.subheading != blank %}
@@ -281,6 +281,17 @@
       "type": "select",
       "id": "heading_size",
       "label": "Heading size",
+      "options": [
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "heading_size_mobile",
+      "label": "Heading size (mobile)",
       "options": [
         { "value": "small", "label": "Small" },
         { "value": "medium", "label": "Medium" },
@@ -376,6 +387,17 @@
           "type": "select",
           "id": "heading_size",
           "label": "Heading size",
+          "options": [
+            { "value": "small", "label": "Small" },
+            { "value": "medium", "label": "Medium" },
+            { "value": "large", "label": "Large" }
+          ],
+          "default": "medium"
+        },
+        {
+          "type": "select",
+          "id": "heading_size_mobile",
+          "label": "Heading size (mobile)",
           "options": [
             { "value": "small", "label": "Small" },
             { "value": "medium", "label": "Medium" },
@@ -806,6 +828,17 @@
           "type": "select",
           "id": "heading_size",
           "label": "Heading size",
+          "options": [
+            { "value": "small", "label": "Small" },
+            { "value": "medium", "label": "Medium" },
+            { "value": "large", "label": "Large" }
+          ],
+          "default": "medium"
+        },
+        {
+          "type": "select",
+          "id": "heading_size_mobile",
+          "label": "Heading size (mobile)",
           "options": [
             { "value": "small", "label": "Small" },
             { "value": "medium", "label": "Medium" },
