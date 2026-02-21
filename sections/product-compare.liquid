@@ -5,14 +5,16 @@
   data-product-compare
 >
   <div class="container">
-    <div class="product-compare__header">
-      {% if section.settings.heading != blank %}
-        <h2 class="product-compare__heading" style="{% render 'heading-size-vars', desktop: section.settings.heading_size, mobile: section.settings.heading_size_mobile %}">{{ section.settings.heading }}</h2>
-      {% endif %}
-      {% if section.settings.subheading != blank %}
-        <p class="product-compare__subheading">{{ section.settings.subheading }}</p>
-      {% endif %}
-    </div>
+    {% if section.settings.heading != blank or section.settings.subheading != blank %}
+      <div class="product-compare__header">
+        {% if section.settings.heading != blank %}
+          <h2 class="product-compare__heading" style="{% render 'heading-size-vars', desktop: section.settings.heading_size, mobile: section.settings.heading_size_mobile %}">{{ section.settings.heading }}</h2>
+        {% endif %}
+        {% if section.settings.subheading != blank %}
+          <p class="product-compare__subheading">{{ section.settings.subheading }}</p>
+        {% endif %}
+      </div>
+    {% endif %}
 
     <button class="product-compare__toggle-btn button button--outline" data-compare-toggle>
       {{ section.settings.button_text }}

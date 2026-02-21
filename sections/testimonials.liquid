@@ -1,8 +1,10 @@
 <section class="testimonials section {% if section.settings.color_scheme == 'surface' %}section--surface{% elsif section.settings.color_scheme == 'dark' %}section--dark{% endif %}" style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;">
   <div class="container">
-    {% if section.settings.heading != blank %}
+    {% if section.settings.heading != blank or section.settings.subheading != blank %}
       <div class="section__header" style="text-align: {{ section.settings.text_alignment }};">
-        <h2 class="section__heading" style="{% render 'heading-size-vars', desktop: section.settings.heading_size, mobile: section.settings.heading_size_mobile %}">{{ section.settings.heading }}</h2>
+        {% if section.settings.heading != blank %}
+          <h2 class="section__heading" style="{% render 'heading-size-vars', desktop: section.settings.heading_size, mobile: section.settings.heading_size_mobile %}">{{ section.settings.heading }}</h2>
+        {% endif %}
         {% if section.settings.subheading != blank %}
           <p class="section__subheading">{{ section.settings.subheading }}</p>
         {% endif %}

@@ -193,14 +193,15 @@ ul, ol {
 }
 
 .button--outline {
-  border: 1.5px solid var(--color-primary);
-  color: var(--color-primary);
-  background: transparent;
+  border: 1.5px solid var(--color-button-outline-border, var(--color-primary));
+  color: var(--color-button-outline-text, var(--color-primary));
+  background-color: var(--color-button-outline-bg, transparent);
 }
 
 .button--outline:hover {
-  background-color: var(--color-primary);
-  color: #fff;
+  border-color: var(--color-button-outline-border-hover, var(--color-primary));
+  background-color: var(--color-button-outline-bg-hover, var(--color-primary));
+  color: var(--color-button-outline-text-hover, #fff);
 }
 
 .section--dark .button--outline {
@@ -263,12 +264,47 @@ ul, ol {
 .header {
   position: relative;
   z-index: 100;
-  background-color: color-mix(in srgb, var(--color-background) 95%, transparent);
+  background-color: var(--header-bg, color-mix(in srgb, var(--color-background) 95%, transparent));
+  color: var(--header-text, var(--color-text));
   border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-  transition: background-color 0.3s ease;
+  transition: background-color 0.35s ease, color 0.35s ease, border-color 0.35s ease;
+}
+
+.header .header__nav-link,
+.header .header__logo-text,
+.header .header__cart,
+.header .header__menu-toggle {
+  color: var(--header-text, var(--color-text));
+  transition: color 0.35s ease;
 }
 
 .header--sticky {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Transparent header — overlays content */
+.header--transparent {
+  background-color: transparent;
+  border-bottom-color: transparent;
+}
+
+/* Scrolled state — applies sticky colors */
+.header.is-scrolled {
+  background-color: var(--header-sticky-bg, var(--header-bg, color-mix(in srgb, var(--color-background) 95%, transparent)));
+  color: var(--header-sticky-text, var(--header-text, var(--color-text)));
+  border-bottom-color: rgba(0, 0, 0, 0.06);
+}
+
+.header.is-scrolled .header__nav-link,
+.header.is-scrolled .header__logo-text,
+.header.is-scrolled .header__cart,
+.header.is-scrolled .header__menu-toggle {
+  color: var(--header-sticky-text, var(--header-text, var(--color-text)));
+}
+
+/* Transparent header loses transparency on scroll */
+.header--transparent.is-scrolled {
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
 }
@@ -692,12 +728,18 @@ ul, ol {
 
 .hero {
   position: relative;
-  min-height: 100vh;
+  min-height: var(--hero-height-mobile, 100vh);
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
   color: #fff;
+}
+
+@media (min-width: 750px) {
+  .hero {
+    min-height: var(--hero-height, 100vh);
+  }
 }
 
 .hero__media {
@@ -1024,12 +1066,6 @@ ul, ol {
 
 .features__card {
   padding: 40px 32px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.features__card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
 }
 
 .features__icon {

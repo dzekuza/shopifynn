@@ -56,6 +56,47 @@
         "id": "color_text_muted",
         "label": "Muted text",
         "default": "#7A8B8A"
+      },
+      {
+        "type": "header",
+        "content": "Secondary button"
+      },
+      {
+        "type": "color",
+        "id": "color_button_outline_border",
+        "label": "Border color",
+        "default": "#1E2D3B"
+      },
+      {
+        "type": "color",
+        "id": "color_button_outline_text",
+        "label": "Text color",
+        "default": "#1E2D3B"
+      },
+      {
+        "type": "color",
+        "id": "color_button_outline_bg",
+        "label": "Background color",
+        "default": "#00000000",
+        "info": "Transparent by default"
+      },
+      {
+        "type": "color",
+        "id": "color_button_outline_border_hover",
+        "label": "Border color (hover)",
+        "default": "#1E2D3B"
+      },
+      {
+        "type": "color",
+        "id": "color_button_outline_text_hover",
+        "label": "Text color (hover)",
+        "default": "#FFFFFF"
+      },
+      {
+        "type": "color",
+        "id": "color_button_outline_bg_hover",
+        "label": "Background color (hover)",
+        "default": "#1E2D3B"
       }
     ]
   },

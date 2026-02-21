@@ -7,14 +7,16 @@
         </div>
       {% endif %}
 
-      <div class="newsletter__text">
-        {% if section.settings.heading != blank %}
-          <h2 class="newsletter__heading" style="{% render 'heading-size-vars', desktop: section.settings.heading_size, mobile: section.settings.heading_size_mobile %}">{{ section.settings.heading }}</h2>
-        {% endif %}
-        {% if section.settings.subheading != blank %}
-          <p class="newsletter__subheading">{{ section.settings.subheading }}</p>
-        {% endif %}
-      </div>
+      {% if section.settings.heading != blank or section.settings.subheading != blank %}
+        <div class="newsletter__text">
+          {% if section.settings.heading != blank %}
+            <h2 class="newsletter__heading" style="{% render 'heading-size-vars', desktop: section.settings.heading_size, mobile: section.settings.heading_size_mobile %}">{{ section.settings.heading }}</h2>
+          {% endif %}
+          {% if section.settings.subheading != blank %}
+            <p class="newsletter__subheading">{{ section.settings.subheading }}</p>
+          {% endif %}
+        </div>
+      {% endif %}
 
       {% form 'customer', class: 'newsletter__form' %}
         <input type="hidden" name="contact[tags]" value="newsletter">

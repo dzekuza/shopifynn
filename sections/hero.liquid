@@ -1,4 +1,4 @@
-<section class="hero" style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;">
+<section class="hero" style="--hero-height: {{ section.settings.height }}vh; --hero-height-mobile: {{ section.settings.mobile_height }}vh; align-items: {% if section.settings.vertical_alignment == 'top' %}flex-start{% elsif section.settings.vertical_alignment == 'bottom' %}flex-end{% else %}center{% endif %}; padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;">
   <div class="hero__media">
     {% if section.settings.video != blank %}
       <video class="hero__video" autoplay muted loop playsinline style="object-fit: {{ section.settings.video_fit }};">
@@ -38,7 +38,7 @@
   </div>
 
   {%- assign align = section.settings.text_alignment -%}
-  <div class="hero__content container" style="text-align: {{ align }}; max-width: {{ section.settings.content_width }}px;{% if align == 'left' %} margin-right: auto;{% elsif align == 'right' %} margin-left: auto;{% else %} margin: 0 auto;{% endif %}">
+  <div class="hero__content container" style="text-align: {{ align }};{% if align == 'center' %} max-width: {{ section.settings.content_width }}px; margin: 0 auto;{% endif %}">
     {% if section.settings.subtitle != blank %}
       <p class="hero__subtitle">{{ section.settings.subtitle }}</p>
     {% endif %}
@@ -237,6 +237,37 @@
         { "value": "right", "label": "Right" }
       ],
       "default": "center"
+    },
+    {
+      "type": "select",
+      "id": "vertical_alignment",
+      "label": "Vertical alignment",
+      "options": [
+        { "value": "top", "label": "Top" },
+        { "value": "middle", "label": "Middle" },
+        { "value": "bottom", "label": "Bottom" }
+      ],
+      "default": "middle"
+    },
+    {
+      "type": "range",
+      "id": "height",
+      "label": "Banner height (desktop)",
+      "min": 40,
+      "max": 100,
+      "step": 5,
+      "default": 100,
+      "unit": "vh"
+    },
+    {
+      "type": "range",
+      "id": "mobile_height",
+      "label": "Banner height (mobile)",
+      "min": 30,
+      "max": 100,
+      "step": 5,
+      "default": 100,
+      "unit": "vh"
     },
     {
       "type": "range",

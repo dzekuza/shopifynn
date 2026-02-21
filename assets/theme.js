@@ -10,12 +10,20 @@
   const header = document.querySelector('[data-header]');
 
   if (header) {
+    var isTransparent = header.hasAttribute('data-header-transparent');
+    var scrollThreshold = isTransparent ? 50 : 100;
+
+    /* Set total header height for transparent offset */
+    if (isTransparent) {
+      document.documentElement.style.setProperty('--header-total-height', header.offsetHeight + 'px');
+    }
+
     let lastScroll = 0;
 
     window.addEventListener('scroll', () => {
       const currentScroll = window.scrollY;
 
-      if (currentScroll > 100) {
+      if (currentScroll > scrollThreshold) {
         header.classList.add('is-scrolled');
       } else {
         header.classList.remove('is-scrolled');

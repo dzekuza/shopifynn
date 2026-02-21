@@ -7,7 +7,23 @@
 {% if section.settings.sticky_header %}
   <style>#shopify-section-{{ section.id }} { position: sticky; top: 0; z-index: 100; }</style>
 {% endif %}
-<header class="header {% if section.settings.sticky_header %}header--sticky{% endif %}" data-header>
+<style>
+  .header[data-header-id="{{ section.id }}"] {
+    --header-bg: {{ section.settings.bg_color }};
+    --header-text: {{ section.settings.text_color }};
+    --header-sticky-bg: {{ section.settings.sticky_bg_color }};
+    --header-sticky-text: {{ section.settings.sticky_text_color }};
+  }
+  {% if section.settings.transparent_header %}
+    #main-content { margin-top: calc(-1 * var(--header-total-height, 72px)); }
+  {% endif %}
+</style>
+<header
+  class="header {% if section.settings.sticky_header %}header--sticky{% endif %}{% if section.settings.transparent_header %} header--transparent{% endif %}"
+  data-header
+  data-header-id="{{ section.id }}"
+  {% if section.settings.transparent_header %}data-header-transparent{% endif %}
+>
   {%- assign announcement_blocks = section.blocks | where: "type", "announcement_item" -%}
   {% if announcement_blocks.size > 0 %}
     <div class="announcement-bar" style="background-color: {{ section.settings.announcement_bg_color }}; color: {{ section.settings.announcement_text_color }};">
@@ -212,6 +228,45 @@
       "id": "sticky_header",
       "label": "Sticky header",
       "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "transparent_header",
+      "label": "Transparent header",
+      "info": "Makes the header transparent and overlays on top of the first section. Useful for hero banners.",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Default colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color",
+      "default": "#F5F7F6"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#1E2D3B"
+    },
+    {
+      "type": "header",
+      "content": "Sticky / scrolled colors"
+    },
+    {
+      "type": "color",
+      "id": "sticky_bg_color",
+      "label": "Background color",
+      "default": "#F5F7F6"
+    },
+    {
+      "type": "color",
+      "id": "sticky_text_color",
+      "label": "Text color",
+      "default": "#1E2D3B"
     },
     {
       "type": "text",
