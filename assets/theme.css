@@ -1747,12 +1747,12 @@ ul, ol {
 /* Carousel */
 .collection-products__carousel-wrap {
   position: relative;
+  overflow: hidden;
 }
 
 .collection-products__carousel {
   display: flex;
   gap: 24px;
-  overflow: hidden;
   transition: transform 0.4s ease;
 }
 
