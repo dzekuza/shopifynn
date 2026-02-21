@@ -1106,6 +1106,14 @@ ul, ol {
     grid-template-columns: repeat(4, 1fr);
   }
 
+  .features__grid--2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .features__grid--3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
   .features__grid--6 {
     grid-template-columns: repeat(6, 1fr);
   }
@@ -1158,6 +1166,11 @@ ul, ol {
 
   .gallery__item--large {
     grid-column: span 2;
+  }
+
+  .gallery__item--tall {
+    grid-row: span 2;
+    aspect-ratio: auto;
   }
 }
 
