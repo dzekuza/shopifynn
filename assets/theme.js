@@ -924,6 +924,38 @@
     });
   }
 
+  /* ---- Company Details (cart attributes) ---- */
+
+  var companyToggle = document.querySelector('[data-company-toggle]');
+  var companyFields = document.querySelector('[data-company-fields]');
+
+  if (companyToggle && companyFields) {
+    companyToggle.addEventListener('click', function () {
+      var expanded = companyFields.hasAttribute('hidden');
+      companyFields.hidden = !expanded;
+      companyToggle.setAttribute('aria-expanded', String(expanded));
+    });
+
+    var companyTimer;
+    var companyInputs = companyFields.querySelectorAll('[data-company-field]');
+    companyInputs.forEach(function (input) {
+      input.addEventListener('input', function () {
+        clearTimeout(companyTimer);
+        companyTimer = setTimeout(function () {
+          var attributes = {};
+          companyInputs.forEach(function (el) {
+            attributes[el.getAttribute('data-company-field')] = el.value;
+          });
+          fetch('/cart/update.js', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ attributes: attributes })
+          });
+        }, 500);
+      });
+    });
+  }
+
   /* ---- Cart Count Update ---- */
 
   window.addEventListener('cart:refresh', function () {

@@ -1,5 +1,9 @@
 {%- liquid
   assign upsell_blocks = section.blocks | where: "type", "upsell_product"
+  assign has_company = false
+  if cart.attributes['Company Name'] != blank or cart.attributes['Registration Number'] != blank or cart.attributes['VAT Number'] != blank
+    assign has_company = true
+  endif
 -%}
 
 <div class="section cart-page" data-cart-page>
@@ -90,6 +94,29 @@
             <div class="cart-page__note">
               <label for="cart-note" class="cart-page__note-label">{{ section.settings.note_label }}</label>
               <textarea id="cart-note" name="note" class="cart-page__note-input" data-cart-note placeholder="{{ section.settings.note_placeholder }}">{{ cart.note }}</textarea>
+            </div>
+          {% endif %}
+
+          {% if section.settings.show_company_details %}
+            <div class="cart-page__company">
+              <button type="button" class="cart-page__company-toggle" data-company-toggle aria-expanded="{{ has_company }}" aria-controls="company-details-fields">
+                <span>{{ section.settings.company_heading }}</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div id="company-details-fields" class="cart-page__company-fields" data-company-fields {% unless has_company %}hidden{% endunless %}>
+                <div class="cart-page__company-field">
+                  <label for="company-name">{{ section.settings.company_name_label }}</label>
+                  <input type="text" id="company-name" data-company-field="Company Name" value="{{ cart.attributes['Company Name'] | escape }}" placeholder="{{ section.settings.company_name_placeholder }}">
+                </div>
+                <div class="cart-page__company-field">
+                  <label for="company-reg">{{ section.settings.company_reg_label }}</label>
+                  <input type="text" id="company-reg" data-company-field="Registration Number" value="{{ cart.attributes['Registration Number'] | escape }}" placeholder="{{ section.settings.company_reg_placeholder }}">
+                </div>
+                <div class="cart-page__company-field">
+                  <label for="company-vat">{{ section.settings.company_vat_label }}</label>
+                  <input type="text" id="company-vat" data-company-field="VAT Number" value="{{ cart.attributes['VAT Number'] | escape }}" placeholder="{{ section.settings.company_vat_placeholder }}">
+                </div>
+              </div>
             </div>
           {% endif %}
 
@@ -224,6 +251,58 @@
       "id": "note_placeholder",
       "label": "Note placeholder",
       "default": "Special instructions for your order..."
+    },
+    {
+      "type": "header",
+      "content": "Company details"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_company_details",
+      "label": "Show company details",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "company_heading",
+      "label": "Company heading",
+      "default": "Company Details (optional)"
+    },
+    {
+      "type": "text",
+      "id": "company_name_label",
+      "label": "Company name label",
+      "default": "Company Name"
+    },
+    {
+      "type": "text",
+      "id": "company_name_placeholder",
+      "label": "Company name placeholder",
+      "default": "Enter company name"
+    },
+    {
+      "type": "text",
+      "id": "company_reg_label",
+      "label": "Registration number label",
+      "default": "Registration Number"
+    },
+    {
+      "type": "text",
+      "id": "company_reg_placeholder",
+      "label": "Registration number placeholder",
+      "default": "Enter registration number"
+    },
+    {
+      "type": "text",
+      "id": "company_vat_label",
+      "label": "VAT number label",
+      "default": "VAT Number"
+    },
+    {
+      "type": "text",
+      "id": "company_vat_placeholder",
+      "label": "VAT number placeholder",
+      "default": "Enter VAT number (e.g. DE123456789)"
     },
     {
       "type": "header",
