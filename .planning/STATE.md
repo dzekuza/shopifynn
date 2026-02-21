@@ -130,9 +130,10 @@ None yet.
 |---|-------------|------|--------|-----------|
 | 1 | Update configurator summary card UI with option images, prices, and edit buttons | 2026-02-20 | dd2d3f4 | [1-update-configurator-summary-card-ui-with](./quick/1-update-configurator-summary-card-ui-with/) |
 | 2 | Review and update sections for responsive design — grid breakpoints, product card hover, dynamic content CSS | 2026-02-20 | 5dc073d | [2-review-and-update-sections-for-responsiv](./quick/2-review-and-update-sections-for-responsiv/) |
+| 3 | Add company details collapsible section to cart sidebar — saves Company Name, Registration Number, VAT Number as Shopify cart attributes | 2026-02-21 | 7e82d7a | [3-add-company-details-dialog-on-checkout-w](./quick/3-add-company-details-dialog-on-checkout-w/) |
 
 ## Session Continuity
 
-Last session: 2026-02-20
-Stopped at: Completed quick task 2 — responsive breakpoints, product card 720w srcset, slideshow touch targets, group row stacking
+Last session: 2026-02-21
+Stopped at: Completed quick task 3 — company details collapsible section in cart sidebar, cart attributes persistence
 Resume file: None
