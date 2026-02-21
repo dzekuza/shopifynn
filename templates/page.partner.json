@@ -1,0 +1,171 @@
+{
+  "sections": {
+    "partner-hero": {
+      "type": "hero",
+      "settings": {
+        "subtitle": "Partnership Program",
+        "heading": "Become a Partner",
+        "text": "Join the Aurowe dealer network and bring Nordic wellness to your customers. We provide premium hot and cold tubs backed by exceptional craftsmanship, competitive margins, and dedicated partner support.",
+        "button_text": "Apply Now",
+        "button_url": "#partner-contact",
+        "button_style": "primary",
+        "button_2_text": "",
+        "button_2_style": "outline",
+        "heading_size": "large",
+        "text_alignment": "center",
+        "content_width": 800,
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "partner-benefits": {
+      "type": "image-with-text",
+      "settings": {
+        "subtitle": "Why Partner With Us",
+        "heading": "A Partnership Built on Quality",
+        "text": "<p>Aurowe tubs are handcrafted from sustainably sourced Nordic thermowood, designed to last decades. As a partner, you represent a brand customers trust — backed by 25+ years of Scandinavian craftsmanship. We equip you with everything you need to succeed: product training, marketing assets, and a dedicated account manager who understands your market.</p>",
+        "button_text": "",
+        "button_style": "primary",
+        "layout": "image_left",
+        "heading_size": "medium",
+        "text_size": "medium",
+        "text_alignment": "left",
+        "color_scheme": "default",
+        "padding_top": 80,
+        "padding_bottom": 80
+      }
+    },
+    "partner-perks": {
+      "type": "features",
+      "blocks": {
+        "perk-margins": {
+          "type": "feature",
+          "settings": {
+            "icon": "trending-up",
+            "heading": "Competitive Margins",
+            "text": "Attractive wholesale pricing with volume-based tier discounts that grow as your business grows.",
+            "text_alignment": "center"
+          }
+        },
+        "perk-territory": {
+          "type": "feature",
+          "settings": {
+            "icon": "shield",
+            "heading": "Exclusive Territory",
+            "text": "Protected sales territories ensure you are the sole Aurowe representative in your region.",
+            "text_alignment": "center"
+          }
+        },
+        "perk-dropship": {
+          "type": "feature",
+          "settings": {
+            "icon": "truck",
+            "heading": "Drop Shipping Available",
+            "text": "We handle logistics and ship directly to your customers, so you can focus on selling.",
+            "text_alignment": "center"
+          }
+        },
+        "perk-marketing": {
+          "type": "feature",
+          "settings": {
+            "icon": "palette",
+            "heading": "Marketing Support",
+            "text": "Access to professional product photography, brochures, digital assets, and co-branded marketing materials.",
+            "text_alignment": "center"
+          }
+        },
+        "perk-training": {
+          "type": "feature",
+          "settings": {
+            "icon": "award",
+            "heading": "Product Training",
+            "text": "Comprehensive onboarding and ongoing training on our full product range, installation, and maintenance.",
+            "text_alignment": "center"
+          }
+        },
+        "perk-reach": {
+          "type": "feature",
+          "settings": {
+            "icon": "globe",
+            "heading": "International Reach",
+            "text": "Join a growing network of partners across Europe and beyond with dedicated regional support.",
+            "text_alignment": "center"
+          }
+        }
+      },
+      "block_order": [
+        "perk-margins",
+        "perk-territory",
+        "perk-dropship",
+        "perk-marketing",
+        "perk-training",
+        "perk-reach"
+      ],
+      "settings": {
+        "heading": "Partnership Perks",
+        "subheading": "Everything you need to grow your wellness business.",
+        "heading_size": "medium",
+        "text_size": "medium",
+        "text_alignment": "center",
+        "columns": "3",
+        "grid_gap": 32,
+        "color_scheme": "surface",
+        "padding_top": 80,
+        "padding_bottom": 80
+      }
+    },
+    "partner-how-to-apply": {
+      "type": "rich-text",
+      "blocks": {
+        "apply-heading": {
+          "type": "heading",
+          "settings": {
+            "heading": "How to Get Started",
+            "heading_size": "medium"
+          }
+        },
+        "apply-text": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Becoming an Aurowe partner is straightforward. Fill out the inquiry form below with details about your business, and our partnership team will review your application within 5 business days. Once approved, you will receive access to our partner portal, wholesale pricing, and a dedicated account manager to help you launch.</p>",
+            "text_size": "medium"
+          }
+        }
+      },
+      "block_order": [
+        "apply-heading",
+        "apply-text"
+      ],
+      "settings": {
+        "text_alignment": "center",
+        "content_width": 700,
+        "color_scheme": "default",
+        "padding_top": 80,
+        "padding_bottom": 60
+      }
+    },
+    "partner-contact": {
+      "type": "contact-form",
+      "settings": {
+        "heading": "Partner Inquiry",
+        "text": "<p>Tell us about your business and how you would like to partner with Aurowe. We will be in touch shortly.</p>",
+        "show_phone": true,
+        "button_text": "Submit Inquiry",
+        "success_message": "Thank you for your interest in partnering with Aurowe. Our team will review your application and contact you within 5 business days.",
+        "heading_size": "large",
+        "text_size": "medium",
+        "text_alignment": "left",
+        "color_scheme": "default",
+        "padding_top": 60,
+        "padding_bottom": 100
+      }
+    }
+  },
+  "order": [
+    "partner-hero",
+    "partner-benefits",
+    "partner-perks",
+    "partner-how-to-apply",
+    "partner-contact"
+  ]
+}
