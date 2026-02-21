@@ -1,0 +1,243 @@
+<section class="image-tabs section {% if section.settings.color_scheme == 'surface' %}section--surface{% elsif section.settings.color_scheme == 'dark' %}section--dark{% endif %}" style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;">
+  <div class="container">
+    <div class="image-tabs__grid {% if section.settings.layout == 'image_right' %}image-tabs__grid--reversed{% endif %}">
+      <div class="image-tabs__media">
+        {% for block in section.blocks %}
+          {% if block.settings.image %}
+            <img
+              src="{{ block.settings.image | image_url: width: 800 }}"
+              srcset="
+                {{ block.settings.image | image_url: width: 500 }} 500w,
+                {{ block.settings.image | image_url: width: 800 }} 800w,
+                {{ block.settings.image | image_url: width: 1200 }} 1200w
+              "
+              sizes="(max-width: 768px) 100vw, 50vw"
+              alt="{{ block.settings.heading | escape }}"
+              loading="lazy"
+              class="image-tabs__image {% if forloop.first %}image-tabs__image--active{% endif %}"
+              data-image-tab-img="{{ forloop.index0 }}"
+            >
+          {% endif %}
+        {% endfor %}
+        {% if section.blocks.size == 0 %}
+          <div class="image-tabs__placeholder">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--color-text-muted)" stroke-width="1">
+              <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
+            </svg>
+          </div>
+        {% endif %}
+      </div>
+
+      <div class="image-tabs__content">
+        {% if section.settings.heading != blank %}
+          <h2 class="image-tabs__heading" style="font-size: {% if section.settings.heading_size == 'small' %}1.5rem{% elsif section.settings.heading_size == 'large' %}2.75rem{% elsif section.settings.heading_size == 'extra_large' %}3.5rem{% else %}2rem{% endif %};">{{ section.settings.heading }}</h2>
+        {% endif %}
+
+        {% if section.settings.subheading != blank %}
+          <p class="image-tabs__subheading">{{ section.settings.subheading }}</p>
+        {% endif %}
+
+        <div class="image-tabs__accordion" data-image-tabs>
+          {% for block in section.blocks %}
+            <div class="image-tabs__item {% if forloop.first %}image-tabs__item--active{% endif %}" data-image-tab="{{ forloop.index0 }}" {{ block.shopify_attributes }}>
+              <button class="image-tabs__trigger" data-image-tab-trigger aria-expanded="{% if forloop.first %}true{% else %}false{% endif %}">
+                <span class="image-tabs__title">{{ block.settings.heading }}</span>
+                <svg class="image-tabs__chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="image-tabs__panel" data-image-tab-panel {% if forloop.first %}style="display: block;"{% endif %}>
+                <div class="image-tabs__panel-inner rte">
+                  {{ block.settings.content }}
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  (function() {
+    var section = document.querySelector('.image-tabs[style]');
+    if (!section) return;
+
+    document.querySelectorAll('[data-image-tabs]').forEach(function(accordion) {
+      var container = accordion.closest('.image-tabs');
+      var triggers = accordion.querySelectorAll('[data-image-tab-trigger]');
+
+      triggers.forEach(function(trigger) {
+        trigger.addEventListener('click', function() {
+          var item = trigger.closest('[data-image-tab]');
+          var index = item.getAttribute('data-image-tab');
+          var isActive = item.classList.contains('image-tabs__item--active');
+
+          if (isActive) return;
+
+          // Close all
+          accordion.querySelectorAll('.image-tabs__item').forEach(function(el) {
+            el.classList.remove('image-tabs__item--active');
+            el.querySelector('[data-image-tab-trigger]').setAttribute('aria-expanded', 'false');
+            var panel = el.querySelector('[data-image-tab-panel]');
+            panel.style.display = 'none';
+          });
+
+          // Open clicked
+          item.classList.add('image-tabs__item--active');
+          trigger.setAttribute('aria-expanded', 'true');
+          item.querySelector('[data-image-tab-panel]').style.display = 'block';
+
+          // Swap image
+          container.querySelectorAll('[data-image-tab-img]').forEach(function(img) {
+            img.classList.toggle('image-tabs__image--active', img.getAttribute('data-image-tab-img') === index);
+          });
+        });
+      });
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Image Tabs",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "The ideal ice bath for your home"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "We offer a variety of models, designed to meet everyone's needs"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" },
+        { "value": "extra_large", "label": "Extra Large" }
+      ],
+      "default": "large"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Image position",
+      "options": [
+        { "value": "image_left", "label": "Image left" },
+        { "value": "image_right", "label": "Image right" }
+      ],
+      "default": "image_left"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "options": [
+        { "value": "default", "label": "Default" },
+        { "value": "surface", "label": "Surface" },
+        { "value": "dark", "label": "Dark" }
+      ],
+      "default": "default"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 40,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 40,
+      "unit": "px"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "tab",
+      "name": "Tab",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Tab title",
+          "default": "Product model"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Tab content",
+          "default": "<p>Describe this product model and its key features here.</p>"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Tab image"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image Tabs",
+      "blocks": [
+        {
+          "type": "tab",
+          "settings": {
+            "heading": "Electric ice bath",
+            "content": "<p>Experience the ultimate in cold therapy with our electric ice bath, featuring precise temperature control and rapid cooling technology.</p>"
+          }
+        },
+        {
+          "type": "tab",
+          "settings": {
+            "heading": "Self cooling ice bath",
+            "content": "<p>Say goodbye to the hassle of ice packs. Our innovative cooling engine maintains cold water temperatures without the need for additional ice.</p>"
+          }
+        },
+        {
+          "type": "tab",
+          "settings": {
+            "heading": "Stainless steel ice bath",
+            "content": "<p>Built to last with premium stainless steel construction, offering superior durability and a sleek, modern aesthetic.</p>"
+          }
+        },
+        {
+          "type": "tab",
+          "settings": {
+            "heading": "Self cleaning ice bath",
+            "content": "<p>Our self-cleaning system keeps your ice bath fresh and hygienic with minimal maintenance required.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
