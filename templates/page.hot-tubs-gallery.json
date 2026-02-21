@@ -1,0 +1,167 @@
+{
+  "sections": {
+    "gallery-hero": {
+      "type": "hero",
+      "settings": {
+        "overlay_opacity": 40,
+        "subtitle": "Gallery",
+        "heading": "Hot Tubs Collection",
+        "text": "Explore our range of handcrafted Nordic hot tubs — built from thermowood, designed for lasting warmth and relaxation.",
+        "button_text": "Configure Your Tub",
+        "button_url": "/pages/configurator",
+        "button_style": "primary",
+        "button_2_text": "",
+        "button_2_style": "outline",
+        "heading_size": "large",
+        "text_size": "medium",
+        "text_alignment": "center",
+        "content_width": 800,
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "gallery": {
+      "type": "lifestyle-gallery",
+      "blocks": {
+        "img-1": {
+          "type": "image",
+          "settings": {
+            "alt": "Nordic hot tub in a winter garden setting",
+            "size": "large"
+          }
+        },
+        "img-2": {
+          "type": "image",
+          "settings": {
+            "alt": "Thermowood hot tub detail",
+            "size": "small"
+          }
+        },
+        "img-3": {
+          "type": "image",
+          "settings": {
+            "alt": "Hot tub with external heater",
+            "size": "small"
+          }
+        },
+        "img-4": {
+          "type": "image",
+          "settings": {
+            "alt": "Round hot tub on a terrace",
+            "size": "small"
+          }
+        },
+        "img-5": {
+          "type": "image",
+          "settings": {
+            "alt": "Hot tub in a lakeside setting",
+            "size": "small"
+          }
+        },
+        "img-6": {
+          "type": "image",
+          "settings": {
+            "alt": "Premium hot tub with LED lighting",
+            "size": "large"
+          }
+        }
+      },
+      "block_order": ["img-1", "img-2", "img-3", "img-4", "img-5", "img-6"],
+      "settings": {
+        "heading": "Hot Tubs in Their Element",
+        "subheading": "Every Aurowe hot tub is built to become part of the landscape — at home in forests, gardens, and coastal retreats.",
+        "heading_size": "medium",
+        "heading_size_mobile": "medium",
+        "text_alignment": "center",
+        "grid_gap": 16,
+        "color_scheme": "default",
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
+    },
+    "features": {
+      "type": "multicolumn",
+      "blocks": {
+        "feat-1": {
+          "type": "column",
+          "settings": {
+            "heading": "Nordic Thermowood",
+            "text": "<p>Heat-treated timber that resists moisture, rot, and insects — naturally, without chemicals.</p>",
+            "text_alignment": "center"
+          }
+        },
+        "feat-2": {
+          "type": "column",
+          "settings": {
+            "heading": "Integrated Heating",
+            "text": "<p>Choose between internal or external wood-fired stoves for efficient, even heating.</p>",
+            "text_alignment": "center"
+          }
+        },
+        "feat-3": {
+          "type": "column",
+          "settings": {
+            "heading": "Custom Configuration",
+            "text": "<p>Select your size, liner, insulation, jets, lighting, and accessories to build the perfect tub.</p>",
+            "text_alignment": "center"
+          }
+        }
+      },
+      "block_order": ["feat-1", "feat-2", "feat-3"],
+      "settings": {
+        "heading": "Why Choose an Aurowe Hot Tub",
+        "subheading": "",
+        "heading_size": "medium",
+        "text_size": "medium",
+        "text_alignment": "center",
+        "columns": "3",
+        "grid_gap": 32,
+        "image_ratio": "natural",
+        "color_scheme": "surface",
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
+    },
+    "cta": {
+      "type": "rich-text",
+      "blocks": {
+        "cta-heading": {
+          "type": "heading",
+          "settings": {
+            "heading": "Ready to Build Your Hot Tub?",
+            "heading_size": "large"
+          }
+        },
+        "cta-text": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Use our configurator to customise every detail — from wood and liner to jets and lighting.</p>",
+            "text_size": "medium"
+          }
+        },
+        "cta-button": {
+          "type": "button",
+          "settings": {
+            "button_text": "Start Configuring",
+            "button_url": "/pages/configurator",
+            "button_style": "primary"
+          }
+        }
+      },
+      "block_order": ["cta-heading", "cta-text", "cta-button"],
+      "settings": {
+        "text_alignment": "center",
+        "content_width": 700,
+        "color_scheme": "default",
+        "padding_top": 80,
+        "padding_bottom": 80
+      }
+    }
+  },
+  "order": [
+    "gallery-hero",
+    "gallery",
+    "features",
+    "cta"
+  ]
+}

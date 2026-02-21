@@ -1,0 +1,170 @@
+{
+  "sections": {
+    "warranty-hero": {
+      "type": "hero",
+      "settings": {
+        "overlay_opacity": 40,
+        "subtitle": "Peace of Mind",
+        "heading": "Warranty & Guarantees",
+        "text": "Every Aurowe product is backed by a comprehensive warranty — because we stand behind what we build.",
+        "button_text": "",
+        "button_style": "primary",
+        "button_2_text": "",
+        "button_2_style": "outline",
+        "heading_size": "large",
+        "text_size": "medium",
+        "text_alignment": "center",
+        "content_width": 800,
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "warranty-tiers": {
+      "type": "multicolumn",
+      "blocks": {
+        "tier-classic": {
+          "type": "column",
+          "settings": {
+            "heading": "Classic — 5 Years",
+            "text": "<p>Covers structural integrity of the tub body, watertight seals, and wood treatment. Includes 2-year coverage on the heating system and plumbing components.</p>",
+            "text_alignment": "center"
+          }
+        },
+        "tier-premium": {
+          "type": "column",
+          "settings": {
+            "heading": "Premium — 7 Years",
+            "text": "<p>Everything in Classic, plus extended 5-year coverage on the heating system, liner, and jet components. Includes a complimentary first-year maintenance inspection.</p>",
+            "text_alignment": "center"
+          }
+        },
+        "tier-signature": {
+          "type": "column",
+          "settings": {
+            "heading": "Signature — 10 Years",
+            "text": "<p>Our most comprehensive warranty. Full structural and systems coverage for 10 years, including heating, plumbing, liners, jets, and electrical components. Includes two complimentary maintenance visits.</p>",
+            "text_alignment": "center"
+          }
+        }
+      },
+      "block_order": ["tier-classic", "tier-premium", "tier-signature"],
+      "settings": {
+        "heading": "Warranty by Product Tier",
+        "subheading": "Coverage varies by product line. All warranties begin from the date of delivery.",
+        "heading_size": "medium",
+        "text_size": "medium",
+        "text_alignment": "center",
+        "columns": "3",
+        "grid_gap": 32,
+        "image_ratio": "natural",
+        "color_scheme": "default",
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
+    },
+    "coverage-details": {
+      "type": "collapsible-content",
+      "blocks": {
+        "q-structural": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "What does the structural warranty cover?",
+            "content": "<p>The structural warranty covers the tub body, staves, base, and all wood-to-wood joints against defects in materials and workmanship. This includes warping, cracking beyond normal weathering, and failure of watertight seals under normal use conditions.</p>",
+            "open_by_default": true
+          }
+        },
+        "q-heating": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "What about the heating system?",
+            "content": "<p>Heating system coverage includes the stove or heater unit, chimney components, and internal plumbing connections. Coverage period depends on your product tier (2, 5, or 10 years). Normal wear items such as gaskets and seals are covered for the first 2 years across all tiers.</p>"
+          }
+        },
+        "q-liner": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Is the fiberglass liner covered?",
+            "content": "<p>Yes. Liner coverage applies to Premium and Signature tiers. It covers manufacturing defects, delamination, and structural cracking. Surface scratches from normal use and cosmetic discolouration are not covered.</p>"
+          }
+        },
+        "q-claim": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "How do I make a warranty claim?",
+            "content": "<p>Contact us at hello@aurowe.com with your order number, a description of the issue, and photos if possible. Our team will respond within 2 business days. For structural or system issues, we may arrange a site visit or request the product be returned for inspection.</p>"
+          }
+        },
+        "q-excluded": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "What is not covered?",
+            "content": "<p>Warranties do not cover damage caused by improper installation, misuse, neglect, unauthorised modifications, or exposure to conditions outside the product's specifications. Natural wood weathering (greying) is normal and not a defect.</p>"
+          }
+        },
+        "q-transfer": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Can I transfer my warranty?",
+            "content": "<p>Yes. Aurowe warranties are transferable to new owners. Contact us with the original order details and the new owner's information to complete the transfer.</p>"
+          }
+        }
+      },
+      "block_order": ["q-structural", "q-heating", "q-liner", "q-claim", "q-excluded", "q-transfer"],
+      "settings": {
+        "heading": "Warranty Details",
+        "subheading": "Common questions about our warranty coverage and claims process.",
+        "button_text": "",
+        "heading_size": "medium",
+        "heading_size_mobile": "medium",
+        "text_size": "medium",
+        "text_alignment": "left",
+        "layout": "stacked",
+        "content_width": 800,
+        "color_scheme": "surface",
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
+    },
+    "cta": {
+      "type": "rich-text",
+      "blocks": {
+        "cta-heading": {
+          "type": "heading",
+          "settings": {
+            "heading": "Questions About Your Warranty?",
+            "heading_size": "large"
+          }
+        },
+        "cta-text": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Our team is here to help with warranty enquiries, claims, or any questions about product care.</p>",
+            "text_size": "medium"
+          }
+        },
+        "cta-button": {
+          "type": "button",
+          "settings": {
+            "button_text": "Contact Support",
+            "button_url": "/pages/contact",
+            "button_style": "primary"
+          }
+        }
+      },
+      "block_order": ["cta-heading", "cta-text", "cta-button"],
+      "settings": {
+        "text_alignment": "center",
+        "content_width": 700,
+        "color_scheme": "default",
+        "padding_top": 80,
+        "padding_bottom": 80
+      }
+    }
+  },
+  "order": [
+    "warranty-hero",
+    "warranty-tiers",
+    "coverage-details",
+    "cta"
+  ]
+}

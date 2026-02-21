@@ -483,7 +483,7 @@
       if (qtyMap[group]) this.state[qtyMap[group]] = product.meta?.default_qty || 1;
     }
 
-    _unlockThrough(stepNum) {
+    _unlockThrough(stepNum, { autoFocus = true } = {}) {
       if (stepNum <= this.maxUnlocked) return;
       this.maxUnlocked = stepNum;
       for (let i = 1; i <= STEPS.length; i++) {
@@ -506,12 +506,14 @@
         if (this.stickyCta) this.stickyCta.disabled = false;
       }
       // Move focus to the first focusable element in the newly unlocked step
-      const newStep = this._stepEls[stepNum];
-      if (newStep) {
-        setTimeout(() => {
-          const firstFocusable = newStep.querySelector('button, [tabindex="0"], input, [data-action]');
-          if (firstFocusable) firstFocusable.focus();
-        }, 200);
+      if (autoFocus) {
+        const newStep = this._stepEls[stepNum];
+        if (newStep) {
+          setTimeout(() => {
+            const firstFocusable = newStep.querySelector('button, [tabindex="0"], input, [data-action]');
+            if (firstFocusable) firstFocusable.focus();
+          }, 200);
+        }
       }
     }
 
@@ -681,8 +683,9 @@
       // Update oven step availability
       this._updateOvenAvailability();
 
-      // Unlock all remaining steps once size is chosen
-      this._unlockThrough(STEPS.length);
+      // Unlock all remaining steps once size is chosen (suppress auto-focus
+      // so it doesn't scroll to the last step — we scroll to step 2 instead)
+      this._unlockThrough(STEPS.length, { autoFocus: false });
       this._updatePrice();
       this._scrollToStep(2);
     }
@@ -1723,7 +1726,13 @@
     _scrollToStep(num) {
       const el = this._stepEls[num];
       if (!el) return;
-      setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 150);
+      /* Use 300ms delay to ensure all DOM changes (unlock, price, summary)
+         have settled before scrolling */
+      setTimeout(() => {
+        const rect = el.getBoundingClientRect();
+        const offset = window.scrollY + rect.top - 20;
+        window.scrollTo({ top: offset, behavior: 'smooth' });
+      }, 300);
     }
 
     _showTooltip(btn) {

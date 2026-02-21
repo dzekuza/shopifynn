@@ -1,0 +1,177 @@
+{
+  "sections": {
+    "process-hero": {
+      "type": "hero",
+      "settings": {
+        "overlay_opacity": 40,
+        "subtitle": "Behind the Craft",
+        "heading": "Our Production Process",
+        "text": "From sustainably sourced timber to a finished tub — follow the journey of an Aurowe product through our Nordic workshop.",
+        "button_text": "",
+        "button_style": "primary",
+        "button_2_text": "",
+        "button_2_style": "outline",
+        "heading_size": "large",
+        "text_size": "medium",
+        "text_alignment": "center",
+        "content_width": 800,
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "step-1": {
+      "type": "image-with-text",
+      "settings": {
+        "subtitle": "Step 1",
+        "heading": "Timber Selection & Treatment",
+        "text": "<p>Every Aurowe product starts with carefully selected Nordic softwood. The timber is thermally modified at over 200°C — a chemical-free process that enhances dimensional stability, moisture resistance, and natural durability. Only timber that meets our grading standard moves forward.</p>",
+        "button_text": "",
+        "button_style": "primary",
+        "heading_size": "medium",
+        "text_size": "medium",
+        "layout": "image_left",
+        "text_alignment": "left",
+        "color_scheme": "default",
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
+    },
+    "step-2": {
+      "type": "image-with-text",
+      "settings": {
+        "subtitle": "Step 2",
+        "heading": "Precision Milling & Joinery",
+        "text": "<p>Treated timber is milled to precise tolerances using CNC equipment, then assembled by hand. Tongue-and-groove joinery ensures watertight construction without reliance on sealants. Every joint is inspected before the build moves to the next stage.</p>",
+        "button_text": "",
+        "button_style": "primary",
+        "heading_size": "medium",
+        "text_size": "medium",
+        "layout": "image_right",
+        "text_alignment": "left",
+        "color_scheme": "surface",
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
+    },
+    "step-3": {
+      "type": "image-with-text",
+      "settings": {
+        "subtitle": "Step 3",
+        "heading": "Liner, Insulation & Systems",
+        "text": "<p>Fiberglass liners are fitted by hand for a seamless interior finish. Closed-cell insulation is applied to retain heat efficiently. Heating systems, plumbing, jets, and filtration are integrated and pressure-tested to meet our performance standards.</p>",
+        "button_text": "",
+        "button_style": "primary",
+        "heading_size": "medium",
+        "text_size": "medium",
+        "layout": "image_left",
+        "text_alignment": "left",
+        "color_scheme": "default",
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
+    },
+    "step-4": {
+      "type": "image-with-text",
+      "settings": {
+        "subtitle": "Step 4",
+        "heading": "Finishing & Quality Control",
+        "text": "<p>Each product is sanded, oiled, and given a final visual and functional inspection. We test heating, water circulation, and structural integrity before anything leaves the workshop. The result is a product built to last decades, not seasons.</p>",
+        "button_text": "",
+        "button_style": "primary",
+        "heading_size": "medium",
+        "text_size": "medium",
+        "layout": "image_right",
+        "text_alignment": "left",
+        "color_scheme": "surface",
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
+    },
+    "stats": {
+      "type": "stats-bar",
+      "blocks": {
+        "stat-1": {
+          "type": "stat",
+          "settings": {
+            "number": "200°C",
+            "label": "Thermal Treatment"
+          }
+        },
+        "stat-2": {
+          "type": "stat",
+          "settings": {
+            "number": "100%",
+            "label": "Hand-Assembled"
+          }
+        },
+        "stat-3": {
+          "type": "stat",
+          "settings": {
+            "number": "48h",
+            "label": "Quality Testing"
+          }
+        },
+        "stat-4": {
+          "type": "stat",
+          "settings": {
+            "number": "25+",
+            "label": "Year Lifespan"
+          }
+        }
+      },
+      "block_order": ["stat-1", "stat-2", "stat-3", "stat-4"],
+      "settings": {
+        "heading": "",
+        "background_color": "#262626",
+        "text_color": "#ffffff",
+        "accent_color": "#B6754D",
+        "padding_top": 48,
+        "padding_bottom": 48
+      }
+    },
+    "cta": {
+      "type": "rich-text",
+      "blocks": {
+        "cta-heading": {
+          "type": "heading",
+          "settings": {
+            "heading": "See the Craft in Action",
+            "heading_size": "large"
+          }
+        },
+        "cta-text": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Visit our workshop or explore our galleries to see Aurowe products in detail.</p>",
+            "text_size": "medium"
+          }
+        },
+        "cta-button": {
+          "type": "button",
+          "settings": {
+            "button_text": "Contact Us",
+            "button_url": "/pages/contact",
+            "button_style": "primary"
+          }
+        }
+      },
+      "block_order": ["cta-heading", "cta-text", "cta-button"],
+      "settings": {
+        "text_alignment": "center",
+        "content_width": 700,
+        "color_scheme": "default",
+        "padding_top": 80,
+        "padding_bottom": 80
+      }
+    }
+  },
+  "order": [
+    "process-hero",
+    "step-1",
+    "step-2",
+    "step-3",
+    "step-4",
+    "stats",
+    "cta"
+  ]
+}

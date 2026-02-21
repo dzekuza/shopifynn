@@ -1,0 +1,203 @@
+{
+  "sections": {
+    "faq-hero": {
+      "type": "hero",
+      "settings": {
+        "overlay_opacity": 40,
+        "subtitle": "Help Centre",
+        "heading": "Frequently Asked Questions",
+        "text": "Find answers to common questions about our products, ordering, delivery, and care.",
+        "button_text": "",
+        "button_style": "primary",
+        "button_2_text": "",
+        "button_2_style": "outline",
+        "heading_size": "large",
+        "text_size": "medium",
+        "text_alignment": "center",
+        "content_width": 800,
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "faq-products": {
+      "type": "collapsible-content",
+      "blocks": {
+        "q-materials": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "What materials are your tubs made from?",
+            "content": "<p>All our tubs are crafted from premium Nordic thermowood — timber that has been thermally modified at over 200°C for enhanced durability, moisture resistance, and dimensional stability. No chemical treatments are used.</p>",
+            "open_by_default": true
+          }
+        },
+        "q-difference": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "What is the difference between Classic, Premium, and Signature?",
+            "content": "<p>Our three tiers differ in materials, features, and warranty coverage. Classic offers solid construction with essential features. Premium adds upgraded liners, extended heating options, and hydro massage. Signature includes our finest materials, full feature set, and 10-year warranty.</p>"
+          }
+        },
+        "q-sizes": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "What sizes are available?",
+            "content": "<p>Most models are available in three sizes: Medium (2-3 persons), Large (4-5 persons), and XL (6-8 persons). Exact dimensions vary by model — see individual product pages for specifications.</p>"
+          }
+        },
+        "q-customise": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Can I customise my tub?",
+            "content": "<p>Yes. Use our online configurator to choose your model, size, liner colour, insulation, heating type, jets, lighting, and accessories. You can also contact us for bespoke requests beyond the standard options.</p>"
+          }
+        }
+      },
+      "block_order": ["q-materials", "q-difference", "q-sizes", "q-customise"],
+      "settings": {
+        "heading": "Products",
+        "subheading": "",
+        "button_text": "",
+        "heading_size": "medium",
+        "heading_size_mobile": "medium",
+        "text_size": "medium",
+        "text_alignment": "left",
+        "layout": "side_by_side",
+        "content_width": 800,
+        "color_scheme": "default",
+        "padding_top": 60,
+        "padding_bottom": 20
+      }
+    },
+    "faq-ordering": {
+      "type": "collapsible-content",
+      "blocks": {
+        "q-lead-time": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "How long does it take to receive my order?",
+            "content": "<p>Standard production and delivery takes 4-6 weeks from order confirmation. Each product is built to order. Delivery timelines may vary by region and season — we will confirm an estimated delivery date after your order is placed.</p>"
+          }
+        },
+        "q-shipping": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Do you deliver internationally?",
+            "content": "<p>Yes, we deliver across Europe and to select international destinations. Shipping costs and timelines are calculated at checkout based on your location. Contact us for deliveries outside our standard regions.</p>"
+          }
+        },
+        "q-payment": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "What payment methods do you accept?",
+            "content": "<p>We accept all major credit cards, bank transfers, and select financing options. Payment is processed securely at checkout. For larger orders, we can arrange milestone-based payments — contact us for details.</p>"
+          }
+        },
+        "q-cancel": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Can I cancel or modify my order?",
+            "content": "<p>Orders can be modified or cancelled within 48 hours of placement. After production begins, changes may not be possible. Contact us as soon as possible if you need to make adjustments.</p>"
+          }
+        }
+      },
+      "block_order": ["q-lead-time", "q-shipping", "q-payment", "q-cancel"],
+      "settings": {
+        "heading": "Ordering & Delivery",
+        "subheading": "",
+        "button_text": "",
+        "heading_size": "medium",
+        "heading_size_mobile": "medium",
+        "text_size": "medium",
+        "text_alignment": "left",
+        "layout": "side_by_side",
+        "content_width": 800,
+        "color_scheme": "surface",
+        "padding_top": 20,
+        "padding_bottom": 20
+      }
+    },
+    "faq-care": {
+      "type": "collapsible-content",
+      "blocks": {
+        "q-maintenance": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "How do I maintain my tub?",
+            "content": "<p>Regular maintenance includes water treatment (if using a filtration system), occasional wood oiling (once or twice a year), and cleaning the liner. We provide a detailed care guide with every purchase. Thermowood requires minimal maintenance compared to untreated wood.</p>"
+          }
+        },
+        "q-winter": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Can I use my tub in winter?",
+            "content": "<p>Absolutely. Our tubs are designed for year-round Nordic conditions. Insulated models retain heat efficiently even in sub-zero temperatures. Simply ensure the water is drained or kept circulating if the tub will be unused for extended periods in freezing weather.</p>"
+          }
+        },
+        "q-lifespan": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "How long will my tub last?",
+            "content": "<p>With proper care, an Aurowe tub will last 20-30 years or more. Thermowood's natural resistance to decay and our quality construction ensure long-term durability. Our warranty covers 5-10 years depending on the product tier.</p>"
+          }
+        }
+      },
+      "block_order": ["q-maintenance", "q-winter", "q-lifespan"],
+      "settings": {
+        "heading": "Care & Maintenance",
+        "subheading": "",
+        "button_text": "",
+        "heading_size": "medium",
+        "heading_size_mobile": "medium",
+        "text_size": "medium",
+        "text_alignment": "left",
+        "layout": "side_by_side",
+        "content_width": 800,
+        "color_scheme": "default",
+        "padding_top": 20,
+        "padding_bottom": 60
+      }
+    },
+    "cta": {
+      "type": "rich-text",
+      "blocks": {
+        "cta-heading": {
+          "type": "heading",
+          "settings": {
+            "heading": "Still Have Questions?",
+            "heading_size": "large"
+          }
+        },
+        "cta-text": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Our team is happy to help. Get in touch and we will get back to you within one business day.</p>",
+            "text_size": "medium"
+          }
+        },
+        "cta-button": {
+          "type": "button",
+          "settings": {
+            "button_text": "Contact Us",
+            "button_url": "/pages/contact",
+            "button_style": "primary"
+          }
+        }
+      },
+      "block_order": ["cta-heading", "cta-text", "cta-button"],
+      "settings": {
+        "text_alignment": "center",
+        "content_width": 700,
+        "color_scheme": "surface",
+        "padding_top": 80,
+        "padding_bottom": 80
+      }
+    }
+  },
+  "order": [
+    "faq-hero",
+    "faq-products",
+    "faq-ordering",
+    "faq-care",
+    "cta"
+  ]
+}

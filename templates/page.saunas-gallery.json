@@ -1,0 +1,167 @@
+{
+  "sections": {
+    "gallery-hero": {
+      "type": "hero",
+      "settings": {
+        "overlay_opacity": 40,
+        "subtitle": "Gallery",
+        "heading": "Saunas",
+        "text": "Step inside our handcrafted Nordic saunas — where tradition, timber, and heat come together.",
+        "button_text": "Explore Saunas",
+        "button_url": "shopify://collections",
+        "button_style": "primary",
+        "button_2_text": "",
+        "button_2_style": "outline",
+        "heading_size": "large",
+        "text_size": "medium",
+        "text_alignment": "center",
+        "content_width": 800,
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "gallery": {
+      "type": "lifestyle-gallery",
+      "blocks": {
+        "img-1": {
+          "type": "image",
+          "settings": {
+            "alt": "Barrel sauna in a forest clearing",
+            "size": "large"
+          }
+        },
+        "img-2": {
+          "type": "image",
+          "settings": {
+            "alt": "Sauna interior with thermowood benches",
+            "size": "small"
+          }
+        },
+        "img-3": {
+          "type": "image",
+          "settings": {
+            "alt": "Outdoor sauna with panoramic window",
+            "size": "small"
+          }
+        },
+        "img-4": {
+          "type": "image",
+          "settings": {
+            "alt": "Sauna heater and stones close-up",
+            "size": "small"
+          }
+        },
+        "img-5": {
+          "type": "image",
+          "settings": {
+            "alt": "Modern cabin sauna on a lakeside deck",
+            "size": "small"
+          }
+        },
+        "img-6": {
+          "type": "image",
+          "settings": {
+            "alt": "Barrel sauna glowing at dusk",
+            "size": "large"
+          }
+        }
+      },
+      "block_order": ["img-1", "img-2", "img-3", "img-4", "img-5", "img-6"],
+      "settings": {
+        "heading": "Saunas Built for the Nordic Way",
+        "subheading": "From barrel saunas to cabin-style builds, every Aurowe sauna is crafted from thermowood and designed to perform.",
+        "heading_size": "medium",
+        "heading_size_mobile": "medium",
+        "text_alignment": "center",
+        "grid_gap": 16,
+        "color_scheme": "default",
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
+    },
+    "features": {
+      "type": "multicolumn",
+      "blocks": {
+        "feat-1": {
+          "type": "column",
+          "settings": {
+            "heading": "Thermowood Construction",
+            "text": "<p>Heat-treated Nordic timber provides superior insulation and a naturally warm, aromatic interior.</p>",
+            "text_alignment": "center"
+          }
+        },
+        "feat-2": {
+          "type": "column",
+          "settings": {
+            "heading": "Efficient Heating",
+            "text": "<p>Choose from wood-burning or electric heaters, sized to match your sauna for fast, even heat.</p>",
+            "text_alignment": "center"
+          }
+        },
+        "feat-3": {
+          "type": "column",
+          "settings": {
+            "heading": "Year-Round Use",
+            "text": "<p>Built to withstand Nordic winters — double-wall insulation and weather-sealed construction as standard.</p>",
+            "text_alignment": "center"
+          }
+        }
+      },
+      "block_order": ["feat-1", "feat-2", "feat-3"],
+      "settings": {
+        "heading": "Why Choose an Aurowe Sauna",
+        "subheading": "",
+        "heading_size": "medium",
+        "text_size": "medium",
+        "text_alignment": "center",
+        "columns": "3",
+        "grid_gap": 32,
+        "image_ratio": "natural",
+        "color_scheme": "surface",
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
+    },
+    "cta": {
+      "type": "rich-text",
+      "blocks": {
+        "cta-heading": {
+          "type": "heading",
+          "settings": {
+            "heading": "Find Your Sauna",
+            "heading_size": "large"
+          }
+        },
+        "cta-text": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Browse our sauna collection or get in touch for guidance on the right model for your space.</p>",
+            "text_size": "medium"
+          }
+        },
+        "cta-button": {
+          "type": "button",
+          "settings": {
+            "button_text": "View Saunas",
+            "button_url": "shopify://collections",
+            "button_style": "primary"
+          }
+        }
+      },
+      "block_order": ["cta-heading", "cta-text", "cta-button"],
+      "settings": {
+        "text_alignment": "center",
+        "content_width": 700,
+        "color_scheme": "default",
+        "padding_top": 80,
+        "padding_bottom": 80
+      }
+    }
+  },
+  "order": [
+    "gallery-hero",
+    "gallery",
+    "features",
+    "cta"
+  ]
+}
