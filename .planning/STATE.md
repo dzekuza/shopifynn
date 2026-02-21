@@ -132,9 +132,10 @@ None yet.
 | 2 | Review and update sections for responsive design — grid breakpoints, product card hover, dynamic content CSS | 2026-02-20 | 5dc073d | [2-review-and-update-sections-for-responsiv](./quick/2-review-and-update-sections-for-responsiv/) |
 | 3 | Add company details collapsible section to cart sidebar — saves Company Name, Registration Number, VAT Number as Shopify cart attributes | 2026-02-21 | 7e82d7a | [3-add-company-details-dialog-on-checkout-w](./quick/3-add-company-details-dialog-on-checkout-w/) |
 | 4 | Add product compare section with two dropdown selectors, 7 cold tub products, 41 spec fields, toggle panel | 2026-02-21 | 927f20d | [4-add-product-compare-section-two-dropdown](./quick/4-add-product-compare-section-two-dropdown/) |
+| 5 | Pull Aurora theme changes (index, product templates) and create Become a Partner B2B landing page template | 2026-02-21 | 18e4ca5 | [5-pull-aurora-theme-changes-and-create-bec](./quick/5-pull-aurora-theme-changes-and-create-bec/) |
 
 ## Session Continuity
 
 Last session: 2026-02-21
-Stopped at: Completed quick task 4 — product compare section with two dropdown selectors, 7 cold tub product presets, 41 spec fields
+Stopped at: Completed quick task 5 — pulled Aurora theme changes and created Become a Partner page template (5 sections: hero, image-with-text, features, rich-text, contact-form)
 Resume file: None
