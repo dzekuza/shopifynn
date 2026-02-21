@@ -97,12 +97,55 @@
           "url": {{ cp_url | json }},
           "price": {{ cp_product.price | default: 0 | money | json }},
           "specs": {
-            "Design": {{ block.settings.spec_design | json }},
+            {%- comment -%} Auto-read from product metafields; manual block settings override {%- endcomment -%}
+            {%- if cp_product != blank -%}
+              {%- assign cp_capacity = block.settings.spec_design | default: cp_product.metafields.custom.capacity -%}
+              {%- assign cp_size = cp_product.metafields.custom.size -%}
+              {%- assign cp_inside_dia = cp_product.metafields.custom.inside_diameter -%}
+              {%- assign cp_outside_dia = cp_product.metafields.custom.outside_diameter -%}
+              {%- if cp_inside_dia != blank and cp_outside_dia != blank -%}
+                {%- assign cp_auto_dimensions = 'Ø' | append: cp_inside_dia | append: '/' | append: cp_outside_dia | append: ' cm' -%}
+              {%- else -%}
+                {%- assign cp_auto_dimensions = '' -%}
+              {%- endif -%}
+              {%- assign cp_ext_material = cp_product.metafields.custom.exterior_material -%}
+              {%- assign cp_fiberglass = cp_product.metafields.custom.fiberglass_type -%}
+              {%- assign cp_liner = cp_product.metafields.custom.liner_collection -%}
+              {%- assign cp_hydro = cp_product.metafields.custom.hydro_massage -%}
+              {%- assign cp_air = cp_product.metafields.custom.air_system -%}
+              {%- assign cp_led = cp_product.metafields.custom.led_lighting -%}
+              {%- assign cp_pillows = cp_product.metafields.custom.head_pillows -%}
+              {%- assign cp_heating = cp_product.metafields.custom.oven_description -%}
+              {%- assign cp_oven_type = cp_product.metafields.custom.oven_type -%}
+            {%- else -%}
+              {%- assign cp_capacity = '' -%}
+              {%- assign cp_size = '' -%}
+              {%- assign cp_auto_dimensions = '' -%}
+              {%- assign cp_ext_material = '' -%}
+              {%- assign cp_fiberglass = '' -%}
+              {%- assign cp_liner = '' -%}
+              {%- assign cp_hydro = '' -%}
+              {%- assign cp_air = '' -%}
+              {%- assign cp_led = '' -%}
+              {%- assign cp_pillows = '' -%}
+              {%- assign cp_heating = '' -%}
+              {%- assign cp_oven_type = '' -%}
+            {%- endif -%}
+            "Capacity": {{ block.settings.spec_design | default: cp_capacity | json }},
+            "Size": {{ cp_size | json }},
+            "Dimensions": {{ block.settings.spec_dimensions | default: cp_auto_dimensions | json }},
+            "Exterior material": {{ block.settings.spec_materials | default: cp_ext_material | json }},
+            "Fiberglass type": {{ cp_fiberglass | json }},
+            "Liner collection": {{ cp_liner | json }},
+            "Hydro massage": {{ cp_hydro | json }},
+            "Air system": {{ cp_air | json }},
+            "LED lighting": {{ cp_led | json }},
+            "Head pillows": {{ cp_pillows | json }},
+            "Heating system": {{ block.settings.spec_heater | default: cp_heating | json }},
+            "Oven type": {{ cp_oven_type | json }},
             "Access": {{ block.settings.spec_access | json }},
-            "Heater": {{ block.settings.spec_heater | json }},
             "Indoor/outdoor use": {{ block.settings.spec_indoor_outdoor | json }},
             "Weatherproof": {{ block.settings.spec_weatherproof | json }},
-            "Materials": {{ block.settings.spec_materials | json }},
             "Cover": {{ block.settings.spec_cover | json }},
             "Filter": {{ block.settings.spec_filter | json }},
             "Micron filter": {{ block.settings.spec_micron_filter | json }},
@@ -133,7 +176,6 @@
             "Max current": {{ block.settings.spec_max_current | json }},
             "Advised water flow": {{ block.settings.spec_water_flow | json }},
             "Water pressure drop": {{ block.settings.spec_pressure_drop | json }},
-            "Dimensions": {{ block.settings.spec_dimensions | json }},
             "Volume": {{ block.settings.spec_volume | json }},
             "Weight empty": {{ block.settings.spec_weight_empty | json }},
             "Weight full": {{ block.settings.spec_weight_full | json }},

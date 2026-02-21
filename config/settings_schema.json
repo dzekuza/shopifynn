@@ -73,6 +73,134 @@
         "id": "font_body",
         "label": "Body font",
         "default": "plus_jakarta_sans_n4"
+      },
+      {
+        "type": "header",
+        "content": "Desktop font sizes"
+      },
+      {
+        "type": "range",
+        "id": "font_size_h1",
+        "label": "H1 heading",
+        "min": 28,
+        "max": 72,
+        "step": 2,
+        "unit": "px",
+        "default": 40
+      },
+      {
+        "type": "range",
+        "id": "font_size_h2",
+        "label": "H2 heading",
+        "min": 22,
+        "max": 56,
+        "step": 2,
+        "unit": "px",
+        "default": 32
+      },
+      {
+        "type": "range",
+        "id": "font_size_h3",
+        "label": "H3 heading",
+        "min": 18,
+        "max": 40,
+        "step": 1,
+        "unit": "px",
+        "default": 24
+      },
+      {
+        "type": "range",
+        "id": "font_size_h4",
+        "label": "H4 heading",
+        "min": 14,
+        "max": 32,
+        "step": 1,
+        "unit": "px",
+        "default": 20
+      },
+      {
+        "type": "range",
+        "id": "font_size_body",
+        "label": "Body text",
+        "min": 12,
+        "max": 22,
+        "step": 1,
+        "unit": "px",
+        "default": 16
+      },
+      {
+        "type": "range",
+        "id": "font_size_small",
+        "label": "Small text",
+        "min": 10,
+        "max": 16,
+        "step": 1,
+        "unit": "px",
+        "default": 14
+      },
+      {
+        "type": "range",
+        "id": "font_size_button",
+        "label": "Button text",
+        "min": 12,
+        "max": 20,
+        "step": 1,
+        "unit": "px",
+        "default": 15
+      },
+      {
+        "type": "header",
+        "content": "Mobile font sizes"
+      },
+      {
+        "type": "range",
+        "id": "font_size_h1_mobile",
+        "label": "H1 heading (mobile)",
+        "min": 22,
+        "max": 52,
+        "step": 2,
+        "unit": "px",
+        "default": 28
+      },
+      {
+        "type": "range",
+        "id": "font_size_h2_mobile",
+        "label": "H2 heading (mobile)",
+        "min": 18,
+        "max": 42,
+        "step": 2,
+        "unit": "px",
+        "default": 24
+      },
+      {
+        "type": "range",
+        "id": "font_size_h3_mobile",
+        "label": "H3 heading (mobile)",
+        "min": 16,
+        "max": 32,
+        "step": 1,
+        "unit": "px",
+        "default": 20
+      },
+      {
+        "type": "range",
+        "id": "font_size_h4_mobile",
+        "label": "H4 heading (mobile)",
+        "min": 12,
+        "max": 26,
+        "step": 1,
+        "unit": "px",
+        "default": 17
+      },
+      {
+        "type": "range",
+        "id": "font_size_body_mobile",
+        "label": "Body text (mobile)",
+        "min": 12,
+        "max": 20,
+        "step": 1,
+        "unit": "px",
+        "default": 15
       }
     ]
   },

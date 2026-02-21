@@ -544,30 +544,24 @@
             {% when 'feature_highlights' %}
               <div class="product__block" {{ block.shopify_attributes }}>
                 <div class="product__highlights">
-                  {% if block.settings.highlight_1 != blank %}
-                    <div class="product__highlight">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--color-accent)" stroke="var(--color-accent)" stroke-width="1"><polyline points="20 6 9 17 4 12"/></svg>
-                      <span>{{ block.settings.highlight_1 }}</span>
-                    </div>
-                  {% endif %}
-                  {% if block.settings.highlight_2 != blank %}
-                    <div class="product__highlight">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--color-accent)" stroke="var(--color-accent)" stroke-width="1"><polyline points="20 6 9 17 4 12"/></svg>
-                      <span>{{ block.settings.highlight_2 }}</span>
-                    </div>
-                  {% endif %}
-                  {% if block.settings.highlight_3 != blank %}
-                    <div class="product__highlight">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--color-accent)" stroke="var(--color-accent)" stroke-width="1"><polyline points="20 6 9 17 4 12"/></svg>
-                      <span>{{ block.settings.highlight_3 }}</span>
-                    </div>
-                  {% endif %}
-                  {% if block.settings.highlight_4 != blank %}
-                    <div class="product__highlight">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--color-accent)" stroke="var(--color-accent)" stroke-width="1"><polyline points="20 6 9 17 4 12"/></svg>
-                      <span>{{ block.settings.highlight_4 }}</span>
-                    </div>
-                  {% endif %}
+                  {%- assign hl_icons = block.settings.highlight_1_icon | append: ',' | append: block.settings.highlight_2_icon | append: ',' | append: block.settings.highlight_3_icon | append: ',' | append: block.settings.highlight_4_icon | split: ',' -%}
+                  {%- assign hl_texts = 'highlight_1,highlight_2,highlight_3,highlight_4' | split: ',' -%}
+                  {%- for hl_key in hl_texts -%}
+                    {%- assign hl_text = block.settings[hl_key] -%}
+                    {%- if hl_text != blank -%}
+                      {%- assign hl_icon = hl_icons[forloop.index0] -%}
+                      <div class="product__highlight">
+                        <span class="product__highlight-icon">
+                          {%- if hl_icon == 'check' or hl_icon == blank -%}
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                          {%- else -%}
+                            {%- render 'icon', name: hl_icon, size: 16 -%}
+                          {%- endif -%}
+                        </span>
+                        <span>{{ hl_text }}</span>
+                      </div>
+                    {%- endif -%}
+                  {%- endfor -%}
                 </div>
               </div>
 
@@ -870,10 +864,86 @@
           "default": "No ice needed"
         },
         {
+          "type": "select",
+          "id": "highlight_1_icon",
+          "label": "Highlight 1 icon",
+          "default": "snowflake",
+          "options": [
+            { "value": "check", "label": "Checkmark" },
+            { "value": "snowflake", "label": "Snowflake" },
+            { "value": "thermometer", "label": "Thermometer" },
+            { "value": "droplet", "label": "Droplet" },
+            { "value": "flame", "label": "Flame" },
+            { "value": "shield", "label": "Shield" },
+            { "value": "leaf", "label": "Leaf" },
+            { "value": "star", "label": "Star" },
+            { "value": "heart", "label": "Heart" },
+            { "value": "zap", "label": "Zap" },
+            { "value": "sun", "label": "Sun" },
+            { "value": "moon", "label": "Moon" },
+            { "value": "wind", "label": "Wind" },
+            { "value": "waves", "label": "Waves" },
+            { "value": "truck", "label": "Truck" },
+            { "value": "clock", "label": "Clock" },
+            { "value": "users", "label": "Users" },
+            { "value": "award", "label": "Award" },
+            { "value": "tool", "label": "Tool" },
+            { "value": "settings", "label": "Settings" },
+            { "value": "lock", "label": "Lock" },
+            { "value": "refresh", "label": "Refresh" },
+            { "value": "gift", "label": "Gift" },
+            { "value": "tag", "label": "Tag" },
+            { "value": "percent", "label": "Percent" },
+            { "value": "life-buoy", "label": "Life buoy" },
+            { "value": "anchor", "label": "Anchor" },
+            { "value": "compass", "label": "Compass" },
+            { "value": "globe", "label": "Globe" },
+            { "value": "coffee", "label": "Coffee" }
+          ]
+        },
+        {
           "type": "text",
           "id": "highlight_2",
           "label": "Highlight 2",
           "default": "Always cold"
+        },
+        {
+          "type": "select",
+          "id": "highlight_2_icon",
+          "label": "Highlight 2 icon",
+          "default": "thermometer",
+          "options": [
+            { "value": "check", "label": "Checkmark" },
+            { "value": "snowflake", "label": "Snowflake" },
+            { "value": "thermometer", "label": "Thermometer" },
+            { "value": "droplet", "label": "Droplet" },
+            { "value": "flame", "label": "Flame" },
+            { "value": "shield", "label": "Shield" },
+            { "value": "leaf", "label": "Leaf" },
+            { "value": "star", "label": "Star" },
+            { "value": "heart", "label": "Heart" },
+            { "value": "zap", "label": "Zap" },
+            { "value": "sun", "label": "Sun" },
+            { "value": "moon", "label": "Moon" },
+            { "value": "wind", "label": "Wind" },
+            { "value": "waves", "label": "Waves" },
+            { "value": "truck", "label": "Truck" },
+            { "value": "clock", "label": "Clock" },
+            { "value": "users", "label": "Users" },
+            { "value": "award", "label": "Award" },
+            { "value": "tool", "label": "Tool" },
+            { "value": "settings", "label": "Settings" },
+            { "value": "lock", "label": "Lock" },
+            { "value": "refresh", "label": "Refresh" },
+            { "value": "gift", "label": "Gift" },
+            { "value": "tag", "label": "Tag" },
+            { "value": "percent", "label": "Percent" },
+            { "value": "life-buoy", "label": "Life buoy" },
+            { "value": "anchor", "label": "Anchor" },
+            { "value": "compass", "label": "Compass" },
+            { "value": "globe", "label": "Globe" },
+            { "value": "coffee", "label": "Coffee" }
+          ]
         },
         {
           "type": "text",
@@ -882,10 +952,86 @@
           "default": "Easy maintenance"
         },
         {
+          "type": "select",
+          "id": "highlight_3_icon",
+          "label": "Highlight 3 icon",
+          "default": "tool",
+          "options": [
+            { "value": "check", "label": "Checkmark" },
+            { "value": "snowflake", "label": "Snowflake" },
+            { "value": "thermometer", "label": "Thermometer" },
+            { "value": "droplet", "label": "Droplet" },
+            { "value": "flame", "label": "Flame" },
+            { "value": "shield", "label": "Shield" },
+            { "value": "leaf", "label": "Leaf" },
+            { "value": "star", "label": "Star" },
+            { "value": "heart", "label": "Heart" },
+            { "value": "zap", "label": "Zap" },
+            { "value": "sun", "label": "Sun" },
+            { "value": "moon", "label": "Moon" },
+            { "value": "wind", "label": "Wind" },
+            { "value": "waves", "label": "Waves" },
+            { "value": "truck", "label": "Truck" },
+            { "value": "clock", "label": "Clock" },
+            { "value": "users", "label": "Users" },
+            { "value": "award", "label": "Award" },
+            { "value": "tool", "label": "Tool" },
+            { "value": "settings", "label": "Settings" },
+            { "value": "lock", "label": "Lock" },
+            { "value": "refresh", "label": "Refresh" },
+            { "value": "gift", "label": "Gift" },
+            { "value": "tag", "label": "Tag" },
+            { "value": "percent", "label": "Percent" },
+            { "value": "life-buoy", "label": "Life buoy" },
+            { "value": "anchor", "label": "Anchor" },
+            { "value": "compass", "label": "Compass" },
+            { "value": "globe", "label": "Globe" },
+            { "value": "coffee", "label": "Coffee" }
+          ]
+        },
+        {
           "type": "text",
           "id": "highlight_4",
           "label": "Highlight 4",
           "default": "Energy efficient"
+        },
+        {
+          "type": "select",
+          "id": "highlight_4_icon",
+          "label": "Highlight 4 icon",
+          "default": "zap",
+          "options": [
+            { "value": "check", "label": "Checkmark" },
+            { "value": "snowflake", "label": "Snowflake" },
+            { "value": "thermometer", "label": "Thermometer" },
+            { "value": "droplet", "label": "Droplet" },
+            { "value": "flame", "label": "Flame" },
+            { "value": "shield", "label": "Shield" },
+            { "value": "leaf", "label": "Leaf" },
+            { "value": "star", "label": "Star" },
+            { "value": "heart", "label": "Heart" },
+            { "value": "zap", "label": "Zap" },
+            { "value": "sun", "label": "Sun" },
+            { "value": "moon", "label": "Moon" },
+            { "value": "wind", "label": "Wind" },
+            { "value": "waves", "label": "Waves" },
+            { "value": "truck", "label": "Truck" },
+            { "value": "clock", "label": "Clock" },
+            { "value": "users", "label": "Users" },
+            { "value": "award", "label": "Award" },
+            { "value": "tool", "label": "Tool" },
+            { "value": "settings", "label": "Settings" },
+            { "value": "lock", "label": "Lock" },
+            { "value": "refresh", "label": "Refresh" },
+            { "value": "gift", "label": "Gift" },
+            { "value": "tag", "label": "Tag" },
+            { "value": "percent", "label": "Percent" },
+            { "value": "life-buoy", "label": "Life buoy" },
+            { "value": "anchor", "label": "Anchor" },
+            { "value": "compass", "label": "Compass" },
+            { "value": "globe", "label": "Globe" },
+            { "value": "coffee", "label": "Coffee" }
+          ]
         }
       ]
     }

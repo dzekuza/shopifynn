@@ -212,6 +212,84 @@
         "padding_bottom": 100
       }
     },
+    "product_compare_section": {
+      "type": "product-compare",
+      "blocks": {
+        "compare_xl_classic": {
+          "type": "product",
+          "settings": {
+            "product": "nordic-elite-xl-classic"
+          }
+        },
+        "compare_l_classic": {
+          "type": "product",
+          "settings": {
+            "product": "nordic-elite-l-classic"
+          }
+        },
+        "compare_m_classic": {
+          "type": "product",
+          "settings": {
+            "product": "nordic-elite-m-classic"
+          }
+        },
+        "compare_xl_premium": {
+          "type": "product",
+          "settings": {
+            "product": "nordic-elite-xl-premium"
+          }
+        },
+        "compare_l_premium": {
+          "type": "product",
+          "settings": {
+            "product": "nordic-elite-l-premium"
+          }
+        },
+        "compare_m_premium": {
+          "type": "product",
+          "settings": {
+            "product": "nordic-elite-m-premium"
+          }
+        },
+        "compare_xl_signature": {
+          "type": "product",
+          "settings": {
+            "product": "nordic-elite-xl-signature"
+          }
+        },
+        "compare_l_signature": {
+          "type": "product",
+          "settings": {
+            "product": "nordic-elite-l-signature"
+          }
+        },
+        "compare_m_signature": {
+          "type": "product",
+          "settings": {
+            "product": "nordic-elite-m-signature"
+          }
+        }
+      },
+      "block_order": [
+        "compare_xl_classic",
+        "compare_l_classic",
+        "compare_m_classic",
+        "compare_xl_premium",
+        "compare_l_premium",
+        "compare_m_premium",
+        "compare_xl_signature",
+        "compare_l_signature",
+        "compare_m_signature"
+      ],
+      "settings": {
+        "heading": "Which bath suits you?",
+        "subheading": "Compare models side by side to easily see the differences in size, features, and functions.",
+        "button_text": "Compare models",
+        "color_scheme": "default",
+        "padding_top": 40,
+        "padding_bottom": 40
+      }
+    },
     "collection_products_zVgBtM": {
       "type": "collection-products",
       "name": "Collection Products",
@@ -241,6 +319,7 @@
     "main-product",
     "image_with_text_CX8UVX",
     "features_zPVyKD",
+    "product_compare_section",
     "collection_products_zVgBtM"
   ]
 }
