@@ -48,7 +48,7 @@ Base products use 3 tiers (Classic/Premium/Signature) with variants encoding siz
 ```
 Primary:    #1E2D3B   (deep fjord navy — headings)
 Secondary:  #5B8A72   (muted aurora green — accents)
-Accent:     #7B6FA0   (soft aurora violet — CTAs)
+Accent:     #4A90A4   (Nordic fjord cyan — CTAs)
 Background: #F5F7F6   (icy mist white)
 Surface:    #E8EDE9   (frost green tint — cards)
 Text:       #1E2D3B
