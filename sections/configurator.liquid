@@ -42,7 +42,7 @@
         {%- assign step_hidden = false -%}
 
         {%- case i -%}
-          {%- when 1 -%}{%- assign s_title = 'Your Hot Tub' -%}{%- assign s_sub = 'Choose model and size.' -%}
+          {%- when 1 -%}{%- assign s_title = 'Choose Your Size' -%}{%- assign s_sub = 'Select the size for your hot tub.' -%}
           {%- when 2 -%}{%- assign s_title = 'Fiberglass Liner' -%}{%- assign s_sub = 'Select collection & color.' -%}
           {%- when 3 -%}{%- assign s_title = 'Hot Tub Insulation' -%}{%- assign s_sub = 'Additional insulation layer.' -%}
           {%- when 4 -%}{%- assign s_title = 'Heating System' -%}{%- assign s_sub = 'External or internal oven.' -%}
@@ -111,66 +111,10 @@
   {%- comment -%} ═══════════ PRODUCT DATA (JSON) ═══════════ {%- endcomment -%}
   <script type="application/json" data-configurator-products>
   {
-    "base": [
-      {%- assign _base_sep = false -%}
-      {%- if section.settings.base_classic_collection != blank -%}
-        {%- assign col = section.settings.base_classic_collection -%}
-        {%- if _base_sep -%},{%- endif -%}
-        {
-          "key": "classic",
-          "title": {{ col.title | json }},
-          "image": {% if col.image %}{{ col.image | image_url: width: 600 | json }}{% elsif col.products.first.featured_image %}{{ col.products.first.featured_image | image_url: width: 600 | json }}{% else %}null{% endif %},
-          "body": {{ col.description | strip_html | truncate: 200 | json }},
-          {%- assign _bp_min = 999999999 -%}{%- for product in col.products -%}{%- if product.price < _bp_min -%}{%- assign _bp_min = product.price -%}{%- endif -%}{%- endfor -%}
-          "price": {{ _bp_min | default: 0 }},
-          "products": [
-            {%- for product in col.products limit: 10 -%}
-              {%- unless forloop.first -%},{%- endunless -%}
-              {% render 'configurator-product-json', product: product %}
-            {%- endfor -%}
-          ]
-        }
-        {%- assign _base_sep = true -%}
-      {%- endif -%}
-      {%- if section.settings.base_premium_collection != blank -%}
-        {%- assign col = section.settings.base_premium_collection -%}
-        {%- if _base_sep -%},{%- endif -%}
-        {
-          "key": "premium",
-          "title": {{ col.title | json }},
-          "image": {% if col.image %}{{ col.image | image_url: width: 600 | json }}{% elsif col.products.first.featured_image %}{{ col.products.first.featured_image | image_url: width: 600 | json }}{% else %}null{% endif %},
-          "body": {{ col.description | strip_html | truncate: 200 | json }},
-          {%- assign _bp_min = 999999999 -%}{%- for product in col.products -%}{%- if product.price < _bp_min -%}{%- assign _bp_min = product.price -%}{%- endif -%}{%- endfor -%}
-          "price": {{ _bp_min | default: 0 }},
-          "products": [
-            {%- for product in col.products limit: 10 -%}
-              {%- unless forloop.first -%},{%- endunless -%}
-              {% render 'configurator-product-json', product: product %}
-            {%- endfor -%}
-          ]
-        }
-        {%- assign _base_sep = true -%}
-      {%- endif -%}
-      {%- if section.settings.base_signature_collection != blank -%}
-        {%- assign col = section.settings.base_signature_collection -%}
-        {%- if _base_sep -%},{%- endif -%}
-        {
-          "key": "signature",
-          "title": {{ col.title | json }},
-          "image": {% if col.image %}{{ col.image | image_url: width: 600 | json }}{% elsif col.products.first.featured_image %}{{ col.products.first.featured_image | image_url: width: 600 | json }}{% else %}null{% endif %},
-          "body": {{ col.description | strip_html | truncate: 200 | json }},
-          {%- assign _bp_min = 999999999 -%}{%- for product in col.products -%}{%- if product.price < _bp_min -%}{%- assign _bp_min = product.price -%}{%- endif -%}{%- endfor -%}
-          "price": {{ _bp_min | default: 0 }},
-          "products": [
-            {%- for product in col.products limit: 10 -%}
-              {%- unless forloop.first -%},{%- endunless -%}
-              {% render 'configurator-product-json', product: product %}
-            {%- endfor -%}
-          ]
-        }
-        {%- assign _base_sep = true -%}
-      {%- endif -%}
-    ],
+    "base": {%- if section.settings.base_product != blank -%}
+      {%- assign product = section.settings.base_product -%}
+      {% render 'configurator-product-json', product: product %}
+    {%- else -%}null{%- endif -%},
 
     {%- comment -%} ── Collections → JSON arrays ── {%- endcomment -%}
 
@@ -315,10 +259,8 @@
 {
   "name": "Hot Tub Configurator",
   "settings": [
-    { "type": "header", "content": "Step 1 — Base Products (Model Tiers)" },
-    { "type": "collection", "id": "base_classic_collection", "label": "Nordic Elite Classic collection" },
-    { "type": "collection", "id": "base_premium_collection", "label": "Nordic Elite Premium collection" },
-    { "type": "collection", "id": "base_signature_collection", "label": "Nordic Elite Signature collection" },
+    { "type": "header", "content": "Step 1 — Base Hot Tub" },
+    { "type": "product", "id": "base_product", "label": "Base hot tub product (variants: XL, L, M)" },
 
     { "type": "header", "content": "Step 2 — Fiberglass Liners" },
     { "type": "collection", "id": "liners_collection", "label": "Liners collection" },

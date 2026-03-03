@@ -3,9 +3,7 @@
     "configurator": {
       "type": "configurator",
       "settings": {
-        "base_classic_collection": "nordic-elite-premium-copy",
-        "base_premium_collection": "nordic-elite-classic",
-        "base_signature_collection": "m-hot-tubs",
+        "base_product": "",
         "liners_collection": "configurator-fiberglass-liners",
         "insulation_product": "hot-tub-insulation",
         "oven_addons_collection": "configurator-oven-add-ons",

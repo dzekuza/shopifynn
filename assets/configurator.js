@@ -2,9 +2,9 @@
  * Nordic Elite Hot Tub Configurator
  * Dynamic 15-step configurator reading from Shopify products/collections.
  *
- * Base products: 3 tier products (Classic / Premium / Signature),
- * each with variants encoding size (XL/L/M) and oven type (external/internal).
- * Step 1 selects tier + size. Step 4 selects oven type → resolves the base variant.
+ * Base product: a single product with variants encoding size (XL/L/M) via option1.
+ * Step 1 selects size. Steps 2-15 configure accessories and add-ons.
+ * Steps 1 (size) and 2 (liner) are required; all others are optional.
  */
 (function () {
   'use strict';
@@ -23,22 +23,24 @@
   }
 
   const STEPS = [
-    { num: 1,  key: 'model_size',  title: 'Your Hot Tub',              subtitle: 'Choose model and size.' },
-    { num: 2,  key: 'liner',       title: 'Fiberglass Liner',           subtitle: 'Select collection & color.' },
-    { num: 3,  key: 'insulation',  title: 'Hot Tub Insulation',         subtitle: 'Extra insulation layer.' },
-    { num: 4,  key: 'oven',        title: 'Heating System',             subtitle: 'External or internal oven.' },
-    { num: 5,  key: 'exterior',    title: 'Exterior Panel',             subtitle: 'Pick your wood finish.' },
-    { num: 6,  key: 'hydro',       title: 'Hydro Massage',              subtitle: 'Select system & nozzles.' },
-    { num: 7,  key: 'air',         title: 'Air System',                 subtitle: 'Select system & nozzles.' },
-    { num: 8,  key: 'filter',      title: 'Filter System',              subtitle: 'Filtration options.' },
-    { num: 9,  key: 'led',         title: 'LED Lighting',               subtitle: 'Choose lamps & quantity.' },
-    { num: 10, key: 'thermometer', title: 'Thermometer',                subtitle: 'Temperature monitoring.' },
-    { num: 11, key: 'stairs',      title: 'Stairs',                     subtitle: 'Matching exterior material.' },
-    { num: 12, key: 'pillows',     title: 'Hot Tub Head Pillows',       subtitle: 'Comfort pillows.' },
-    { num: 13, key: 'cover',       title: 'Cover',                      subtitle: 'Protect your hot tub.' },
-    { num: 14, key: 'controls',    title: 'Control Installation',       subtitle: 'Mark installation locations.' },
-    { num: 15, key: 'heater_conn', title: 'Heater Connection Type',     subtitle: 'Connection angle.' },
+    { num: 1,  key: 'size',         title: 'Choose Your Size',           subtitle: 'Select the size for your hot tub.' },
+    { num: 2,  key: 'liner',        title: 'Fiberglass Liner',           subtitle: 'Select collection & color.' },
+    { num: 3,  key: 'insulation',   title: 'Hot Tub Insulation',         subtitle: 'Extra insulation layer.' },
+    { num: 4,  key: 'oven',         title: 'Heating System',             subtitle: 'External or internal oven.' },
+    { num: 5,  key: 'exterior',     title: 'Exterior Panel',             subtitle: 'Pick your wood finish.' },
+    { num: 6,  key: 'hydro',        title: 'Hydro Massage',              subtitle: 'Select system & nozzles.' },
+    { num: 7,  key: 'air',          title: 'Air System',                 subtitle: 'Select system & nozzles.' },
+    { num: 8,  key: 'filter',       title: 'Filter System',              subtitle: 'Filtration options.' },
+    { num: 9,  key: 'led',          title: 'LED Lighting',               subtitle: 'Choose lamps & quantity.' },
+    { num: 10, key: 'thermometer',  title: 'Thermometer',                subtitle: 'Temperature monitoring.' },
+    { num: 11, key: 'stairs',       title: 'Stairs',                     subtitle: 'Matching exterior material.' },
+    { num: 12, key: 'pillows',      title: 'Hot Tub Head Pillows',       subtitle: 'Comfort pillows.' },
+    { num: 13, key: 'cover',        title: 'Cover',                      subtitle: 'Protect your hot tub.' },
+    { num: 14, key: 'controls',     title: 'Control Installation',       subtitle: 'Mark installation locations.' },
+    { num: 15, key: 'heater_conn',  title: 'Heater Connection Type',     subtitle: 'Connection angle.' },
   ];
+
+  const REQUIRED_STEPS = new Set([1, 2]);
 
   /* ══ Main configurator class ════════════════════════════════════════ */
   class HotTubConfigurator extends HTMLElement {
@@ -57,17 +59,16 @@
       }
       this.data = JSON.parse(dataEl.textContent);
       this.state = {
-        model: null,               // 'classic', 'premium', 'signature'
-        selectedTier: null,        // tier object { key, title, products[] }
-        selectedBaseProduct: null,  // resolved product matching size + oven
-        size: null,                // 'XL', 'L', 'M'
-        ovenType: 'external',      // 'external' or 'internal'
-        baseVariantId: null,       // resolved variant ID
-        basePrice: 0,              // resolved variant price
+        // Step 1 — size only (no tier/model)
+        size: null,
+        baseVariantId: null,
+        basePrice: 0,
 
+        // Steps 2-15
         liner: null,
         linerVariant: null,
         insulation: false,
+        ovenType: 'external',
         glassDoor: false,
         chimney: false,
         exterior: null,
@@ -150,8 +151,6 @@
 
       // Additional hot-path nodes
       this._ovenNote = this.querySelector('[data-oven-note]');
-      this._sizeSection = this.querySelector('[data-size-section]');
-      this._sizeCardsContainer = this.querySelector('[data-size-cards]');
     }
 
     /* ══ 3. STEP RENDERING ══════════════════════════════════════════════ */
@@ -164,7 +163,7 @@
         if (!content) continue;
 
         switch (step.key) {
-          case 'model_size':  this._renderModelSizeStep(content); break;
+          case 'size':  this._renderSizeStep(content); break;
           case 'liner':       this._renderCollectionStep(content, 'liners', 'dropdown-color'); break;
           case 'insulation':  this._renderCheckboxStep(content, 'insulation'); break;
           case 'oven':        this._renderOvenStep(content); break;
@@ -183,33 +182,44 @@
       }
     }
 
-    _renderModelSizeStep(container) {
-      const products = this.data.base || [];
-      let html = '';
+    _renderSizeStep(container) {
+      const baseProduct = this.data.base;
+      if (!baseProduct || !baseProduct.variants) {
+        container.innerHTML = '<p class="cfg-empty">Base product not configured. Assign it in the section settings.</p>';
+        return;
+      }
 
-      // Model tier cards
-      html += '<p class="cfg-label">Choose your model:</p>';
-      html += '<div class="cfg-cards" data-model-cards>';
-      for (const product of products) {
+      const dims = {
+        XL: 'Inside \u2205 200 cm / Outside \u2205 225 cm',
+        L: 'Inside \u2205 180 cm / Outside \u2205 200 cm',
+        M: '100\u00d780 cm / 120\u00d7200 cm',
+      };
+      const persons = { XL: '6\u20138 persons', L: '6\u20138 persons', M: '2 persons' };
+
+      const sizeOrder = ['XL', 'L', 'M'];
+      const sizes = [];
+      for (const v of baseProduct.variants) {
+        const sizeLabel = (v.option1 || '').toUpperCase();
+        if (sizeLabel && sizeOrder.includes(sizeLabel)) {
+          sizes.push({ label: sizeLabel, price: v.price, variantId: v.id });
+        }
+      }
+      sizes.sort((a, b) => sizeOrder.indexOf(a.label) - sizeOrder.indexOf(b.label));
+
+      let html = '<p class="cfg-label">Select your hot tub size:</p>';
+      html += '<div class="cfg-cards" data-size-cards>';
+      for (const s of sizes) {
         html += `
-          <div class="cfg-card cfg-card--model" data-action="select-model" data-model-key="${product.key}" tabindex="0" role="button" aria-pressed="false">
-            ${product.image ? `<img src="${product.image}" alt="${product.title}" class="cfg-card__model-img" loading="lazy">` : ''}
+          <div class="cfg-card cfg-card--size" data-action="select-size" data-size="${s.label}" data-variant-id="${s.variantId}" data-price="${s.price}" tabindex="0" role="button" aria-pressed="false">
             <div class="cfg-card__info">
-              <h4 class="cfg-card__name">${product.title}</h4>
-              ${product.body ? `<p class="cfg-card__desc">${product.body}</p>` : ''}
-              <p class="cfg-card__meta">From ${money(product.price)}</p>
+              <h4 class="cfg-card__name">${s.label}</h4>
+              <p class="cfg-card__desc">${dims[s.label] || ''}</p>
+              <p class="cfg-card__meta">${persons[s.label] || ''}</p>
             </div>
+            <div class="cfg-card__price">From ${money(s.price)}</div>
           </div>`;
       }
       html += '</div>';
-
-      // Size cards (shown after model selected)
-      html += `
-        <div class="cfg-conditional" data-size-section style="display:none;">
-          <p class="cfg-label" style="margin-top:20px;">Choose your size:</p>
-          <div class="cfg-cards" data-size-cards></div>
-        </div>`;
-
       container.innerHTML = DOMPurify.sanitize(html);
     }
 
@@ -411,29 +421,6 @@
       }
     }
 
-    _renderSizeCards(sizes) {
-      const container = this.querySelector('[data-size-cards]');
-      if (!container) return;
-
-      const dims = {
-        XL: 'Inside ∅ 200 cm / Outside ∅ 225 cm',
-        L: 'Inside ∅ 180 cm / Outside ∅ 200 cm',
-        M: '100×80 cm / 120×200 cm',
-      };
-      const persons = { XL: '6–8 persons', L: '6–8 persons', M: '2 persons' };
-
-      container.innerHTML = DOMPurify.sanitize(sizes.map(s => `
-        <div class="cfg-card cfg-card--size" data-action="select-size" data-size="${s.label}" tabindex="0" role="button" aria-pressed="false">
-          <div class="cfg-card__info">
-            <h4 class="cfg-card__name">${s.label}</h4>
-            <p class="cfg-card__desc">${dims[s.label] || ''}</p>
-            <p class="cfg-card__meta">${persons[s.label] || ''}</p>
-          </div>
-          <div class="cfg-card__price">From ${money(s.minPrice)}</div>
-        </div>
-      `).join(''));
-    }
-
     _showVariants(group, product) {
       const area = this.querySelector(`[data-variant-area="${group}"]`);
       if (!area) return;
@@ -500,7 +487,7 @@
           }
         }
       }
-      if (this.state.size && this.ctaBtn) {
+      if (this.state.size && this.state.liner && this.ctaBtn) {
         this.ctaBtn.disabled = false;
         this.ctaBtn.textContent = 'Add to Cart';
         if (this.stickyCta) this.stickyCta.disabled = false;
@@ -529,9 +516,6 @@
 
         const action = target.dataset.action;
         switch (action) {
-          case 'select-model':
-            this._handleModelSelect(target.dataset.modelKey);
-            break;
           case 'select-size':
             this._handleSizeSelect(target.dataset.size);
             break;
@@ -597,6 +581,11 @@
             this._scrollToStep(stepNum);
             break;
           }
+          case 'remove-summary-item': {
+            const stepNum = parseInt(target.dataset.removeStep, 10);
+            this._handleRemoveItem(stepNum);
+            break;
+          }
         }
 
         // Tooltip
@@ -632,60 +621,17 @@
       });
     }
 
-    _handleModelSelect(modelKey) {
-      this.state.model = modelKey;
-      const tier = (this.data.base || []).find(p => p.key === modelKey);
-      if (!tier) return;
-
-      this.state.selectedTier = tier;
-      this.state.selectedBaseProduct = null;
-      this.state.size = null;
-      this.state.baseVariantId = null;
-      this.state.basePrice = 0;
-
-      // Update model cards UI
-      this.querySelectorAll('[data-action="select-model"]').forEach(el => {
-        const selected = el.dataset.modelKey === modelKey;
-        el.classList.toggle('cfg-card--selected', selected);
-        el.setAttribute('aria-pressed', String(selected));
-      });
-
-      // Extract sizes from products in collection
-      const sizes = this._extractSizes(tier.products || []);
-      this._renderSizeCards(sizes);
-
-      // Show size section
-      const sizeSection = this.querySelector('[data-size-section]');
-      if (sizeSection) sizeSection.style.display = 'block';
-
-      // Show tier image
-      if (tier.image) {
-        this._preloadImage(tier.image);
-        this._setMainImage(tier.image);
-      }
-
-      this._updatePrice();
-    }
-
     _handleSizeSelect(size) {
       this.state.size = size;
 
-      // Update size cards UI
       this.querySelectorAll('[data-action="select-size"]').forEach(el => {
         const selected = el.dataset.size === size;
         el.classList.toggle('cfg-card--selected', selected);
         el.setAttribute('aria-pressed', String(selected));
       });
 
-      // Resolve base product with current oven type
       this._resolveBaseProduct();
-
-      // Update oven step availability
-      this._updateOvenAvailability();
-
-      // Unlock all remaining steps once size is chosen (suppress auto-focus
-      // so it doesn't scroll to the last step — we scroll to step 2 instead)
-      this._unlockThrough(STEPS.length, { autoFocus: false });
+      this._unlockThrough(2, { autoFocus: false });
       this._updatePrice();
       this._scrollToStep(2);
     }
@@ -732,6 +678,17 @@
       }
 
       this._updatePrice();
+
+      // After liner (step 2) is selected, unlock all remaining optional steps
+      if (group === 'liners') {
+        this._unlockThrough(STEPS.length, { autoFocus: false });
+        if (this.ctaBtn) {
+          this.ctaBtn.disabled = false;
+          this.ctaBtn.textContent = 'Add to Cart';
+          if (this.stickyCta) this.stickyCta.disabled = false;
+        }
+        this._scrollToStep(3);
+      }
     }
 
     _handleCheckboxToggle(target) {
@@ -761,9 +718,6 @@
       this.querySelectorAll('[data-action="oven-type"]').forEach(btn => {
         btn.classList.toggle('cfg-toggle-btn--active', btn.dataset.value === type);
       });
-
-      // Resolve base product with new oven type
-      this._resolveBaseProduct();
 
       // Show/hide heater connection step (only for external)
       const step15 = this.querySelector('[data-step="15"]');
@@ -834,6 +788,64 @@
       this._updatePrice();
     }
 
+    _handleRemoveItem(stepNum) {
+      const resetMap = {
+        3:  () => { this.state.insulation = false; this._uncheckStep(3); },
+        4:  () => {
+          this.state.ovenType = 'external';
+          this.state.glassDoor = false;
+          this.state.chimney = false;
+          this._uncheckStep(4);
+          // Reset oven type toggle UI
+          this.querySelectorAll('[data-action="oven-type"]').forEach(btn => {
+            btn.classList.toggle('cfg-toggle-btn--active', btn.dataset.value === 'external');
+          });
+        },
+        5:  () => { this.state.exterior = null; this.state.exteriorVariant = null; this._unselectProducts(5, 'exteriors'); },
+        6:  () => { this.state.hydro = null; this.state.hydroNozzles = 8; this._unselectProducts(6, 'hydro'); },
+        7:  () => { this.state.air = null; this.state.airNozzles = 12; this._unselectProducts(7, 'air'); },
+        8:  () => { this.state.filterEnabled = false; this.state.filterProduct = null; this._uncheckStep(8); },
+        9:  () => { this.state.led = null; this.state.ledQty = 1; this._unselectProducts(9, 'leds'); },
+        10: () => { this.state.thermometer = null; this._unselectProducts(10, 'thermometers'); },
+        11: () => { this.state.stairs = false; this._uncheckStep(11); },
+        12: () => { this.state.pillows = false; this.state.pillowQty = 2; this._uncheckStep(12); },
+        13: () => { this.state.cover = null; this.state.coverVariant = null; this._unselectProducts(13, 'covers'); },
+        15: () => {
+          this.state.heaterConnection = 'straight';
+          this.querySelectorAll('[data-action="heater-conn"]').forEach(card => {
+            card.classList.toggle('cfg-card--selected', card.dataset.value === 'straight');
+          });
+        },
+      };
+
+      const reset = resetMap[stepNum];
+      if (reset) {
+        reset();
+        this._updatePrice();
+      }
+    }
+
+    _uncheckStep(stepNum) {
+      const stepEl = this._stepEls[stepNum];
+      if (!stepEl) return;
+      stepEl.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+        cb.checked = false;
+        cb.closest('.cfg-checkbox-card')?.classList.remove('cfg-checkbox-card--checked');
+      });
+      stepEl.querySelectorAll('.cfg-conditional').forEach(panel => { panel.style.display = 'none'; });
+    }
+
+    _unselectProducts(stepNum, dataKey) {
+      const stepEl = this._stepEls[stepNum];
+      if (!stepEl) return;
+      stepEl.querySelectorAll('input[type="radio"]').forEach(r => { r.checked = false; });
+      stepEl.querySelectorAll('.cfg-radio-card--selected').forEach(c => { c.classList.remove('cfg-radio-card--selected'); });
+      const variantArea = stepEl.querySelector(`[data-variant-area="${dataKey}"]`);
+      if (variantArea) variantArea.style.display = 'none';
+      const qtyArea = stepEl.querySelector(`[data-qty-area="${dataKey}"]`);
+      if (qtyArea) qtyArea.style.display = 'none';
+    }
+
     _selectVariant(group, variantId, price) {
       const variantMap = {
         'liners': 'linerVariant',
@@ -848,110 +860,23 @@
 
     /* ══ 5. PRODUCT RESOLUTION ══════════════════════════════════════════ */
 
-    _extractSizes(products) {
-      const sizeMap = new Map();
-      const sizeOrder = ['XL', 'L', 'M'];
-
-      for (const p of products) {
-        const size = (p.meta?.size || '').toUpperCase();
-        if (!size) {
-          console.warn('[Configurator] Product missing meta.size — skipping:', p.title);
-          continue;
-        }
-
-        if (!sizeMap.has(size)) {
-          sizeMap.set(size, { key: size.toLowerCase(), label: size, minPrice: p.price, products: [] });
-        }
-        const entry = sizeMap.get(size);
-        entry.products.push(p);
-        if (p.price < entry.minPrice) entry.minPrice = p.price;
-      }
-
-      if (sizeMap.size === 0) {
-        this._renderProductError('No sizes available for this model. Please check product metafield configuration.');
-      }
-
-      return sizeOrder.filter(s => sizeMap.has(s)).map(s => sizeMap.get(s));
-    }
-
     _resolveBaseProduct() {
-      const tier = this.state.selectedTier;
-      if (!tier || !this.state.size) return;
+      const baseProduct = this.data.base;
+      if (!baseProduct || !this.state.size) return;
 
-      const products = tier.products || [];
       const size = this.state.size.toUpperCase();
-      const wantInternal = this.state.ovenType === 'internal';
+      const variant = baseProduct.variants?.find(v => (v.option1 || '').toUpperCase() === size);
 
-      // Filter to products matching size via metafield — no regex
-      const sizeProducts = products.filter(p => (p.meta?.size || '').toUpperCase() === size);
-      if (sizeProducts.length === 0) {
-        console.warn('[Configurator] No products found for size:', size, '— check configurator.size metafields');
-        this.state.selectedBaseProduct = null;
-        this.state.baseVariantId = null;
-        this.state.basePrice = 0;
-        return;
-      }
-
-      // Find product matching oven type via metafield
-      let product = sizeProducts.find(p => {
-        const ovenType = (p.meta?.oven_type || '').toLowerCase();
-        return wantInternal ? ovenType === 'internal' : ovenType === 'external';
-      });
-
-      // Fallback: if internal not found, use external
-      if (!product && wantInternal) {
-        product = sizeProducts.find(p => (p.meta?.oven_type || '').toLowerCase() === 'external');
-        if (product) {
-          this.state.ovenType = 'external';
-          this.querySelectorAll('[data-action="oven-type"]').forEach(btn => {
-            btn.classList.toggle('cfg-toggle-btn--active', btn.dataset.value === 'external');
-          });
+      if (variant) {
+        this.state.baseVariantId = variant.id;
+        this.state.basePrice = variant.price;
+        if (baseProduct.image) {
+          this._preloadImage(baseProduct.image);
+          this._setMainImage(baseProduct.image);
         }
-      }
-
-      if (product) {
-        this.state.selectedBaseProduct = product;
-        this.state.baseVariantId = product.variants?.[0]?.id || null;
-        this.state.basePrice = product.variants?.[0]?.price || product.price || 0;
-        if (product.image) this._preloadImage(product.image);
-        if (product.image) this._setMainImage(product.image);
       } else {
-        this.state.selectedBaseProduct = null;
         this.state.baseVariantId = null;
         this.state.basePrice = 0;
-      }
-    }
-
-    _updateOvenAvailability() {
-      const tier = this.state.selectedTier;
-      if (!tier || !this.state.size) return;
-
-      const products = tier.products || [];
-      const size = this.state.size.toUpperCase();
-
-      // Check if an internal oven product exists for this size via metafield — no regex
-      const hasInternal = products.some(p =>
-        (p.meta?.size || '').toUpperCase() === size && (p.meta?.oven_type || '').toLowerCase() === 'internal'
-      );
-
-      const internalBtn = this.querySelector('[data-action="oven-type"][data-value="internal"]');
-      if (internalBtn) {
-        internalBtn.disabled = !hasInternal;
-        internalBtn.style.opacity = hasInternal ? '' : '0.4';
-
-        if (!hasInternal && this.state.ovenType === 'internal') {
-          this.state.ovenType = 'external';
-          internalBtn.classList.remove('cfg-toggle-btn--active');
-          this.querySelector('[data-action="oven-type"][data-value="external"]')?.classList.add('cfg-toggle-btn--active');
-          this._resolveBaseProduct();
-        }
-      }
-
-      const note = this.querySelector('[data-oven-note]');
-      if (note) {
-        note.textContent = !hasInternal && size
-          ? 'Internal oven is not available for size ' + size + '.'
-          : '';
       }
     }
 
@@ -960,7 +885,7 @@
     _calculateLineItems() {
       const items = [];
 
-      // 1. Base product (resolved variant — includes model + size + oven)
+      // 1. Base product (resolved by size)
       if (this.state.baseVariantId) {
         items.push({
           variantId: this.state.baseVariantId,
@@ -1207,15 +1132,16 @@
       const groups = [];
 
       // Base Model group (stepNum 1)
-      if (this.state.model && this.state.size) {
-        const tierTitle = this.state.selectedTier?.title || this.state.model;
+      if (this.state.size) {
+        const baseProduct = this.data.base;
         const ovenLabel = this.state.ovenType === 'internal' ? 'Internal Oven' : 'External Oven';
         groups.push({
-          heading: 'Base Model',
+          heading: 'Base Hot Tub',
           stepNum: 1,
+          removable: false,
           items: [{
-            label: `${tierTitle}, Size ${this.state.size}, ${ovenLabel}`,
-            image: this.state.selectedBaseProduct?.image || null,
+            label: `Size ${this.state.size}, ${ovenLabel}`,
+            image: baseProduct?.image || null,
             price: this.state.basePrice || 0,
             qty: null,
           }],
@@ -1250,7 +1176,7 @@
           qty: null,
         });
       }
-      if (heatingItems.length > 0) groups.push({ heading: 'Heating', stepNum: 4, items: heatingItems });
+      if (heatingItems.length > 0) groups.push({ heading: 'Heating', stepNum: 4, removable: true, items: heatingItems });
 
       // Wellness group — hydro (stepNum 6), air (stepNum 7)
       const wellnessItems = [];
@@ -1270,7 +1196,7 @@
           qty: null,
         });
       }
-      if (wellnessItems.length > 0) groups.push({ heading: 'Wellness Features', stepNum: 6, items: wellnessItems });
+      if (wellnessItems.length > 0) groups.push({ heading: 'Wellness Features', stepNum: 6, removable: true, items: wellnessItems });
 
       // Accessories group — multiple steps; stepNum points to liner step (2) as entry point
       const accItems = [];
@@ -1281,6 +1207,7 @@
           price: this._getSelectedVariantPrice('liners', 'liner', 'linerVariant'),
           qty: null,
           stepNum: 2,
+          removable: false,
         });
       }
       if (this.state.insulation) {
@@ -1290,6 +1217,7 @@
           price: this._getProductPrice('insulations'),
           qty: null,
           stepNum: 3,
+          removable: true,
         });
       }
       if (this.state.exterior) {
@@ -1299,6 +1227,7 @@
           price: this._getSelectedVariantPrice('exteriors', 'exterior', 'exteriorVariant'),
           qty: null,
           stepNum: 5,
+          removable: true,
         });
       }
       if (this.state.filterEnabled && this.state.filterProduct) {
@@ -1308,6 +1237,7 @@
           price: this._getSelectedProductPrice('filters', 'filterProduct'),
           qty: null,
           stepNum: 8,
+          removable: true,
         });
       }
       if (this.state.led) {
@@ -1317,6 +1247,7 @@
           price: this._getSelectedProductPrice('leds', 'led'),
           qty: this.state.ledQty || 1,
           stepNum: 9,
+          removable: true,
         });
       }
       if (this.state.thermometer) {
@@ -1326,6 +1257,7 @@
           price: this._getSelectedProductPrice('thermometers', 'thermometer'),
           qty: null,
           stepNum: 10,
+          removable: true,
         });
       }
       if (this.state.stairs) {
@@ -1335,6 +1267,7 @@
           price: this._getProductPrice('stairs'),
           qty: null,
           stepNum: 11,
+          removable: true,
         });
       }
       if (this.state.pillows) {
@@ -1344,6 +1277,7 @@
           price: this._getProductPrice('pillows'),
           qty: this.state.pillowQty || 2,
           stepNum: 12,
+          removable: true,
         });
       }
       if (this.state.cover) {
@@ -1353,6 +1287,7 @@
           price: this._getSelectedVariantPrice('covers', 'cover', 'coverVariant'),
           qty: null,
           stepNum: 13,
+          removable: true,
         });
       }
       if (accItems.length > 0) {
@@ -1429,6 +1364,20 @@
             infoEl.appendChild(priceEl);
 
             itemEl.appendChild(infoEl);
+
+            const itemStepNum = item.stepNum || group.stepNum;
+            const itemRemovable = item.removable !== undefined ? item.removable : group.removable;
+            if (itemRemovable) {
+              const removeBtn = document.createElement('button');
+              removeBtn.type = 'button';
+              removeBtn.className = 'cfg-summary__remove';
+              removeBtn.textContent = '\u00d7';
+              removeBtn.dataset.action = 'remove-summary-item';
+              removeBtn.dataset.removeStep = String(itemStepNum);
+              removeBtn.setAttribute('aria-label', 'Remove ' + item.label);
+              itemEl.appendChild(removeBtn);
+            }
+
             groupEl.appendChild(itemEl);
           }
 
@@ -1463,12 +1412,11 @@
 
       const lines = [];
 
-      // Base Model group (always present if model + size selected)
-      if (this.state.model && this.state.size) {
-        const tierTitle = trunc(this.state.selectedTier?.title || this.state.model);
+      // Base Model group (always present if size selected)
+      if (this.state.size) {
         const ovenLabel = this.state.ovenType === 'internal' ? 'Int.' : 'Ext.';
         lines.push('Base');
-        lines.push(`  ${tierTitle}, Sz ${this.state.size}, ${ovenLabel}`);
+        lines.push(`  Sz ${this.state.size}, ${ovenLabel}`);
       }
 
       // Heating group — only oven addons (glass door, chimney) since oven is part of base
@@ -1512,7 +1460,7 @@
       if (byteLength > 200) {
         // Fallback: compact single-line summary
         const fallbackParts = [];
-        if (this.state.model && this.state.size) fallbackParts.push(`${trunc(this.state.selectedTier?.title || '', 12)} ${this.state.size}`);
+        if (this.state.size) fallbackParts.push(`Sz ${this.state.size}`);
         if (this.state.ovenType) fallbackParts.push(this.state.ovenType === 'internal' ? 'Int' : 'Ext');
         if (this.state.liner) fallbackParts.push(trunc(this._getProductTitle('liners', this.state.liner), 12));
         if (this.state.exterior) fallbackParts.push(trunc(this._getProductTitle('exteriors', this.state.exterior), 12));
@@ -1541,23 +1489,19 @@
 
     /**
      * Validates that all required steps have a selection.
-     * REQUIRED: model_size (step 1), liner (step 2), oven/heating (step 4), exterior (step 5)
-     * OPTIONAL: insulation, hydro, air, filter, led, thermometer, stairs, pillows, cover, controls, heater_conn
+     * REQUIRED: size (step 1), liner (step 2)
+     * OPTIONAL: all other steps (3-15)
      * Returns { valid: boolean, missingStep: string | null }
      */
     _validateRequiredSteps() {
-      if (!this.state.model || !this.state.size) {
-        return { valid: false, missingStep: 'model_size' };
+      if (!this.state.size) {
+        return { valid: false, missingStep: 'size' };
       }
       if (!this.state.liner) {
         return { valid: false, missingStep: 'liner' };
       }
-      // oven step: baseVariantId resolves after model + size + ovenType are set
       if (!this.state.baseVariantId) {
-        return { valid: false, missingStep: 'oven' };
-      }
-      if (!this.state.exterior) {
-        return { valid: false, missingStep: 'exterior' };
+        return { valid: false, missingStep: 'size' };
       }
       return { valid: true, missingStep: null };
     }

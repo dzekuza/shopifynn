@@ -5747,3 +5747,294 @@ ul, ol {
 .product-compare.section--dark .product-compare__specs td {
   border-bottom-color: rgba(255, 255, 255, 0.12);
 }
+
+/* ============================================
+   COLLECTION TABS
+   ============================================ */
+
+.collection-tabs__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.collection-tabs__header-left {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.collection-tabs__heading {
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+  color: var(--ct-heading-color, var(--color-text));
+}
+
+.collection-tabs__subheading {
+  color: var(--ct-heading-color, var(--color-text-muted));
+  margin-bottom: 32px;
+}
+
+.collection-tabs__tabs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.collection-tabs__tab {
+  padding: 8px 20px;
+  border-radius: 50px;
+  border: 1px solid var(--ct-tab-border, var(--color-text-muted));
+  background: transparent;
+  color: var(--ct-tab-text, var(--color-text));
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  white-space: nowrap;
+}
+
+.collection-tabs__tab:hover {
+  border-color: var(--ct-tab-hover-border, var(--color-primary));
+  color: var(--ct-tab-hover-border, var(--color-primary));
+}
+
+.collection-tabs__tab--active {
+  background: var(--ct-tab-active-bg, var(--color-primary));
+  border-color: var(--ct-tab-active-bg, var(--color-primary));
+  color: var(--ct-tab-active-text, #fff);
+}
+
+.collection-tabs__tab--active:hover {
+  background: var(--ct-tab-active-bg, var(--color-primary));
+  border-color: var(--ct-tab-active-bg, var(--color-primary));
+  color: var(--ct-tab-active-text, #fff);
+}
+
+.collection-tabs__shop-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.collection-tabs__shop-all.button--outline {
+  color: var(--ct-shopall-text, var(--color-button-outline-text, var(--color-primary)));
+  border-color: var(--ct-shopall-border, var(--color-button-outline-border, var(--color-primary)));
+}
+
+.collection-tabs__shop-all.button--outline:hover {
+  background-color: var(--ct-shopall-text, var(--color-button-outline-bg-hover, var(--color-primary)));
+  border-color: var(--ct-shopall-text, var(--color-button-outline-border-hover, var(--color-primary)));
+  color: #fff;
+}
+
+/* Panels */
+.collection-tabs__panel {
+  display: none;
+}
+
+.collection-tabs__panel--active {
+  display: block;
+}
+
+/* Carousel */
+.collection-tabs__carousel-wrap {
+  position: relative;
+  overflow: hidden;
+  padding: 8px 0;
+}
+
+.collection-tabs__carousel {
+  display: flex;
+  gap: 24px;
+  transition: transform 0.4s ease;
+}
+
+.collection-tabs__slide {
+  flex: 0 0 calc(25% - 18px);
+  min-width: 0;
+}
+
+.collection-tabs__arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: #fff;
+  color: var(--color-primary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  z-index: 2;
+}
+
+.collection-tabs__arrow--prev {
+  left: 8px;
+}
+
+.collection-tabs__arrow--next {
+  right: 8px;
+}
+
+.collection-tabs__arrow:hover:not(:disabled) {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #fff;
+}
+
+.collection-tabs__arrow:disabled {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.collection-tabs__empty {
+  text-align: center;
+  color: var(--color-text-muted);
+  padding: 40px 0;
+}
+
+/* Dark variant */
+.section--dark .collection-tabs__heading {
+  color: var(--ct-heading-color, #fff);
+}
+
+.section--dark .collection-tabs__subheading {
+  color: var(--ct-heading-color, rgba(255, 255, 255, 0.7));
+}
+
+.section--dark .collection-tabs__tab {
+  border-color: var(--ct-tab-border, rgba(255, 255, 255, 0.3));
+  color: var(--ct-tab-text, rgba(255, 255, 255, 0.8));
+}
+
+.section--dark .collection-tabs__tab:hover {
+  border-color: var(--ct-tab-hover-border, #fff);
+  color: var(--ct-tab-hover-border, #fff);
+}
+
+.section--dark .collection-tabs__tab--active {
+  background: var(--ct-tab-active-bg, #fff);
+  border-color: var(--ct-tab-active-bg, #fff);
+  color: var(--ct-tab-active-text, var(--color-primary));
+}
+
+.section--dark .collection-tabs__shop-all.button--outline {
+  color: var(--ct-shopall-text, #fff);
+  border-color: var(--ct-shopall-border, rgba(255, 255, 255, 0.4));
+}
+
+.section--dark .collection-tabs__shop-all.button--outline:hover {
+  background-color: var(--ct-shopall-text, #fff);
+  border-color: var(--ct-shopall-text, #fff);
+  color: var(--color-primary);
+}
+
+.section--dark .collection-tabs__arrow {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+.section--dark .collection-tabs__arrow:hover:not(:disabled) {
+  background: #fff;
+  color: var(--color-primary);
+}
+
+/* Mobile */
+@media (max-width: 749px) {
+  .collection-tabs__header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .collection-tabs__header-left {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .collection-tabs__tabs {
+    gap: 6px;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    width: 100%;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 4px;
+  }
+
+  .collection-tabs__tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .collection-tabs__tab {
+    font-size: 13px;
+    padding: 6px 16px;
+  }
+
+  .collection-tabs__shop-all {
+    align-self: flex-end;
+  }
+
+  .collection-tabs__arrow {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   CONFIGURATOR SUMMARY
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── Configurator: Summary item layout ── */
+.cfg-summary__item {
+  display: flex;
+  align-items: center;
+}
+
+.cfg-summary__item-info {
+  flex: 1;
+  min-width: 0;
+}
+
+/* ── Configurator: Remove button in summary ── */
+.cfg-summary__remove {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--color-text-muted, #7A8B8A);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--color-text-muted, #7A8B8A);
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  flex-shrink: 0;
+  margin-left: 8px;
+  transition: border-color 0.2s, color 0.2s, background-color 0.2s;
+}
+.cfg-summary__remove:hover {
+  border-color: var(--color-accent, #4A90A4);
+  color: var(--color-accent, #4A90A4);
+  background: rgba(74, 144, 164, 0.08);
+}
