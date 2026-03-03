@@ -20,6 +20,8 @@
                     {{ block.settings.image | image_url: width: 1000 }} 1000w
                   "
                   sizes="(max-width: 768px) 100vw, {{ section.settings.content_width }}px"
+                  width="{{ block.settings.image.width }}"
+                  height="{{ block.settings.image.height }}"
                   alt="{{ block.settings.image_alt | escape | default: 'Section image' }}"
                   loading="lazy"
                   class="rich-text__image"

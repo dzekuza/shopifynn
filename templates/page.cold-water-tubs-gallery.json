@@ -1,8 +1,19 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "gallery-hero": {
       "type": "hero",
       "settings": {
+        "video_url": "",
+        "video_fit": "cover",
         "overlay_opacity": 40,
         "subtitle": "Gallery",
         "heading": "Cold-Water Tubs",
@@ -11,10 +22,15 @@
         "button_url": "shopify://collections",
         "button_style": "primary",
         "button_2_text": "",
+        "button_2_url": "",
         "button_2_style": "outline",
         "heading_size": "large",
+        "heading_size_mobile": "medium",
         "text_size": "medium",
         "text_alignment": "center",
+        "vertical_alignment": "middle",
+        "height": 100,
+        "mobile_height": 100,
         "content_width": 800,
         "padding_top": 0,
         "padding_bottom": 0
@@ -26,47 +42,66 @@
         "img-1": {
           "type": "image",
           "settings": {
+            "video_fit": "cover",
             "alt": "Cold plunge tub by a Nordic lake",
+            "caption": "",
             "size": "large"
           }
         },
         "img-2": {
           "type": "image",
           "settings": {
+            "video_fit": "cover",
             "alt": "Cold-water tub in a modern garden",
-            "size": "small"
+            "caption": "",
+            "size": "tall"
           }
         },
         "img-3": {
           "type": "image",
           "settings": {
+            "video_fit": "cover",
             "alt": "Ice bath tub close-up detail",
+            "caption": "",
             "size": "small"
           }
         },
         "img-4": {
           "type": "image",
           "settings": {
+            "video_fit": "cover",
             "alt": "Cold plunge after sauna session",
+            "caption": "",
             "size": "small"
           }
         },
         "img-5": {
           "type": "image",
           "settings": {
+            "video_fit": "cover",
             "alt": "Thermowood cold tub on a deck",
-            "size": "small"
+            "caption": "",
+            "size": "tall"
           }
         },
         "img-6": {
           "type": "image",
           "settings": {
+            "video_fit": "cover",
             "alt": "Cold-water tub in a winter landscape",
+            "caption": "",
             "size": "large"
           }
         }
       },
-      "block_order": ["img-1", "img-2", "img-3", "img-4", "img-5", "img-6"],
+      "block_order": [
+        "img-1",
+        "img-2",
+        "img-3",
+        "img-4",
+        "img-5",
+        "img-6"
+      ],
       "settings": {
         "heading": "The Art of Cold Immersion",
         "subheading": "Cold-water bathing has been a cornerstone of Nordic wellness for centuries. Our tubs bring that tradition to your home.",
@@ -85,33 +120,47 @@
         "ben-1": {
           "type": "column",
           "settings": {
+            "video_fit": "cover",
             "heading": "Faster Recovery",
             "text": "<p>Cold immersion reduces inflammation and accelerates muscle recovery after exercise.</p>",
+            "link_text": "",
+            "link_url": "",
             "text_alignment": "center"
           }
         },
         "ben-2": {
           "type": "column",
           "settings": {
+            "video_fit": "cover",
             "heading": "Mental Clarity",
             "text": "<p>Regular cold exposure boosts alertness, mood, and resilience to stress.</p>",
+            "link_text": "",
+            "link_url": "",
             "text_alignment": "center"
           }
         },
         "ben-3": {
           "type": "column",
           "settings": {
+            "video_fit": "cover",
             "heading": "Contrast Bathing",
             "text": "<p>Pair with a hot tub or sauna for the full Nordic contrast therapy experience.</p>",
+            "link_text": "",
+            "link_url": "",
             "text_alignment": "center"
           }
         }
       },
-      "block_order": ["ben-1", "ben-2", "ben-3"],
+      "block_order": [
+        "ben-1",
+        "ben-2",
+        "ben-3"
+      ],
       "settings": {
         "heading": "Benefits of Cold-Water Bathing",
         "subheading": "",
         "heading_size": "medium",
+        "heading_size_mobile": "medium",
         "text_size": "medium",
         "text_alignment": "center",
         "columns": "3",
@@ -129,7 +178,8 @@
           "type": "heading",
           "settings": {
             "heading": "Embrace the Cold",
-            "heading_size": "large"
+            "heading_size": "large",
+            "heading_size_mobile": "medium"
           }
         },
         "cta-text": {
@@ -148,7 +198,11 @@
           }
         }
       },
-      "block_order": ["cta-heading", "cta-text", "cta-button"],
+      "block_order": [
+        "cta-heading",
+        "cta-text",
+        "cta-button"
+      ],
       "settings": {
         "text_alignment": "center",
         "content_width": 700,

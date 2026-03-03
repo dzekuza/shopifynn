@@ -16,6 +16,9 @@
     "color_surface": "#E8EDE9",
     "color_text": "#1E2D3B",
     "color_text_muted": "#7A8B8A",
+    "color_button_outline_text": "#ffffff",
+    "color_button_outline_bg": "#1e2d3b",
+    "color_button_outline_bg_hover": "#111921",
     "font_heading": "plus_jakarta_sans_n7",
     "font_body": "plus_jakarta_sans_n4",
     "font_size_h1_mobile": 22,
@@ -23,13 +26,18 @@
     "logo": "shopify://shop_images/newdarkk.png",
     "logo_width": 140,
     "logo_text": "AUROWE",
-    "card_image_border_radius": "8px",
+    "card_image_border_radius": "12px",
     "sections": {
       "header": {
         "type": "header",
         "settings": {
           "menu": "main-menu",
           "sticky_header": true,
+          "transparent_header": false,
+          "bg_color": "#f5f7f6",
+          "text_color": "#1e2d3b",
+          "sticky_bg_color": "#f5f7f6",
+          "sticky_text_color": "#1e2d3b",
           "mega_menu_trigger": "Products",
           "quiz_text": "Help me choose",
           "quiz_url": "",
@@ -69,7 +77,7 @@
         ],
         "settings": {
           "about_text": "Premium Nordic hot and cold tubs, handcrafted with care and built to last a lifetime.",
-          "color_scheme": "surface",
+          "color_scheme": "default",
           "padding_top": 48,
           "padding_bottom": 32
         }

@@ -17,6 +17,8 @@
           <div class="video-section__cover" data-video-cover>
             <img
               src="{{ section.settings.cover_image | image_url: width: 1200 }}"
+              width="{{ section.settings.cover_image.width }}"
+              height="{{ section.settings.cover_image.height }}"
               alt="{{ section.settings.heading | escape | default: 'Video cover' }}"
               loading="lazy"
               class="video-section__cover-image"
@@ -40,6 +42,8 @@
           <div class="video-section__cover" data-video-cover>
             <img
               src="{{ section.settings.cover_image | image_url: width: 1200 }}"
+              width="{{ section.settings.cover_image.width }}"
+              height="{{ section.settings.cover_image.height }}"
               alt="{{ section.settings.heading | escape | default: 'Video cover' }}"
               loading="lazy"
               class="video-section__cover-image"

@@ -21,7 +21,7 @@
         "heading": "Nordic Warmth, Crafted for You",
         "text": "Premium hot and cold tubs designed with Nordic precision and built to last a lifetime.",
         "button_text": "Explore Collection",
-        "button_url": "shopify://collections",
+        "button_url": "shopify://collections/hot-tubs",
         "button_style": "primary",
         "button_2_text": "Help me choose",
         "button_2_url": "",
@@ -30,7 +30,7 @@
         "heading_size_mobile": "medium",
         "text_size": "medium",
         "text_alignment": "center",
-        "vertical_alignment": "middle",
+        "vertical_alignment": "top",
         "height": 100,
         "mobile_height": 100,
         "content_width": 1200,
@@ -108,8 +108,8 @@
             "quote": "The best investment we've made for our home. The craftsmanship is simply outstanding and the whole family enjoys it year-round.",
             "name": "Anna S.",
             "location": "Stockholm, Sweden",
-            "avatar": "shopify://shop_images/67efa600cbff0c09012ce189_Camilla-Akerberg-x-Icetubs.avif",
-            "image": "shopify://shop_images/67efa600cbff0c09012ce189_Camilla-Akerberg-x-Icetubs.avif",
+            "avatar": "shopify://shop_images/NE-M-SIGNATURE-Cedar-9-16.png",
+            "image": "shopify://shop_images/NE-M-SIGNATURE-Cedar-9-16.png",
             "rating": 5,
             "text_alignment": "left"
           }
@@ -121,7 +121,7 @@
             "name": "Marc D.",
             "location": "Munich, Germany",
             "avatar": "shopify://shop_images/67efa600cbff0c09012ce189_Camilla-Akerberg-x-Icetubs.avif",
-            "image": "shopify://shop_images/67efa600cbff0c09012ce189_Camilla-Akerberg-x-Icetubs.avif",
+            "image": "shopify://shop_images/Professional_Hot_Tub_Product_Image_3.png",
             "rating": 5,
             "text_alignment": "left"
           }
@@ -133,7 +133,7 @@
             "name": "Elise R.",
             "location": "Oslo, Norway",
             "avatar": "shopify://shop_images/67efa600cbff0c09012ce189_Camilla-Akerberg-x-Icetubs.avif",
-            "image": "shopify://shop_images/67efa600cbff0c09012ce189_Camilla-Akerberg-x-Icetubs.avif",
+            "image": "shopify://shop_images/WhatsApp_Image_2026-01-23_at_18.14.52.jpg",
             "rating": 5,
             "text_alignment": "left"
           }
@@ -240,65 +240,58 @@
         "padding_bottom": 100
       }
     },
-    "features_kFbxwK": {
-      "type": "features",
+    "image_tabs_ecUkMH": {
+      "type": "image-tabs",
       "blocks": {
-        "feature_UXKqcV": {
-          "type": "feature",
+        "tab_i3m49w": {
+          "type": "tab",
           "settings": {
-            "icon": "craft",
-            "heading": "Handcrafted in Scandinavia",
-            "text": "Each tub is meticulously built by skilled Nordic artisans using time-honored techniques.",
-            "text_alignment": "center"
+            "heading": "Electric ice bath",
+            "content": "<p>Experience the ultimate in cold therapy with our electric ice bath, featuring precise temperature control and rapid cooling technology.</p>",
+            "image": "shopify://shop_images/NE-M-SIGNATURE-Cedar-9-16.png"
           }
         },
-        "feature_C4ekcx": {
-          "type": "feature",
+        "tab_LzAWeW": {
+          "type": "tab",
           "settings": {
-            "icon": "leaf",
-            "heading": "Sustainable Materials",
-            "text": "Responsibly sourced thermowood and eco-friendly finishes that stand the test of time.",
-            "text_alignment": "center"
+            "heading": "Self cooling ice bath",
+            "content": "<p>Say goodbye to the hassle of ice packs. Our innovative cooling engine maintains cold water temperatures without the need for additional ice.</p>",
+            "image": "shopify://shop_images/67efa600cbff0c09012ce189_Camilla-Akerberg-x-Icetubs.avif"
           }
         },
-        "feature_RCRYmF": {
-          "type": "feature",
+        "tab_EGYnXJ": {
+          "type": "tab",
           "settings": {
-            "icon": "shield",
-            "heading": "Up to 10-Year Warranty",
-            "text": "We stand behind every tub with industry-leading warranty coverage.",
-            "text_alignment": "center"
+            "heading": "Stainless steel ice bath",
+            "content": "<p>Built to last with premium stainless steel construction, offering superior durability and a sleek, modern aesthetic.</p>",
+            "image": "shopify://shop_images/NE-M-SIGNATURE-Cedar-AUROWE.png"
           }
         },
-        "feature_EMX4gR": {
-          "type": "feature",
+        "tab_L8EYiP": {
+          "type": "tab",
           "settings": {
-            "icon": "palette",
-            "heading": "Fully Customizable",
-            "text": "Choose your size, wood finish, liner color, and equipment to match your vision.",
-            "text_alignment": "center"
+            "heading": "Self cleaning ice bath",
+            "content": "<p>Our self-cleaning system keeps your ice bath fresh and hygienic with minimal maintenance required.</p>",
+            "image": "shopify://shop_images/NE-M-SIGNATURE-Cedar-9-16.png"
           }
         }
       },
       "block_order": [
-        "feature_UXKqcV",
-        "feature_C4ekcx",
-        "feature_RCRYmF",
-        "feature_EMX4gR"
+        "tab_i3m49w",
+        "tab_LzAWeW",
+        "tab_EGYnXJ",
+        "tab_L8EYiP"
       ],
-      "name": "Features",
+      "name": "Image Tabs",
       "settings": {
-        "heading": "The benefits of Icetubs",
-        "subheading": "Cold therapy isn’t just about physical recovery, it’s a holistic approach to improving your overall wellbeing.",
-        "heading_size": "medium",
+        "heading": "The ideal ice bath for your home",
+        "subheading": "We offer a variety of models, designed to meet everyone's needs",
+        "heading_size": "large",
         "heading_size_mobile": "medium",
-        "text_size": "small",
-        "text_alignment": "center",
-        "columns": "4",
-        "grid_gap": 16,
+        "layout": "image_left",
         "color_scheme": "surface",
-        "padding_top": 100,
-        "padding_bottom": 100
+        "padding_top": 64,
+        "padding_bottom": 64
       }
     },
     "collection-products": {
@@ -308,11 +301,11 @@
         "product_limit": 4,
         "heading": "Featured Products",
         "subheading": "Explore our handcrafted selection of Nordic hot and cold tubs.",
-        "heading_size": "medium",
-        "heading_size_mobile": "medium",
+        "heading_size": "large",
+        "heading_size_mobile": "small",
         "text_size": "small",
         "layout": "carousel",
-        "columns": "4",
+        "columns": "3",
         "mobile_columns": "2",
         "grid_gap": 12,
         "text_alignment": "center",
@@ -427,7 +420,7 @@
         "heading_size_mobile": "medium",
         "text_size": "small",
         "text_alignment": "center",
-        "columns": "3",
+        "columns": "4",
         "grid_gap": 24,
         "color_scheme": "surface",
         "padding_top": 64,
@@ -539,7 +532,7 @@
     "features_bpBDCE",
     "testimonials_CqXXEi",
     "product-tiers",
-    "features_kFbxwK",
+    "image_tabs_ecUkMH",
     "collection-products",
     "image_with_text_9NkBcX",
     "image_with_text_g6rQCM",

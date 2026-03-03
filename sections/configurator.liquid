@@ -22,13 +22,13 @@
         <div class="cfg__loader" data-img-loading style="display:none;"><div class="cfg__spinner"></div></div>
         <div class="cfg__placeholder" data-main-placeholder>
           {%- if section.settings.default_image != blank -%}
-            <img src="{{ section.settings.default_image | image_url: width: 1200 }}" alt="Nordic Elite hot tub" style="width:100%;height:100%;object-fit:cover;" loading="eager">
+            <img src="{{ section.settings.default_image | image_url: width: 1200 }}" width="{{ section.settings.default_image.width }}" height="{{ section.settings.default_image.height }}" alt="Nordic Elite hot tub" style="width:100%;height:100%;object-fit:cover;" loading="eager">
           {%- else -%}
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
             <span>Select a model to preview your hot tub</span>
           {%- endif -%}
         </div>
-        <img src="" alt="Hot tub preview" class="cfg-main-image" data-main-image loading="eager" style="display:none;">
+        <img src="" width="1200" height="800" alt="Hot tub preview" class="cfg-main-image" data-main-image loading="eager" style="display:none;">
       </div>
       <div class="cfg__gallery" data-gallery></div>
     </div>
@@ -39,7 +39,6 @@
       {%- for i in (1..15) -%}
         {%- assign locked = '' -%}
         {%- if i > 1 -%}{%- assign locked = ' cfg-step--locked' -%}{%- endif -%}
-        {%- assign step_hidden = false -%}
 
         {%- case i -%}
           {%- when 1 -%}{%- assign s_title = 'Choose Your Size' -%}{%- assign s_sub = 'Select the size for your hot tub.' -%}
@@ -111,13 +110,6 @@
   {%- comment -%} ═══════════ PRODUCT DATA (JSON) ═══════════ {%- endcomment -%}
   <script type="application/json" data-configurator-products>
   {
-    "base": {%- if section.settings.base_product != blank -%}
-      {%- assign product = section.settings.base_product -%}
-      {% render 'configurator-product-json', product: product %}
-    {%- else -%}null{%- endif -%},
-
-    {%- comment -%} ── Collections → JSON arrays ── {%- endcomment -%}
-
     {%- comment -%} Liners (Step 2) {%- endcomment -%}
     "liners": [
       {%- if section.settings.liners_collection != blank -%}
@@ -259,9 +251,6 @@
 {
   "name": "Hot Tub Configurator",
   "settings": [
-    { "type": "header", "content": "Step 1 — Base Hot Tub" },
-    { "type": "product", "id": "base_product", "label": "Base hot tub product (variants: XL, L, M)" },
-
     { "type": "header", "content": "Step 2 — Fiberglass Liners" },
     { "type": "collection", "id": "liners_collection", "label": "Liners collection" },
 

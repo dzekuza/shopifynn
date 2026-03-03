@@ -26,6 +26,8 @@
             {{ section.settings.image | image_url: width: 1920 }} 1920w
           "
           sizes="100vw"
+          width="{{ section.settings.image.width }}"
+          height="{{ section.settings.image.height }}"
           alt="{{ section.settings.heading | escape }}"
           loading="eager"
           class="hero__image"

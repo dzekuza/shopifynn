@@ -27,6 +27,8 @@
               {{ article.image | image_url: width: 1200 }} 1200w
             "
             sizes="(max-width: 768px) 100vw, {{ section.settings.content_width }}px"
+            width="{{ article.image.width }}"
+            height="{{ article.image.height }}"
             alt="{{ article.image.alt | default: article.title | escape }}"
             loading="eager"
             class="article-page__image"

@@ -12,6 +12,8 @@
                 {{ block.settings.image | image_url: width: 1920 }} 1920w
               "
               sizes="100vw"
+              width="{{ block.settings.image.width }}"
+              height="{{ block.settings.image.height }}"
               alt="{{ block.settings.heading | escape | default: 'Slide image' }}"
               loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
               class="slideshow__image"

@@ -3,7 +3,6 @@
     "configurator": {
       "type": "configurator",
       "settings": {
-        "base_product": "",
         "liners_collection": "configurator-fiberglass-liners",
         "insulation_product": "hot-tub-insulation",
         "oven_addons_collection": "configurator-oven-add-ons",

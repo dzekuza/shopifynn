@@ -3,7 +3,7 @@
     <div class="newsletter__inner" style="text-align: {{ section.settings.text_alignment }}; max-width: {{ section.settings.content_width }}px; margin: 0 auto;">
       {% if section.settings.image %}
         <div class="newsletter__image-wrap">
-          <img src="{{ section.settings.image | image_url: width: 600 }}" alt="{{ section.settings.heading | escape }}" loading="lazy" class="newsletter__image">
+          <img src="{{ section.settings.image | image_url: width: 600 }}" width="{{ section.settings.image.width }}" height="{{ section.settings.image.height }}" alt="{{ section.settings.heading | escape }}" loading="lazy" class="newsletter__image">
         </div>
       {% endif %}
 

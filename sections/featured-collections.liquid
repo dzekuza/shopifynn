@@ -30,6 +30,8 @@
                   {{ block.settings.image | image_url: width: 900 }} 900w
                 "
                 sizes="(max-width: 768px) 100vw, 50vw"
+                width="{{ block.settings.image.width }}"
+                height="{{ block.settings.image.height }}"
                 alt="{{ block.settings.heading | escape }}"
                 loading="lazy"
                 class="featured-collections__image"

@@ -26,6 +26,8 @@
             <div class="multicolumn__image-wrap {% if section.settings.image_ratio == 'circle' %}multicolumn__image-wrap--circle{% endif %}">
               <img
                 src="{{ block.settings.image | image_url: width: 540 }}"
+                width="{{ block.settings.image.width }}"
+                height="{{ block.settings.image.height }}"
                 alt="{{ block.settings.heading | escape | default: 'Column image' }}"
                 loading="lazy"
                 class="multicolumn__image"

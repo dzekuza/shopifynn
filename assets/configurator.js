@@ -1,10 +1,10 @@
 /**
  * Nordic Elite Hot Tub Configurator
- * Dynamic 15-step configurator reading from Shopify products/collections.
+ * Dynamic 15-step parts-based builder reading from Shopify products/collections.
  *
- * Base product: a single product with variants encoding size (XL/L/M) via option1.
- * Step 1 selects size. Steps 2-15 configure accessories and add-ons.
- * Steps 1 (size) and 2 (liner) are required; all others are optional.
+ * No base product — total price is the sum of all selected options.
+ * Step 1 selects size (determines size-specific pricing for some add-ons).
+ * Step 2 selects liner. Steps 3-15 are optional add-ons.
  */
 (function () {
   'use strict';
@@ -59,10 +59,8 @@
       }
       this.data = JSON.parse(dataEl.textContent);
       this.state = {
-        // Step 1 — size only (no tier/model)
+        // Step 1 — size only (no base product, no price)
         size: null,
-        baseVariantId: null,
-        basePrice: 0,
 
         // Steps 2-15
         liner: null,
@@ -183,40 +181,22 @@
     }
 
     _renderSizeStep(container) {
-      const baseProduct = this.data.base;
-      if (!baseProduct || !baseProduct.variants) {
-        container.innerHTML = '<p class="cfg-empty">Base product not configured. Assign it in the section settings.</p>';
-        return;
-      }
-
-      const dims = {
-        XL: 'Inside \u2205 200 cm / Outside \u2205 225 cm',
-        L: 'Inside \u2205 180 cm / Outside \u2205 200 cm',
-        M: '100\u00d780 cm / 120\u00d7200 cm',
-      };
-      const persons = { XL: '6\u20138 persons', L: '6\u20138 persons', M: '2 persons' };
-
-      const sizeOrder = ['XL', 'L', 'M'];
-      const sizes = [];
-      for (const v of baseProduct.variants) {
-        const sizeLabel = (v.option1 || '').toUpperCase();
-        if (sizeLabel && sizeOrder.includes(sizeLabel)) {
-          sizes.push({ label: sizeLabel, price: v.price, variantId: v.id });
-        }
-      }
-      sizes.sort((a, b) => sizeOrder.indexOf(a.label) - sizeOrder.indexOf(b.label));
+      const sizes = [
+        { label: 'XL', desc: 'Inside \u2205 200 cm / Outside \u2205 225 cm', meta: '6\u20138 persons' },
+        { label: 'L',  desc: 'Inside \u2205 180 cm / Outside \u2205 200 cm', meta: '6\u20138 persons' },
+        { label: 'M',  desc: '100\u00d780 cm / 120\u00d7200 cm',              meta: '2 persons' },
+      ];
 
       let html = '<p class="cfg-label">Select your hot tub size:</p>';
       html += '<div class="cfg-cards" data-size-cards>';
       for (const s of sizes) {
         html += `
-          <div class="cfg-card cfg-card--size" data-action="select-size" data-size="${s.label}" data-variant-id="${s.variantId}" data-price="${s.price}" tabindex="0" role="button" aria-pressed="false">
+          <div class="cfg-card cfg-card--size" data-action="select-size" data-size="${s.label}" tabindex="0" role="button" aria-pressed="false">
             <div class="cfg-card__info">
               <h4 class="cfg-card__name">${s.label}</h4>
-              <p class="cfg-card__desc">${dims[s.label] || ''}</p>
-              <p class="cfg-card__meta">${persons[s.label] || ''}</p>
+              <p class="cfg-card__desc">${s.desc}</p>
+              <p class="cfg-card__meta">${s.meta}</p>
             </div>
-            <div class="cfg-card__price">From ${money(s.price)}</div>
           </div>`;
       }
       html += '</div>';
@@ -231,6 +211,9 @@
       }
 
       let html = '';
+
+      // Clear selection button (hidden until a product is selected)
+      html += `<button type="button" class="cfg-clear-btn" data-action="clear-selection" data-group="${dataKey}" style="display:none;"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="3" x2="11" y2="11"/><line x1="11" y1="3" x2="3" y2="11"/></svg> Clear selection</button>`;
 
       // Product selector (radio cards with images)
       html += `<div class="cfg-product-list" data-product-group="${dataKey}">`;
@@ -311,6 +294,7 @@
           </span>
         </label>
         <div class="cfg-conditional" id="cfg-filter-options" style="display:none;">
+          <button type="button" class="cfg-clear-btn" data-action="clear-selection" data-group="${dataKey}" style="display:none;"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="3" x2="11" y2="11"/><line x1="11" y1="3" x2="3" y2="11"/></svg> Clear selection</button>
           <div class="cfg-product-list" data-product-group="${dataKey}">
             ${products.map(p => `
               <label class="cfg-radio-card" data-action="select-product" data-group="${dataKey}" data-product-id="${p.id}" data-price="${p.price}">
@@ -541,6 +525,9 @@
           case 'heater-conn':
             this._handleHeaterConnection(target.dataset.value);
             break;
+          case 'clear-selection':
+            this._handleClearSelection(target.dataset.group);
+            break;
           case 'retry-cart':
             this._hideError();
             this._handleAddToCart();
@@ -630,7 +617,6 @@
         el.setAttribute('aria-pressed', String(selected));
       });
 
-      this._resolveBaseProduct();
       this._unlockThrough(2, { autoFocus: false });
       this._updatePrice();
       this._scrollToStep(2);
@@ -666,6 +652,10 @@
           card.classList.toggle('cfg-radio-card--selected', card.dataset.productId == productId);
         });
       }
+
+      // Show clear button
+      const clearBtn = this.querySelector(`[data-action="clear-selection"][data-group="${group}"]`);
+      if (clearBtn) clearBtn.style.display = '';
 
       // Show variant swatches if product has multiple variants
       if (product.variants?.length > 1) {
@@ -844,6 +834,28 @@
       if (variantArea) variantArea.style.display = 'none';
       const qtyArea = stepEl.querySelector(`[data-qty-area="${dataKey}"]`);
       if (qtyArea) qtyArea.style.display = 'none';
+      // Hide clear button
+      const clearBtn = stepEl.querySelector(`[data-action="clear-selection"][data-group="${dataKey}"]`);
+      if (clearBtn) clearBtn.style.display = 'none';
+    }
+
+    _handleClearSelection(group) {
+      // Map group → step number and state keys
+      const groupMap = {
+        'liners':       { step: 2,  reset: () => { this.state.liner = null; this.state.linerVariant = null; } },
+        'exteriors':    { step: 5,  reset: () => { this.state.exterior = null; this.state.exteriorVariant = null; } },
+        'hydro':        { step: 6,  reset: () => { this.state.hydro = null; this.state.hydroNozzles = 8; } },
+        'air':          { step: 7,  reset: () => { this.state.air = null; this.state.airNozzles = 12; } },
+        'leds':         { step: 9,  reset: () => { this.state.led = null; this.state.ledQty = 1; } },
+        'thermometers': { step: 10, reset: () => { this.state.thermometer = null; } },
+        'covers':       { step: 13, reset: () => { this.state.cover = null; this.state.coverVariant = null; } },
+        'filters':      { step: 8,  reset: () => { this.state.filterProduct = null; } },
+      };
+      const entry = groupMap[group];
+      if (!entry) return;
+      entry.reset();
+      this._unselectProducts(entry.step, group);
+      this._updatePrice();
     }
 
     _selectVariant(group, variantId, price) {
@@ -858,45 +870,12 @@
       this._updatePrice();
     }
 
-    /* ══ 5. PRODUCT RESOLUTION ══════════════════════════════════════════ */
-
-    _resolveBaseProduct() {
-      const baseProduct = this.data.base;
-      if (!baseProduct || !this.state.size) return;
-
-      const size = this.state.size.toUpperCase();
-      const variant = baseProduct.variants?.find(v => (v.option1 || '').toUpperCase() === size);
-
-      if (variant) {
-        this.state.baseVariantId = variant.id;
-        this.state.basePrice = variant.price;
-        if (baseProduct.image) {
-          this._preloadImage(baseProduct.image);
-          this._setMainImage(baseProduct.image);
-        }
-      } else {
-        this.state.baseVariantId = null;
-        this.state.basePrice = 0;
-      }
-    }
-
-    /* ══ 6. PRICE CALCULATION ════════════════════════════════════════════ */
+    /* ══ 5. PRICE CALCULATION ════════════════════════════════════════════ */
 
     _calculateLineItems() {
       const items = [];
 
-      // 1. Base product (resolved by size)
-      if (this.state.baseVariantId) {
-        items.push({
-          variantId: this.state.baseVariantId,
-          quantity: 1,
-          price: this.state.basePrice || 0,
-          properties: { '_config': 'base' },
-          label: 'Base',
-        });
-      }
-
-      // 2. Liner
+      // 1. Liner
       if (this.state.liner) {
         const price = this._getSelectedVariantPrice('liners', 'liner', 'linerVariant');
         const variantId = this.state.linerVariant || null;
@@ -1131,18 +1110,17 @@
       // Build grouped data structure — each item is { label, image, price, qty, stepNum }
       const groups = [];
 
-      // Base Model group (stepNum 1)
+      // Size group (stepNum 1) — no price, just shows selected size
       if (this.state.size) {
-        const baseProduct = this.data.base;
         const ovenLabel = this.state.ovenType === 'internal' ? 'Internal Oven' : 'External Oven';
         groups.push({
-          heading: 'Base Hot Tub',
+          heading: 'Configuration',
           stepNum: 1,
           removable: false,
           items: [{
             label: `Size ${this.state.size}, ${ovenLabel}`,
-            image: baseProduct?.image || null,
-            price: this.state.basePrice || 0,
+            image: null,
+            price: 0,
             qty: null,
           }],
         });
@@ -1371,7 +1349,7 @@
               const removeBtn = document.createElement('button');
               removeBtn.type = 'button';
               removeBtn.className = 'cfg-summary__remove';
-              removeBtn.textContent = '\u00d7';
+              removeBtn.innerHTML = '<svg width="12" height="12" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="3" x2="11" y2="11"/><line x1="11" y1="3" x2="3" y2="11"/></svg>';
               removeBtn.dataset.action = 'remove-summary-item';
               removeBtn.dataset.removeStep = String(itemStepNum);
               removeBtn.setAttribute('aria-label', 'Remove ' + item.label);
@@ -1412,11 +1390,10 @@
 
       const lines = [];
 
-      // Base Model group (always present if size selected)
+      // Size (always present if size selected)
       if (this.state.size) {
         const ovenLabel = this.state.ovenType === 'internal' ? 'Int.' : 'Ext.';
-        lines.push('Base');
-        lines.push(`  Sz ${this.state.size}, ${ovenLabel}`);
+        lines.push(`Sz ${this.state.size}, ${ovenLabel}`);
       }
 
       // Heating group — only oven addons (glass door, chimney) since oven is part of base
@@ -1499,9 +1476,6 @@
       }
       if (!this.state.liner) {
         return { valid: false, missingStep: 'liner' };
-      }
-      if (!this.state.baseVariantId) {
-        return { valid: false, missingStep: 'size' };
       }
       return { valid: true, missingStep: null };
     }

@@ -29,6 +29,8 @@
                 {{ block.settings.image | image_url: width: 800 }} 800w
               "
               sizes="(max-width: 768px) 100vw, 33vw"
+              width="{{ block.settings.image.width }}"
+              height="{{ block.settings.image.height }}"
               alt="{{ block.settings.alt | default: section.settings.heading | escape }}"
               loading="lazy"
               class="gallery__image"

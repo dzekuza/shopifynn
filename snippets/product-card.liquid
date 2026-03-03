@@ -11,6 +11,8 @@
             {{ product.featured_image | image_url: width: 720 }} 720w
           "
           sizes="(max-width: 767px) 45vw, (max-width: 1023px) 30vw, 25vw"
+          width="{{ product.featured_image.width }}"
+          height="{{ product.featured_image.height }}"
           alt="{{ product.title | escape }}"
           loading="lazy"
           class="product-card__image"
@@ -25,6 +27,8 @@
               {{ product.images[1] | image_url: width: 720 }} 720w
             "
             sizes="(max-width: 767px) 45vw, (max-width: 1023px) 30vw, 25vw"
+            width="{{ product.images[1].width }}"
+            height="{{ product.images[1].height }}"
             alt="{{ product.title | escape }}"
             loading="lazy"
             class="product-card__image product-card__image--secondary"

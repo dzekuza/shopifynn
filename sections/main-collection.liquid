@@ -10,6 +10,7 @@
       {% endif %}
     </div>
 
+    {% paginate collection.products by section.settings.products_per_page %}
     {% if collection.products.size > 0 %}
       <!-- Toolbar -->
       <div class="collection-page__toolbar">
@@ -39,8 +40,7 @@
       </div>
 
       <!-- Pagination -->
-      {% if paginate.pages > 1 %}
-        {% paginate collection.products by section.settings.products_per_page %}
+        {% if paginate.pages > 1 %}
           <nav class="collection-page__pagination" aria-label="Pagination">
             {% if paginate.previous %}
               <a href="{{ paginate.previous.url }}" class="collection-page__pagination-link" aria-label="Previous page">
@@ -66,14 +66,14 @@
               </a>
             {% endif %}
           </nav>
-        {% endpaginate %}
-      {% endif %}
+        {% endif %}
     {% else %}
       <div class="collection-page__empty">
         <p>No products found in this collection.</p>
         <a href="{{ routes.all_products_collection_url }}" class="button button--primary">Browse all products</a>
       </div>
     {% endif %}
+    {% endpaginate %}
   </div>
 </section>
 

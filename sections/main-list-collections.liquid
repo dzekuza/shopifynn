@@ -19,6 +19,8 @@
                   {{ collection.image | image_url: width: 600 }} 600w
                 "
                 sizes="(max-width: 768px) 100vw, 33vw"
+                width="{{ collection.image.width }}"
+                height="{{ collection.image.height }}"
                 alt="{{ collection.title | escape }}"
                 loading="lazy"
                 class="collection-list__image"

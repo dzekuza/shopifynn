@@ -54,6 +54,8 @@
                         {{ block.settings.image | image_url: width: 1000 }} 1000w
                       "
                       sizes="(max-width: 768px) 100vw, 50vw"
+                      width="{{ block.settings.image.width }}"
+                      height="{{ block.settings.image.height }}"
                       alt="{{ block.settings.alt | default: block.settings.image.alt | escape }}"
                       loading="lazy"
                     >
@@ -102,6 +104,8 @@
                           {{ img | image_url: width: 800 }} 800w
                         "
                         sizes="(max-width: 768px) 100vw, 33vw"
+                        width="{{ img.width }}"
+                        height="{{ img.height }}"
                         alt="{{ block.settings[alt_key] | default: img.alt | escape }}"
                         loading="lazy"
                       >
@@ -138,10 +142,10 @@
                       {% if block.settings[a_key] %}
                         <img
                           src="{{ block.settings[a_key] | image_url: width: 80 }}"
-                          alt="{{ block.settings[n_key] | escape }}"
-                          class="dynamic-content__testimonial-avatar"
                           width="40"
                           height="40"
+                          alt="{{ block.settings[n_key] | escape }}"
+                          class="dynamic-content__testimonial-avatar"
                           loading="lazy"
                         >
                       {% endif %}
@@ -182,6 +186,8 @@
                         {{ fc.image | image_url: width: 1400 }} 1400w
                       "
                       sizes="100vw"
+                      width="{{ fc.image.width }}"
+                      height="{{ fc.image.height }}"
                       alt="{{ fc.title | escape }}"
                       loading="lazy"
                     >
@@ -222,6 +228,8 @@
                       {{ block.settings.image | image_url: width: 800 }} 800w
                     "
                     sizes="(max-width: 768px) 100vw, 50vw"
+                    width="{{ block.settings.image.width }}"
+                    height="{{ block.settings.image.height }}"
                     alt="{{ block.settings.image.alt | escape }}"
                     loading="lazy"
                   >

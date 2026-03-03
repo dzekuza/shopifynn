@@ -22,6 +22,8 @@
                         {{ image | image_url: width: 1200 }} 1200w
                       "
                       sizes="(max-width: 768px) 100vw, 50vw"
+                      width="{{ image.width }}"
+                      height="{{ image.height }}"
                       alt="{{ image.alt | default: product.title | escape }}"
                       {% if forloop.first %}loading="eager"{% else %}loading="lazy"{% endif %}
                     >
@@ -40,6 +42,8 @@
                 <button type="button" class="product__gallery-thumb{% if forloop.first %} is-active{% endif %}" data-thumb-index="{{ forloop.index0 }}" aria-label="View image {{ forloop.index }}">
                   <img
                     src="{{ image | image_url: width: 120 }}"
+                    width="{{ image.width }}"
+                    height="{{ image.height }}"
                     alt="{{ image.alt | default: product.title | escape }}"
                     loading="lazy"
                   >
@@ -60,6 +64,8 @@
                   {{ product.featured_image | image_url: width: 1200 }} 1200w
                 "
                 sizes="(max-width: 768px) 100vw, 50vw"
+                width="{{ product.featured_image.width }}"
+                height="{{ product.featured_image.height }}"
                 alt="{{ product.featured_image.alt | default: product.title | escape }}"
                 loading="eager"
                 class="product__main-image"
@@ -272,7 +278,7 @@
 
             {% when 'buy_buttons' %}
               <div class="product__block" {{ block.shopify_attributes }}>
-                <form method="post" action="/cart/add" data-product-form>
+                {% form 'product', product, data-product-form: '' %}
                   <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" data-variant-id>
                   <input type="hidden" name="quantity" value="1" data-form-quantity>
                   <button
@@ -289,7 +295,7 @@
                   {% if block.settings.show_dynamic_checkout %}
                     {{ form | payment_button }}
                   {% endif %}
-                </form>
+                {% endform %}
               </div>
 
             {% when 'description' %}

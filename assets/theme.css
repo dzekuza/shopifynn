@@ -6020,21 +6020,41 @@ ul, ol {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
-  border: 1px solid var(--color-text-muted, #7A8B8A);
-  border-radius: 50%;
-  background: transparent;
-  color: var(--color-text-muted, #7A8B8A);
-  font-size: 16px;
-  line-height: 1;
+  width: 26px;
+  height: 26px;
+  border: none;
+  border-radius: 6px;
+  background: rgba(192, 57, 43, 0.08);
+  color: #c0392b;
   cursor: pointer;
   flex-shrink: 0;
   margin-left: 8px;
-  transition: border-color 0.2s, color 0.2s, background-color 0.2s;
+  transition: background-color 0.2s;
 }
 .cfg-summary__remove:hover {
-  border-color: var(--color-accent, #4A90A4);
-  color: var(--color-accent, #4A90A4);
-  background: rgba(74, 144, 164, 0.08);
+  background: rgba(192, 57, 43, 0.16);
+}
+
+/* ── Configurator: Clear selection button in steps ── */
+.cfg-clear-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px 6px 12px;
+  margin-bottom: 12px;
+  border: none;
+  border-radius: 6px;
+  background: rgba(192, 57, 43, 0.08);
+  color: #c0392b;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+.cfg-clear-btn:hover {
+  background: rgba(192, 57, 43, 0.16);
+}
+.cfg-clear-btn svg {
+  flex-shrink: 0;
 }

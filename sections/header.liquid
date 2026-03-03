@@ -58,7 +58,7 @@
   {% endif %}
 
   <div class="header__inner container">
-    <a href="/" class="header__logo">
+    <a href="{{ routes.root_url }}" class="header__logo">
       {% if logo %}
         {%- assign logo_width_2x = logo_width | times: 2 -%}
         {%- assign logo_width_3x = logo_width | times: 3 -%}
@@ -167,7 +167,7 @@
       {% if section.settings.quiz_text != blank %}
         <a href="{{ section.settings.quiz_url }}" class="header__cta button button--primary">{{ section.settings.quiz_text }}</a>
       {% endif %}
-      <a href="/cart" class="header__cart" aria-label="Cart" data-cart-drawer-toggle>
+      <a href="{{ routes.cart_url }}" class="header__cart" aria-label="Cart" data-cart-drawer-toggle>
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
           <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
           <line x1="3" y1="6" x2="21" y2="6"/>
