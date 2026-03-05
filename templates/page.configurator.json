@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "configurator": {
@@ -5,6 +14,8 @@
       "settings": {
         "liners_collection": "configurator-fiberglass-liners",
         "insulation_product": "hot-tub-insulation",
+        "external_ovens_collection": "external-ovens",
+        "internal_ovens_collection": "internal-ovens",
         "oven_addons_collection": "configurator-oven-add-ons",
         "exteriors_collection": "configurator-exterior-panels",
         "hydro_collection": "configurator-hydro-massage",
@@ -12,15 +23,18 @@
         "filters_collection": "configurator-filter-system",
         "leds_collection": "configurator-led-lighting",
         "thermometers_collection": "configurator-thermometer",
-        "stairs_product": "stairs-matching-exterior-material",
+        "stairs_collection": "configurator-stairs",
         "pillows_product": "hot-tub-head-pillow",
         "covers_collection": "configurator-covers",
         "heater_90_product": "heater-connection-90-degree-angle",
+        "specs_page": "",
         "background_color": "#ffffff",
         "padding_top": 40,
         "padding_bottom": 40
       }
     }
   },
-  "order": ["configurator"]
+  "order": [
+    "configurator"
+  ]
 }

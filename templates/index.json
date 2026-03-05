@@ -14,6 +14,7 @@
       "settings": {
         "image": "shopify://shop_images/NE-M-SIGNATURE-Cedar-AUROWE.png",
         "mobile_image": "shopify://shop_images/NE-M-SIGNATURE-Cedar-9-16.png",
+        "video": "shopify://files/videos/video 4.mp4",
         "video_url": "",
         "video_fit": "cover",
         "overlay_opacity": 30,
